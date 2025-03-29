@@ -41,10 +41,13 @@
 
     <div class="px-3 py-4 border-t border-gray-200">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Projects</span>
-        <button class="text-gray-400 hover:text-gray-500">
+        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Проекты</span>
+        <RouterLink
+            to="/projects/create"
+            class="text-gray-400 hover:text-gray-500"
+        >
           <Icon icon="heroicons:plus" class="h-4 w-4"/>
-        </button>
+        </RouterLink>
       </div>
       <div class="space-y-1">
         <template v-if="isLoadingProjects">
@@ -74,7 +77,7 @@
 
     <div class="px-3 py-4 border-t border-gray-200">
       <div class="flex items-center justify-between mb-2">
-        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Teams</span>
+        <span class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Команды</span>
         <RouterLink
             to="/teams/create"
             class="text-gray-400 hover:text-gray-500"

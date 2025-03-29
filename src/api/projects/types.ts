@@ -10,3 +10,8 @@ export interface UpdateProjectBody {
   name: string;
   slug?: string;
 }
+
+export interface CreateProjectBody extends UpdateProjectBody {
+  team_id: number;
+  platform: string;
+}

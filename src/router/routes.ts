@@ -9,7 +9,8 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   TEAMS: '/teams',
   CREATE_TEAM: '/teams/create',
-  PROJECTS: '/projects'
+  PROJECTS: '/projects',
+  CREATE_PROJECT: '/projects/create'
 }
 
 export const routes: RouteRecordRaw[] = [
@@ -48,21 +49,21 @@ export const routes: RouteRecordRaw[] = [
   {
     path: ROUTES.PROJECTS,
     component: () => import('../pages/Projects.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
+    path: ROUTES.CREATE_PROJECT,
+    component: () => import('../pages/CreateProject.vue'),
     meta: { requiresAuth: true }
   },
   {
     path: '/projects/:slug/settings',
     component: ProjectSettings,
     children: [
-      { path: 'general', component: GeneralSettings },
-      { path: 'security', component: SecuritySettings },
+      {path: 'general', component: GeneralSettings},
+      {path: 'security', component: SecuritySettings},
     ]
   }
-  // {
-  //   path: '/projects/create',
-  //   component: ProjectCreatePage,
-  //   meta: { requiresAuth: true }
-  // },
   // {
   //   path: '/projects/:slug',
   //   component: ProjectSettingsPage,

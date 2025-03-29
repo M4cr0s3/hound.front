@@ -15,7 +15,7 @@ import {Icon} from "@iconify/vue";
             </div>
             <input
                 type="search"
-                placeholder="Search projects, teams, issues..."
+                placeholder="Искать проект, задачу, команду..."
                 class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
             />
           </div>

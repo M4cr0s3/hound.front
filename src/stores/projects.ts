@@ -1,7 +1,16 @@
 import {defineStore} from "pinia";
-import {getProject, getProjects, updateProject, type Project, type UpdateProjectBody} from "../api";
+import {
+  getProject,
+  getProjects,
+  updateProject,
+  type Project,
+  type UpdateProjectBody,
+  type CreateProjectBody,
+  createProject
+} from "../api";
 import {ref} from "vue";
 import {router} from "../router";
+import {ROUTES} from "../router/routes.ts";
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([]);
@@ -43,6 +52,17 @@ export const useProjectsStore = defineStore('projects', () => {
     }
   }
 
-  return {projects, project, updateBody, isLoading, fetchProjects, fetchProject, update};
+
+  const create = async (body: CreateProjectBody) => {
+    isLoading.value = true;
+    try {
+      await createProject(body);
+      await router.push(ROUTES.PROJECTS);
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  return {projects, project, updateBody, isLoading, fetchProjects, fetchProject, update, create};
 
 })
