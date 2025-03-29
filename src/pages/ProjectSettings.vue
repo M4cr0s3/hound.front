@@ -52,8 +52,8 @@ const tabs = [
   {name: 'Environments', path: 'environments'},
   {name: 'Tags', path: 'tags'},
   {name: 'Issue Tracking', path: 'issue-tracking'},
-  {name: 'Security & Privacy', path: 'security'},
-  {name: 'Integrations', path: 'integrations'},
+  {name: 'Безопасность', path: 'security'},
+  {name: 'Интеграции', path: 'integrations'},
   {name: 'Ownership', path: 'ownership'},
   {name: 'Data Forwarding', path: 'data-forwarding'},
   {name: 'Advanced', path: 'advanced'}
