@@ -34,7 +34,7 @@
               <div class="flex items-center space-x-4">
                 <div
                     class="flex-shrink-0 h-10 w-10 rounded-md flex items-center justify-center text-white font-medium"
-                    :class="getTeamColor(team.name)"
+                    :class="getColor(team.name)"
                 >
                   {{ getFirstLetter(team.name) }}
                 </div>
@@ -65,40 +65,15 @@ import DashboardLayout from '../layouts/DashboardLayout.vue';
 import {Icon} from "@iconify/vue";
 import {useTeamsStore} from "../stores";
 import {storeToRefs} from "pinia";
+import {useColor} from "../composables";
 
 const teamsStore = useTeamsStore()
 const {teams, isLoadingTeams} = storeToRefs(teamsStore);
 
+const { getColor } = useColor();
+
 const getFirstLetter = (name: string) => {
-  return name.trim().charAt(0).toUpperCase();
+  return name.charAt(0).toUpperCase();
 };
 
-const getTeamColor = (name: string) => {
-  const colors = [
-    'bg-indigo-500', 'bg-indigo-600',
-    'bg-green-500', 'bg-green-600',
-    'bg-emerald-500', 'bg-emerald-600',
-    'bg-teal-500', 'bg-teal-600',
-    'bg-cyan-500', 'bg-cyan-600',
-    'bg-blue-500', 'bg-blue-600',
-    'bg-sky-500', 'bg-sky-600',
-    'bg-violet-500', 'bg-violet-600',
-    'bg-purple-500', 'bg-purple-600',
-    'bg-fuchsia-500', 'bg-fuchsia-600',
-    'bg-pink-500', 'bg-pink-600',
-    'bg-rose-500', 'bg-rose-600',
-    'bg-red-500', 'bg-red-600',
-    'bg-orange-500', 'bg-orange-600',
-    'bg-amber-500', 'bg-amber-600',
-    'bg-yellow-500', 'bg-yellow-600',
-    'bg-lime-500', 'bg-lime-600'
-  ];
-
-  const hash = name.split('').reduce((acc, char, index) => {
-    return char.charCodeAt(0) * (index + 1) + ((acc << 5) - acc);
-  }, 0);
-
-  const index = Math.abs(hash) % colors.length;
-  return colors[index];
-};
 </script>

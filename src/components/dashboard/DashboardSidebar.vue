@@ -47,18 +47,28 @@
         </button>
       </div>
       <div class="space-y-1">
-        <a
-            v-for="project in projects"
-            :key="project.id"
-            href="#"
-            class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50"
-        >
-          <span
-              class="w-2.5 h-2.5 mr-3 rounded-full"
-              :class="project.color"
-          />
-          {{ project.name }}
-        </a>
+        <template v-if="isLoadingProjects">
+          <div v-for="i in 3" :key="`project-skeleton-${i}`" class="animate-pulse">
+            <div class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md">
+              <span class="w-2.5 h-2.5 mr-3 rounded-full bg-gray-200"></span>
+              <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <a
+              v-for="project in projects"
+              :key="project.id"
+              href="#"
+              class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50"
+          >
+            <span
+                class="w-2.5 h-2.5 mr-3 rounded-full"
+                :class="getColor(project.name)"
+            />
+            {{ project.name }}
+          </a>
+        </template>
       </div>
     </div>
 
@@ -73,23 +83,33 @@
         </RouterLink>
       </div>
       <div class="space-y-1">
-        <RouterLink
-            v-for="team in teams"
-            :key="team.id"
-            :to="`/teams/${team.slug}`"
-            custom
-            v-slot="{ isActive }"
-        >
-          <a
-              :class="[
-              isActive ? 'bg-gray-100' : '',
-              'group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50'
-            ]"
+        <template v-if="isLoadingTeams">
+          <div v-for="i in 3" :key="`team-skeleton-${i}`" class="animate-pulse">
+            <div class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md">
+              <span class="w-2.5 h-2.5 mr-3 rounded-full bg-gray-200"></span>
+              <div class="h-4 bg-gray-200 rounded w-3/4"></div>
+            </div>
+          </div>
+        </template>
+        <template v-else>
+          <RouterLink
+              v-for="team in teams"
+              :key="team.id"
+              :to="`/teams/${team.slug}`"
+              custom
+              v-slot="{ isActive }"
           >
-            <span class="w-2.5 h-2.5 mr-3 rounded-full bg-gray-400"/>
-            {{ team.name }}
-          </a>
-        </RouterLink>
+            <a
+                :class="[
+                isActive ? 'bg-gray-100' : '',
+                'group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50'
+              ]"
+            >
+              <span class="w-2.5 h-2.5 mr-3 rounded-full" :class="getColor(team.name)"/>
+              {{ team.name }}
+            </a>
+          </RouterLink>
+        </template>
       </div>
     </div>
   </aside>
@@ -100,6 +120,8 @@ import {Icon} from "@iconify/vue";
 import {useTeamsStore} from "../../stores";
 import {storeToRefs} from "pinia";
 import {onMounted} from "vue";
+import {useProjectsStore} from "../../stores";
+import {useColor} from "../../composables";
 
 const navigation = [
   {name: 'Dashboard', to: '/', icon: 'heroicons:home'},
@@ -109,15 +131,16 @@ const navigation = [
   {name: 'Security', to: '/security', icon: 'heroicons:shield-check'},
 ];
 
-const projects = [
-  {id: 1, name: 'Web App', color: 'bg-indigo-500'},
-  {id: 2, name: 'Mobile App', color: 'bg-green-500'},
-];
+const projectsStore = useProjectsStore();
+const {projects, isLoading: isLoadingProjects} = storeToRefs(projectsStore);
 
 const teamsStore = useTeamsStore()
-const {teams} = storeToRefs(teamsStore);
+const {teams, isLoadingTeams} = storeToRefs(teamsStore);
+
+const { getColor } = useColor();
 
 onMounted(async () => {
+  await projectsStore.fetchProjects();
   await teamsStore.fetchTeams();
 })
 
