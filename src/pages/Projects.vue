@@ -2,7 +2,7 @@
   <DashboardLayout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
       <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Projects</h1>
+        <h1 class="text-2xl font-bold text-gray-900">Проекты</h1>
         <RouterLink
             to="/projects/create"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
@@ -13,7 +13,6 @@
       </div>
 
       <div class="bg-white shadow rounded-lg overflow-hidden">
-        <!-- Скелетон при загрузке -->
         <div v-if="isLoading" class="divide-y divide-gray-200">
           <div
               v-for="i in 5"
@@ -33,7 +32,6 @@
           </div>
         </div>
 
-        <!-- Реальный список проектов -->
         <div v-else class="divide-y divide-gray-200">
           <div
               v-for="project in projects"

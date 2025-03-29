@@ -15,7 +15,7 @@ export const authMiddleware = (
 
   if (to.meta.requiresAuth && !isAuthenticated) {
     return next({
-      name: ROUTES.LOGIN,
+      path: ROUTES.LOGIN,
       query: {redirect: to.fullPath}
     });
   }
