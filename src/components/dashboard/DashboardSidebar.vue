@@ -124,9 +124,10 @@ import {useProjectsStore} from "../../stores";
 import {useColor} from "../../composables";
 
 const navigation = [
-  {name: 'Dashboard', to: '/', icon: 'heroicons:home'},
-  {name: 'Issues', to: '/issues', icon: 'heroicons:document-text'},
-  {name: 'Teams', to: '/teams', icon: 'heroicons:users'},
+  {name: 'Dashboard', to: '/dashboard', icon: 'heroicons:home'},
+  {name: 'Задачи', to: '/issues', icon: 'heroicons:document-text'},
+  {name: 'Команды', to: '/teams', icon: 'heroicons:users'},
+  {name: 'Проекты', to: '/projects', icon: 'heroicons:folder-open'},
   {name: 'Settings', to: '/settings', icon: 'heroicons:cog-8-tooth'},
   {name: 'Security', to: '/security', icon: 'heroicons:shield-check'},
 ];

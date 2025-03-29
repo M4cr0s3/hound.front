@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/vue": "^1.7.23",
     "@iconify/vue": "^5.0.0-beta.2",
     "@tailwindcss/vite": "^4.0.17",
     "axios": "^1.8.4",

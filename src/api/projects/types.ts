@@ -5,3 +5,8 @@ export interface Project {
   slug: string;
   platform: string;
 }
+
+export interface UpdateProjectBody {
+  name: string;
+  slug?: string;
+}

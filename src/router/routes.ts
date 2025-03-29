@@ -1,4 +1,7 @@
 import type {RouteRecordRaw} from "vue-router";
+import GeneralSettings from "../pages/GeneralSettings.vue";
+import SecuritySettings from "../pages/SecuritySettings.vue";
+import ProjectSettings from "../pages/ProjectSettings.vue";
 
 export const ROUTES = {
   INDEX: '/',
@@ -6,6 +9,7 @@ export const ROUTES = {
   DASHBOARD: '/dashboard',
   TEAMS: '/teams',
   CREATE_TEAM: '/teams/create',
+  PROJECTS: '/projects'
 }
 
 export const routes: RouteRecordRaw[] = [
@@ -40,5 +44,40 @@ export const routes: RouteRecordRaw[] = [
     meta: {
       requiresAuth: true
     }
+  },
+  {
+    path: ROUTES.PROJECTS,
+    component: () => import('../pages/Projects.vue'),
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/projects/:slug/settings',
+    component: ProjectSettings,
+    children: [
+      { path: 'general', component: GeneralSettings },
+      { path: 'security', component: SecuritySettings },
+    ]
   }
+  // {
+  //   path: '/projects/create',
+  //   component: ProjectCreatePage,
+  //   meta: { requiresAuth: true }
+  // },
+  // {
+  //   path: '/projects/:slug',
+  //   component: ProjectSettingsPage,
+  //   meta: { requiresAuth: true },
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'project-overview',
+  //       component: ProjectOverviewPage
+  //     },
+  //     {
+  //       path: 'settings',
+  //       name: 'project-settings',
+  //       component: ProjectSettingsForm
+  //     }
+  //   ]
+  // }
 ];
