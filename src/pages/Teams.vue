@@ -70,10 +70,9 @@ import {useColor} from "../composables";
 const teamsStore = useTeamsStore()
 const {teams, isLoadingTeams} = storeToRefs(teamsStore);
 
-const { getColor } = useColor();
+const {getColor} = useColor();
 
 const getFirstLetter = (name: string) => {
   return name.charAt(0).toUpperCase();
 };
-
 </script>

@@ -14,7 +14,7 @@ import {ROUTES} from "../router/routes.ts";
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([]);
-  const project = ref<Project>({});
+  const project = ref<Project>({} as Project);
   const updateBody = ref<UpdateProjectBody>({
     name: '',
     slug: '',

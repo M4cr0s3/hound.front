@@ -43,7 +43,7 @@ export function setupAuthInterceptor(axiosInstance: AxiosInstance): void {
           const {token} = response.data;
 
           localStorage.setItem('token', token);
-          originalRequest.headers.Authorization = `Bearer ${token}`;
+          originalRequest!.headers.Authorization = `Bearer ${token}`;
 
           return axiosInstance(originalRequest);
         }

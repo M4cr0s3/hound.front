@@ -3,7 +3,7 @@ import {ROUTES} from "../routes.ts";
 
 export const authMiddleware = (
     to: RouteLocationNormalized,
-    from: RouteLocationNormalized,
+    _: RouteLocationNormalized,
     next: NavigationGuardNext
 ) => {
   const token = localStorage.getItem('token');

@@ -41,28 +41,28 @@
 
 const stats = [
   {
-    name: 'Total Errors',
+    name: 'Всего ошибок',
     value: '1,234',
     change: '12%',
     changeType: 'increase',
     bgColor: 'bg-red-500'
   },
   {
-    name: 'Unresolved',
+    name: 'Нерешенных',
     value: '567',
     change: '5%',
     changeType: 'increase',
     bgColor: 'bg-yellow-500'
   },
   {
-    name: 'Resolved',
+    name: 'Решенных',
     value: '667',
     change: '8%',
     changeType: 'increase',
     bgColor: 'bg-green-500'
   },
   {
-    name: 'Ignored',
+    name: 'Проигнорировано',
     value: '42',
     change: '3%',
     changeType: 'decrease',

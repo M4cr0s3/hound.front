@@ -48,19 +48,19 @@ const {project} = storeToRefs(store);
 
 const tabs = [
   {name: 'Основные', path: 'general'},
-  {name: 'Alerts', path: 'alerts'},
-  {name: 'Environments', path: 'environments'},
-  {name: 'Tags', path: 'tags'},
-  {name: 'Issue Tracking', path: 'issue-tracking'},
+  // {name: 'Alerts', path: 'alerts'},
+  // {name: 'Environments', path: 'environments'},
+  // {name: 'Tags', path: 'tags'},
+  // {name: 'Issue Tracking', path: 'issue-tracking'},
   {name: 'Безопасность', path: 'security'},
   {name: 'Интеграции', path: 'integrations'},
-  {name: 'Ownership', path: 'ownership'},
-  {name: 'Data Forwarding', path: 'data-forwarding'},
-  {name: 'Advanced', path: 'advanced'}
+  // {name: 'Ownership', path: 'ownership'},
+  // {name: 'Data Forwarding', path: 'data-forwarding'},
+  // {name: 'Advanced', path: 'advanced'}
 ];
 
 onMounted(async () => {
-  await store.fetchProject(route.params.slug);
+  await store.fetchProject(route.params.slug as string);
 })
 
 </script>

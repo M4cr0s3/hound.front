@@ -6,7 +6,7 @@
           <h3 class="text-lg leading-6 font-medium text-gray-900">Создание новой команды</h3>
         </div>
 
-        <form @submit.prevent="createTeamHandler" class="px-4 py-5 sm:p-6">
+        <form @submit.prevent="teamsStore.create(form)" class="px-4 py-5 sm:p-6">
           <div class="space-y-6">
             <InputField
                 id="team-name"
@@ -65,6 +65,9 @@ import DashboardLayout from '../layouts/DashboardLayout.vue';
 import {useTeam} from "../composables";
 import InputField from "../components/ui/InputField.vue";
 import {ROUTES} from "../router/routes.ts";
+import {useTeamsStore} from "../stores";
+
+const teamsStore = useTeamsStore();
 
 const {
   form,

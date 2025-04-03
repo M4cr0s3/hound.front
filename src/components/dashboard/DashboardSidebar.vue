@@ -3,11 +3,10 @@
     <div class="flex items-center h-16 px-4 border-b border-gray-200">
       <div class="flex items-center">
         <div class="flex-shrink-0 flex items-center justify-center h-10 w-10 rounded-md bg-indigo-600 text-white">
-          <span class="text-lg font-medium">FT</span>
+          <span class="text-lg font-medium">H</span>
         </div>
         <div class="ml-3">
-          <p class="text-sm font-medium text-gray-900">Финтехсервис</p>
-          <p class="text-xs font-medium text-gray-500">Организация</p>
+          <p class="text-sm font-medium text-gray-900">Hound</p>
         </div>
       </div>
     </div>
@@ -131,8 +130,8 @@ const navigation = [
   {name: 'Задачи', to: '/issues', icon: 'heroicons:document-text'},
   {name: 'Команды', to: '/teams', icon: 'heroicons:users'},
   {name: 'Проекты', to: '/projects', icon: 'heroicons:folder-open'},
-  {name: 'Settings', to: '/settings', icon: 'heroicons:cog-8-tooth'},
-  {name: 'Security', to: '/security', icon: 'heroicons:shield-check'},
+  // {name: 'Settings', to: '/settings', icon: 'heroicons:cog-8-tooth'},
+  // {name: 'Security', to: '/security', icon: 'heroicons:shield-check'},
 ];
 
 const projectsStore = useProjectsStore();
@@ -141,7 +140,7 @@ const {projects, isLoading: isLoadingProjects} = storeToRefs(projectsStore);
 const teamsStore = useTeamsStore()
 const {teams, isLoadingTeams} = storeToRefs(teamsStore);
 
-const { getColor } = useColor();
+const {getColor} = useColor();
 
 onMounted(async () => {
   await projectsStore.fetchProjects();

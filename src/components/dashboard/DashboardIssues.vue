@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white shadow rounded-lg mb-6">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">Recent Issues</h3>
+      <h3 class="text-lg leading-6 font-medium text-gray-900">Недавние задачи</h3>
     </div>
     <div class="bg-white overflow-hidden">
       <ul class="divide-y divide-gray-200">
@@ -21,17 +21,18 @@
               <div class="mt-2 sm:flex sm:justify-between">
                 <div class="sm:flex">
                   <p class="flex items-center text-sm text-gray-500">
-                    <component :is="issue.typeIcon" class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                    <component :is="issue.typeIcon" class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
                     {{ issue.type }}
                   </p>
                   <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
-                    <component :is="issue.projectIcon" class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                    <component :is="issue.projectIcon" class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400"/>
                     {{ issue.project }}
                   </p>
                 </div>
                 <div class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
                   <p>
-                    Last seen <time :datetime="issue.datetime">{{ issue.time }}</time>
+                    Замечена последний раз
+                    <time :datetime="issue.datetime">{{ issue.time }}</time>
                   </p>
                 </div>
               </div>
@@ -41,8 +42,8 @@
       </ul>
     </div>
     <div class="px-4 py-4 sm:px-6 border-t border-gray-200">
-      <button class="text-sm font-medium text-indigo-600 hover:text-indigo-500">
-        View all issues
+      <button class="cursor-pointer text-sm font-medium text-indigo-600 hover:text-indigo-500">
+        Посмотреть все задачи
       </button>
     </div>
   </div>
@@ -68,7 +69,7 @@ const issues = [
     type: 'Network',
     project: 'Mobile App',
     datetime: '2023-05-20',
-    time: '4 days ago'
+    time: '4 дня назад'
   },
   {
     id: 3,
@@ -78,7 +79,7 @@ const issues = [
     type: 'Backend',
     project: 'API Service',
     datetime: '2023-05-18',
-    time: '6 days ago'
+    time: '6 дней назад'
   }
 ];
 </script>

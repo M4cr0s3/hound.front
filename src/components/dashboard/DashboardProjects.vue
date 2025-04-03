@@ -1,26 +1,26 @@
 <template>
   <div class="bg-white shadow rounded-lg">
     <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-      <h3 class="text-lg leading-6 font-medium text-gray-900">Your Projects</h3>
+      <h3 class="text-lg leading-6 font-medium text-gray-900">Ваши проекты</h3>
     </div>
     <div class="bg-white overflow-hidden">
       <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-gray-50">
         <tr>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Project
+            Проект
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Errors (24h)
+            Ошибки (24h)
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Status
+            Статус
           </th>
           <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-            Team
+            Команда
           </th>
           <th scope="col" class="relative px-6 py-3">
-            <span class="sr-only">Edit</span>
+            <span class="sr-only">Редактировать</span>
           </th>
         </tr>
         </thead>
@@ -43,7 +43,7 @@
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
             <div class="text-sm text-gray-900">{{ project.errors }}</div>
-            <div class="text-sm text-gray-500">{{ project.resolved }} resolved</div>
+            <div class="text-sm text-gray-500">{{ project.resolved }} решено</div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">
               <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full" :class="project.statusClass">
@@ -62,7 +62,7 @@
             </div>
           </td>
           <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-            <a href="#" class="text-indigo-600 hover:text-indigo-900">Settings</a>
+            <a href="#" class="text-indigo-600 hover:text-indigo-900">Настройки</a>
           </td>
         </tr>
         </tbody>
@@ -75,7 +75,7 @@
 const projects = [
   {
     id: 1,
-    name: 'Web Application',
+    name: 'showcase.front',
     platform: 'JavaScript',
     bgColor: 'bg-indigo-500',
     errors: 42,
@@ -89,7 +89,7 @@ const projects = [
   },
   {
     id: 2,
-    name: 'Mobile App',
+    name: 'rn-app.mobile',
     platform: 'React Native',
     bgColor: 'bg-green-500',
     errors: 28,
@@ -102,8 +102,8 @@ const projects = [
   },
   {
     id: 3,
-    name: 'API Service',
-    platform: 'Python',
+    name: 'api-news.back',
+    platform: 'Golang',
     bgColor: 'bg-yellow-500',
     errors: 15,
     resolved: 12,
@@ -114,18 +114,5 @@ const projects = [
       { id: 4, name: 'Alice Brown', avatar: 'https://avatars.githubusercontent.com/u/4?v=4' }
     ]
   },
-  {
-    id: 4,
-    name: 'Marketing Site',
-    platform: 'WordPress',
-    bgColor: 'bg-red-500',
-    errors: 8,
-    resolved: 5,
-    status: 'Critical',
-    statusClass: 'bg-red-100 text-red-800',
-    team: [
-      { id: 5, name: 'Charlie Davis', avatar: 'https://avatars.githubusercontent.com/u/5?v=4' }
-    ]
-  }
 ];
 </script>

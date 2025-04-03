@@ -27,6 +27,8 @@
               :options="teamsStore.teams"
               label="Команда"
               placeholder="Выберите команду"
+              option-label="name"
+              option-value="id"
           />
 
           <PlatformCard

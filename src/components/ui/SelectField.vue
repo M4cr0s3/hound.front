@@ -10,7 +10,7 @@
             class="relative w-full cursor-default rounded-md border border-gray-300 bg-white py-2 pl-3 pr-10 text-left shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
         >
           <span class="block truncate">
-            {{ selectedValue ? getOptionLabel(selectedValue) : placeholder }}
+            {{ selectedOptionLabel || placeholder }}
           </span>
           <span class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
               <Icon icon="heroicons:chevron-down" class="h-5 w-5 text-gray-400"/>
@@ -98,6 +98,16 @@ const emit = defineEmits(['update:modelValue'])
 const selectedValue = computed({
   get: () => props.modelValue,
   set: (value) => emit('update:modelValue', value)
+})
+
+const selectedOption = computed(() => {
+  return props.options.find(option =>
+      getOptionValue(option) === selectedValue.value
+  )
+})
+
+const selectedOptionLabel = computed(() => {
+  return selectedOption.value ? getOptionLabel(selectedOption.value) : null
 })
 
 const getOptionLabel = (option: any) => {

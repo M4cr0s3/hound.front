@@ -1,7 +1,7 @@
 <template>
   <AuthLayout>
     <div class="sm:mx-auto flex items-center flex-col sm:w-full sm:max-w-md">
-      <Logo width="128" height="128"/>
+      <Logo :width="128" :height="128"/>
       <h2 class="text-center text-3xl font-extrabold text-gray-900">
         Войдите в свой аккаунт
       </h2>
