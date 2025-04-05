@@ -1,15 +1,17 @@
-import {api} from "../";
+import { api } from '../';
 
 interface AuthBody {
-  email: string
-  password: string
+	email: string;
+	password: string;
 }
 
 type AuthResponse = {
-  status: boolean
-  token: string
-}
+	data: {
+		status: boolean;
+		token: string;
+	};
+};
 
 export const login = async (body: AuthBody) => {
-  return api.post<AuthBody, AuthResponse>('/auth/login', body);
-}
+	return api.post<AuthBody, AuthResponse>('/auth/login', body);
+};
