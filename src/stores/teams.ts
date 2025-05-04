@@ -1,34 +1,42 @@
-import { defineStore } from 'pinia';
-import type { Team, CreateTeamBody } from '../api';
-import { ref } from 'vue';
-import { createTeam, getTeams } from '../api';
-import { router } from '../router';
-import { ROUTES } from '../router/routes.ts';
+import {defineStore} from 'pinia';
+import {type Team, type CreateTeamBody, type Id, TeamsApi} from '../api';
+import {ref, type Ref} from 'vue';
+import {router} from '../router';
+import {ROUTES} from '../router/routes.ts';
 
 export const useTeamsStore = defineStore('teams', () => {
-	const teams = ref<Team[]>([]);
-	const isLoadingTeams = ref(false);
-	const isLoading = ref(false);
+  const teams = ref<Team[]>([]);
+  const isLoadingTeams = ref(false);
+  const isLoading = ref(false);
 
-	const fetchTeams = async () => {
-		isLoadingTeams.value = true;
-		try {
-			const response = await getTeams();
-			teams.value = response.data;
-		} finally {
-			isLoadingTeams.value = false;
-		}
-	};
+  const handleLoading = async (
+      action: () => Promise<void>,
+      loadingRef: Ref<boolean>
+  ) => {
+    loadingRef.value = true;
+    try {
+      await action();
+    } finally {
+      loadingRef.value = false;
+    }
+  };
 
-	const create = async (body: CreateTeamBody) => {
-		isLoading.value = true;
-		try {
-			await createTeam(body);
-			await router.push(ROUTES.TEAMS);
-		} finally {
-			isLoading.value = false;
-		}
-	};
+  const fetchTeams = () =>
+      handleLoading(async () => {
+        teams.value = await TeamsApi.getAll();
+      }, isLoadingTeams);
 
-	return { teams, isLoadingTeams, fetchTeams, create };
+  const create = (body: CreateTeamBody) =>
+      handleLoading(async () => {
+        await TeamsApi.create(body);
+        await router.push({path: ROUTES.TEAM.INDEX});
+      }, isLoading);
+
+  const destroy = (id: Id) =>
+      handleLoading(async () => {
+        await TeamsApi.delete(id);
+        await fetchTeams();
+      }, isLoading);
+
+  return {teams, isLoading, isLoadingTeams, fetchTeams, create, destroy};
 });

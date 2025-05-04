@@ -61,7 +61,6 @@ export const useLogin = (): UseLoginReturn => {
 				if (field === 'email' || field === 'password') {
 					result.fieldErrors[field] = messages[0];
 				} else {
-					console.log('wf');
 					result.commonError = result.commonError
 						? `${result.commonError} ${messages.join(' ')}`
 						: messages.join(' ');
@@ -79,8 +78,8 @@ export const useLogin = (): UseLoginReturn => {
 		try {
 			const response = await login(credentials.value);
 
-			localStorage.setItem('token', response.data!.token);
-			await router.push(ROUTES.INDEX);
+			localStorage.setItem('token', response.token);
+			await router.push(ROUTES.DASHBOARD);
 		} catch (error: unknown) {
 			if (isApiErrorResponse(error)) {
 				errors.value = extractErrors(error.response.data);

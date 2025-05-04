@@ -7,14 +7,24 @@
             to="/teams/create"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >
-          <Icon icon="heroicons:plus" class="-ml-1 mr-2 h-5 w-5"/>
+          <Icon
+              icon="heroicons:plus"
+              class="-ml-1 mr-2 h-5 w-5"
+          />
           Создать команду
         </RouterLink>
       </div>
 
       <div class="bg-white shadow rounded-lg overflow-hidden">
-        <ul v-if="isLoadingTeams" class="divide-y divide-gray-200">
-          <li v-for="i in 5" :key="`skeleton-${i}`" class="px-4 py-4 sm:px-6">
+        <ul
+            v-if="isLoadingTeams"
+            class="divide-y divide-gray-200"
+        >
+          <li
+              v-for="i in 5"
+              :key="`skeleton-${i}`"
+              class="px-4 py-4 sm:px-6"
+          >
             <div class="flex items-center space-x-4 animate-pulse">
               <div class="flex-shrink-0 h-10 w-10 rounded-md bg-gray-200"></div>
               <div class="flex-1 min-w-0 space-y-2">
@@ -25,8 +35,14 @@
           </li>
         </ul>
 
-        <ul v-else class="divide-y divide-gray-200">
-          <li v-for="team in teams" :key="team.id">
+        <ul
+            v-else
+            class="divide-y divide-gray-200"
+        >
+          <li
+              v-for="team in teams"
+              :key="team.id"
+          >
             <RouterLink
                 :to="`/teams/${team.slug}`"
                 class="block hover:bg-gray-50 px-4 py-4 sm:px-6"
@@ -51,23 +67,54 @@
                     </p>
                   </div>
                 </div>
+                <div class="flex items-center space-x-4">
+                  <RouterLink
+                      :to="`teams/${team.slug}/edit`"
+                      class="text-gray-400 hover:text-gray-500"
+                  >
+                    <Icon
+                        icon="heroicons-outline:pencil"
+                        class="h-5 w-5 cursor-pointer"
+                    />
+                  </RouterLink>
+                </div>
+                <div class="flex items-center space-x-4">
+                  <button
+                      class="text-gray-400 hover:text-red-500 cursor-pointer"
+                      @click.prevent="teamsStore.destroy(team.id)"
+                  >
+                    <Icon
+                        icon="heroicons:trash"
+                        class="h-5 w-5"
+                    />
+                  </button>
+                </div>
               </div>
             </RouterLink>
           </li>
         </ul>
+
+        <EmptyState
+            v-if="!teamsStore.teams.length && !isLoadingTeams"
+            title="Команды отсутствуют"
+            icon="heroicons:users"
+            description="Команды не найдены"
+        />
+
       </div>
     </div>
   </DashboardLayout>
 </template>
 
 <script setup lang="ts">
-import DashboardLayout from '../layouts/DashboardLayout.vue';
-import {Icon} from "@iconify/vue";
-import {useTeamsStore} from "../stores";
-import {storeToRefs} from "pinia";
-import {useColor} from "../composables";
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import {Icon} from '@iconify/vue';
+import {useTeamsStore} from '@/stores';
+import {storeToRefs} from 'pinia';
+import {useColor} from '@/composables';
+import {EmptyState} from "@/components/projects/settings/notification";
 
-const teamsStore = useTeamsStore()
+const teamsStore = useTeamsStore();
 const {teams, isLoadingTeams} = storeToRefs(teamsStore);
 
 const {getColor} = useColor();

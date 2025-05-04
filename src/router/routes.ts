@@ -1,17 +1,30 @@
-import type {RouteRecordRaw} from "vue-router";
-import GeneralSettings from "../pages/GeneralSettings.vue";
-import SecuritySettings from "../pages/SecuritySettings.vue";
-import ProjectSettings from "../pages/ProjectSettings.vue";
+import type {RouteRecordRaw} from 'vue-router';
 
 export const ROUTES = {
   INDEX: '/',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
-  TEAMS: '/teams',
-  CREATE_TEAM: '/teams/create',
-  PROJECTS: '/projects',
-  CREATE_PROJECT: '/projects/create'
-}
+  TEAM: {
+    INDEX: '/teams',
+    CREATE: '/teams/create',
+    EDIT: '/teams/:slug/edit',
+  },
+  PROJECT: {
+    INDEX: '/projects',
+    CREATE: '/projects/create',
+    EVENTS: '/projects/:slug/events',
+  },
+  ISSUE: {
+    INDEX: '/issues',
+    SHOW: '/issues/:id',
+    CREATE: '/projects/:slug/issues/create',
+  },
+  USER: {
+    INDEX: '/users',
+    CREATE: '/users/create',
+  },
+  INVITE: '/invite/:token',
+};
 
 export const routes: RouteRecordRaw[] = [
   {
@@ -21,64 +34,113 @@ export const routes: RouteRecordRaw[] = [
   {
     path: ROUTES.LOGIN,
     component: () => import('../pages/Login.vue'),
-    meta: {
-      guestOnly: true
-    }
+    meta: {guestOnly: true},
   },
   {
     path: ROUTES.DASHBOARD,
     component: () => import('../pages/Dashboard.vue'),
-    meta: {
-      requiresAuth: true
-    }
+    meta: {requiresAuth: true},
   },
   {
-    path: ROUTES.TEAMS,
-    component: () => import('../pages/Teams.vue'),
-    meta: {
-      requiresAuth: true
-    }
+    path: ROUTES.TEAM.INDEX,
+    component: () => import('../pages/team/Index.vue'),
+    meta: {requiresAuth: true},
   },
   {
-    path: ROUTES.CREATE_TEAM,
-    component: () => import('../pages/CreateTeam.vue'),
-    meta: {
-      requiresAuth: true
-    }
+    path: ROUTES.TEAM.CREATE,
+    component: () => import('../pages/team/Create.vue'),
+    meta: {requiresAuth: true},
   },
   {
-    path: ROUTES.PROJECTS,
-    component: () => import('../pages/Projects.vue'),
-    meta: {requiresAuth: true}
+    path: ROUTES.TEAM.EDIT,
+    component: () => import('../pages/team/Edit.vue'),
+    props: true,
+    meta: {requiresAuth: true},
   },
   {
-    path: ROUTES.CREATE_PROJECT,
-    component: () => import('../pages/CreateProject.vue'),
-    meta: { requiresAuth: true }
+    path: ROUTES.PROJECT.INDEX,
+    component: () => import('../pages/project/Projects.vue'),
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.PROJECT.CREATE,
+    component: () => import('../pages/project/CreateProject.vue'),
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.PROJECT.EVENTS,
+    component: () => import('../pages/project/events/Events.vue'),
+    props: true,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.ISSUE.INDEX,
+    component: () => import('../pages/issue/Index.vue'),
+    props: true,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.ISSUE.SHOW,
+    component: () => import('../pages/issue/Show.vue'),
+    props: true,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.USER.INDEX,
+    component: () => import('../pages/user/Index.vue'),
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.USER.CREATE,
+    component: () => import('../pages/user/Create.vue'),
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.INVITE,
+    component: () => import('../pages/Invite.vue'),
+    meta: {guestOnly: true}
+  },
+  {
+    path: '/projects/:slug/events/:eventId/issue/create',
+    component: () => import('../pages/issue/CreateIssue.vue'),
+    props: true,
   },
   {
     path: '/projects/:slug/settings',
-    component: ProjectSettings,
+    component: () => import('../pages/project/ProjectSettings.vue'),
     children: [
-      {path: 'general', component: GeneralSettings},
-      {path: 'security', component: SecuritySettings},
-    ]
-  }
-  // {
-  //   path: '/projects/:slug',
-  //   component: ProjectSettingsPage,
-  //   meta: { requiresAuth: true },
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'project-overview',
-  //       component: ProjectOverviewPage
-  //     },
-  //     {
-  //       path: 'settings',
-  //       name: 'project-settings',
-  //       component: ProjectSettingsForm
-  //     }
-  //   ]
-  // }
+      {
+        path: 'general',
+        component: () => import('../pages/project/GeneralSettings.vue'),
+        props: true,
+      },
+      {
+        path: 'security',
+        component: () => import('../pages/project/SecuritySettings.vue'),
+        props: true,
+      },
+      {
+        path: 'delete',
+        component: () => import('../pages/project/DeleteProject.vue'),
+        props: true,
+      },
+      {
+        path: 'healthcheck',
+        component: () => import('../pages/project/HealthCheckSettings.vue'),
+        props: true,
+      },
+      {
+        path: 'notification',
+        component: () => import('../pages/project/NotificationSettings.vue'),
+        props: true,
+      },
+    ],
+    meta: {requiresAuth: true},
+  },
+  {
+    path: '/healthcheck/:endpointId/results',
+    component: () => import('../pages/healthcheck/Results.vue'),
+    props: true,
+    meta: {requiresAuth: true},
+  },
 ];

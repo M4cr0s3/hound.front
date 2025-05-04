@@ -1,5 +1,5 @@
 import { type Ref, ref } from 'vue';
-import { createTeam, type Team, getTeams } from '../api';
+import { type Team, TeamsApi } from '../api';
 import axios from 'axios';
 
 interface TeamForm {
@@ -59,7 +59,7 @@ export const useTeam = (): UseTeamReturn => {
 		isSubmitting.value = true;
 
 		try {
-			await createTeam({
+			await TeamsApi.create({
 				name: form.value.name,
 				slug: form.value.slug || undefined,
 			});
@@ -80,8 +80,7 @@ export const useTeam = (): UseTeamReturn => {
 	const fetchTeams = async (): Promise<void> => {
 		isLoadingTeams.value = true;
 		try {
-			const response = await getTeams();
-			teams.value = response.data;
+			teams.value = TeamsApi.getAll();
 		} finally {
 			isLoadingTeams.value = false;
 		}

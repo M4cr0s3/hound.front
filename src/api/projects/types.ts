@@ -1,3 +1,5 @@
+import type { Id } from '../types';
+
 export interface Project {
 	id: number;
 	team_id: number;
@@ -26,3 +28,25 @@ export interface CreateProjectResponse {
 	success: boolean;
 	message: string;
 }
+
+export interface ProjectStatistic {
+	total_events: number;
+	errors_last_day: number;
+	error_rate_change: number;
+	avg_response_time: number;
+}
+
+export interface LastDayStat {
+	id: Id;
+	name: string;
+	slug: string;
+	platform: string;
+
+	stats: ProjectStatistic;
+	events_last_day: {
+		hour: string;
+		count: number;
+	}[];
+}
+
+export type LastDayStatsResponse = LastDayStat[];

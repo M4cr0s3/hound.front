@@ -13,6 +13,11 @@ export default defineConfig({
       }
     }
   },
+  resolve: {
+    alias: {
+      '@': '/src',
+    },
+  },
   plugins: [
     vue(),
     vueDevTools(),

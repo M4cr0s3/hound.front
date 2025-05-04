@@ -1,17 +1,16 @@
-import { api } from '../';
+import {httpClient} from '../';
 
 interface AuthBody {
-	email: string;
-	password: string;
+  email: string;
+  password: string;
 }
 
 type AuthResponse = {
-	data: {
-		status: boolean;
-		token: string;
-	};
+  status: boolean;
+  token: string;
+  refresh_token: string;
 };
 
-export const login = async (body: AuthBody) => {
-	return api.post<AuthBody, AuthResponse>('/auth/login', body);
+export const login = async (body: AuthBody): Promise<AuthResponse> => {
+  return httpClient.post('/auth/login', body);
 };

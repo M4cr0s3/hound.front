@@ -1,7 +1,6 @@
-import {api} from "../";
-import type {AxiosResponse} from "axios";
+import {httpClient} from "../";
 import type {Project} from "./";
 
-export const getProjects = async (): Promise<AxiosResponse<Project[]>> => api.get('/projects');
+export const getProjects = async (): Promise<Project[]> => httpClient.get('/projects');
 
-export const getProject = async (slug: string): Promise<AxiosResponse<Project>> => api.get(`/projects/${slug}`);
+export const getProject = async (slug: string): Promise<Project> => httpClient.get(`/projects/${slug}`);

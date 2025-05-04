@@ -13,16 +13,26 @@
           :value="modelValue"
           :type="type"
           :name="name"
+          :disabled="disabled"
           :autocomplete="autocomplete"
           :required="required"
           :placeholder="placeholder"
           class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-          :class="{ 'border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500': error }"
-          @input="$emit('update:modelValue', $event.target.value)"
+          :class="{
+					'border-red-300 text-red-900 focus:ring-red-500 focus:border-red-500':
+						error,
+					'bg-gray-50 text-gray-500 cursor-not-allowed': disabled,
+				  }"
+          @input="
+					$emit('update:modelValue', ($event.target as HTMLInputElement).value)
+				"
       />
     </div>
-    <p v-if="error" class="mt-2 text-sm text-red-600">
-      {{ error }}
+    <p
+        v-if="error"
+        class="mt-2 text-sm text-red-600"
+    >
+      {{ error.toString() }}
     </p>
     <slot name="description"></slot>
   </div>
@@ -32,39 +42,43 @@
 defineProps({
   id: {
     type: String,
-    required: true
+    required: true,
   },
   modelValue: {
     type: [String, Number],
-    default: ''
+    default: '',
   },
   type: {
     type: String,
-    default: 'text'
+    default: 'text',
   },
   name: {
     type: String,
-    default: ''
+    default: '',
   },
   label: {
     type: String,
-    default: ''
+    default: '',
   },
   placeholder: {
     type: String,
-    default: ''
+    default: '',
   },
   autocomplete: {
     type: String,
-    default: 'off'
+    default: 'off',
   },
   required: {
     type: Boolean,
-    default: false
+    default: false,
   },
   error: {
     type: String,
-    default: ''
+    default: '',
+  },
+  disabled: {
+    type: Boolean,
+    default: false
   }
 });
 
