@@ -14,6 +14,12 @@ const buildUrl = (item: any) => {
     return `/projects/${item.slug}/settings/general`
   }
 
+  // TODO: вместо edit кидать на show со всей инфой о команде
+
+  if (item.type === 'team') {
+    return `/teams/${item.slug}/edit`
+  }
+
   if (item.type === 'event') {
     return `/projects/${item.project.slug}/events/${item.slug}`
   }
