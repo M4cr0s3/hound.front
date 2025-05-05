@@ -65,7 +65,7 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue';
 import {SelectField, Button} from '@/components/ui'
-import {httpClient, type IssueStatus, type IssuePriority, type Issue, type User} from '@/api';
+import {httpClient, IssueStatus, IssuePriority, type Issue, type User} from '@/api';
 
 const props = defineProps<{
   issue?: Issue;
@@ -95,12 +95,6 @@ const priorityOptions = Object.values(IssuePriority).map((priority) => ({
   value: priority,
   label: priority.toUpperCase(),
 }));
-
-const tagOptions = [
-  {value: 'bug', label: 'Bug'},
-  {value: 'feature', label: 'Feature'},
-  {value: 'enhancement', label: 'Enhancement'},
-];
 
 const userOptions = ref<{ value: User; label: string }[]>([]);
 
