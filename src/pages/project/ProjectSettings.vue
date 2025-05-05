@@ -64,7 +64,7 @@ const tabs = [
 	// {name: 'Issue Tracking', path: 'issue-tracking'},
 	{ name: 'Безопасность', path: 'security' },
 	{ name: 'Нотификация', path: 'notification' },
-	{ name: 'Интеграции', path: 'integrations' },
+	// { name: 'Интеграции', path: 'integrations' },
 	{ name: 'Удаление', path: 'delete' },
 	// {name: 'Ownership', path: 'ownership'},
 	// {name: 'Data Forwarding', path: 'data-forwarding'},
