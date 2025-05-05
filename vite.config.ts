@@ -7,7 +7,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:8123/api',
+        target: 'https://macrose.duckdns.org/api',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       }
