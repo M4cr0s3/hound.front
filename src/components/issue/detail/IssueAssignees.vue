@@ -54,7 +54,11 @@
       </div>
 
       <p v-if="assignees.users.length === 0 && assignees.teams.length === 0" class="text-sm text-gray-500">
-        No assignees
+        <EmptyState
+            title="Назначенные отсутствуют"
+            description="Добавьте ответственных за эту задачу"
+            icon="heroicons:user-group"
+        />
       </p>
     </div>
 
@@ -122,6 +126,7 @@ import {Icon} from '@iconify/vue'
 import {Avatar, Button, Modal, SelectField} from '@/components/ui';
 import {httpClient, type Team, type User} from '@/api';
 import {useIssuesStore} from "@/stores";
+import {EmptyState} from "@/components/projects/settings/notification";
 
 const props = defineProps<{
   assignees: {
