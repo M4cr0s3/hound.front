@@ -11,7 +11,7 @@ const buildUrl = (item: any) => {
   }
 
   if (item.type === 'project') {
-    return `/projects/${item.slug}/settings`
+    return `/projects/${item.slug}/settings/general`
   }
 
   if (item.type === 'event') {
