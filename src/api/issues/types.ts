@@ -1,4 +1,4 @@
-import type {Team} from "@/api";
+import type {Team, Event} from "@/api";
 
 export enum IssueStatus {
   Open = 'open',

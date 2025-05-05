@@ -37,7 +37,7 @@
 
 <script setup lang="ts">
 import {defineProps, defineEmits} from 'vue';
-import {PrioritySelect, DatePicker, TagList, Badge} from '@/components/ui';
+import {PrioritySelect, DatePicker, Badge} from '@/components/ui';
 import type {Issue} from '@/api';
 import {useIssuesStore} from "@/stores";
 
