@@ -145,7 +145,8 @@
                 option-label="name"
                 option-value="id"
                 :error="memberErrors?.user_ids?.[0]"
-                :multiple="true"
+                multiple
+                searchable
                 :search-debounce="500"
                 @search="handleUserSearch"
                 placeholder="Начните вводить имя или email"
