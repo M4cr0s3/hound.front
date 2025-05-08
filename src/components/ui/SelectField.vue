@@ -7,6 +7,7 @@
             class="block text-sm font-medium text-gray-700 mb-1"
         >
           {{ label }}
+          <span v-if="required" class="text-red-500">*</span>
         </ListboxLabel>
 
         <ListboxButton
@@ -214,6 +215,10 @@ const props = defineProps({
     type: Number,
     default: 300,
   },
+  required: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 const emit = defineEmits(['update:modelValue', 'search']);
@@ -225,7 +230,7 @@ watchDebounced(
     (value) => {
       emit('search', value);
     },
-    { debounce: props.searchDebounce }
+    {debounce: props.searchDebounce}
 );
 
 const selectedValues = computed({

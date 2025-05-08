@@ -8,11 +8,13 @@ export const ROUTES = {
     INDEX: '/teams',
     CREATE: '/teams/create',
     EDIT: '/teams/:slug/edit',
+    SHOW: '/teams/:slug'
   },
   PROJECT: {
     INDEX: '/projects',
     CREATE: '/projects/create',
     EVENTS: '/projects/:slug/events',
+    SHOW: '/projects/:slug'
   },
   ISSUE: {
     INDEX: '/issues',
@@ -47,6 +49,12 @@ export const routes: RouteRecordRaw[] = [
     meta: {requiresAuth: true},
   },
   {
+    path: ROUTES.TEAM.SHOW,
+    component: () => import('../pages/team/Show.vue'),
+    props: true,
+    meta: {requiresAuth: true},
+  },
+  {
     path: ROUTES.TEAM.CREATE,
     component: () => import('../pages/team/Create.vue'),
     meta: {requiresAuth: true},
@@ -59,12 +67,17 @@ export const routes: RouteRecordRaw[] = [
   },
   {
     path: ROUTES.PROJECT.INDEX,
-    component: () => import('../pages/project/Projects.vue'),
+    component: () => import('../pages/project/Index.vue'),
     meta: {requiresAuth: true},
   },
   {
+    path: ROUTES.PROJECT.SHOW,
+    component: () => import('../pages/project/Show.vue'),
+    meta: {requiresAuth: true}
+  },
+  {
     path: ROUTES.PROJECT.CREATE,
-    component: () => import('../pages/project/CreateProject.vue'),
+    component: () => import('../pages/project/Create.vue'),
     meta: {requiresAuth: true},
   },
   {
@@ -121,7 +134,7 @@ export const routes: RouteRecordRaw[] = [
       },
       {
         path: 'delete',
-        component: () => import('../pages/project/DeleteProject.vue'),
+        component: () => import('../pages/project/Delete.vue'),
         props: true,
       },
       {

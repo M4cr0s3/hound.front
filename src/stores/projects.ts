@@ -35,7 +35,7 @@ export const useProjectsStore = defineStore('projects', () => {
   const fetchProject = async (slug: string) => {
     isLoading.value = true;
     try {
-      project.value = await getProject(slug);
+      project.value = (await getProject(slug)).project;
     } finally {
       isLoading.value = false;
     }

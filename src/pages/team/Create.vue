@@ -1,80 +1,64 @@
 <template>
   <DashboardLayout>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div class="bg-white shadow rounded-lg overflow-hidden">
-        <div class="px-4 py-5 sm:px-6 border-b border-gray-200">
-          <h3 class="text-lg leading-6 font-medium text-gray-900">
-            Создание новой команды
-          </h3>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div class="flex items-center space-x-4 mb-8">
+        <div class="p-3 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-md">
+          <Icon icon="heroicons:user-group" class="h-8 w-8 text-white" />
+        </div>
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Создание новой команды</h1>
+          <p class="text-sm text-gray-500">Объедините участников для совместной работы над проектами</p>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+          <h2 class="text-lg font-semibold text-gray-900">Основные параметры</h2>
         </div>
 
         <form
-            @submit.prevent="teamsStore.create(form)"
-            class="px-4 py-5 sm:p-6"
+            @submit.prevent="handleSubmit"
+            class="p-6 space-y-6"
         >
-          <div class="space-y-6">
-            <InputField
-                id="team-name"
-                v-model="form.name"
-                label="Название команды"
-                type="text"
-                placeholder="backend"
-                required
-                :error="errors.name"
-            />
+          <InputField
+              id="team-name"
+              v-model="form.name"
+              label="Название команды"
+              placeholder="Например: Backend разработка"
+              required
+              :error="errors.name"
+              icon="heroicons:tag"
+          />
 
-            <InputField
-                id="team-slug"
-                v-model="form.slug"
-                label="Slug команды (опционально)"
-                type="text"
-                placeholder="backend"
-                :error="errors.slug"
+          <InputField
+              id="team-slug"
+              v-model="form.slug"
+              label="URL-идентификатор"
+              placeholder="Например: backend-team"
+              :error="errors.slug"
+              description="Если не указан, будет сгенерирован автоматически"
+              icon="heroicons:link"
+          />
+
+          <div class="pt-4 flex justify-end gap-x-3 border-t border-gray-100">
+            <Button
+                variant="secondary"
+                @click="$router.push(ROUTES.TEAM.INDEX)"
+                class="px-4 py-2"
             >
-              <template #description>
-                <p class="mt-2 text-sm text-gray-500">
-                  Если не указан, будет сгенерирован автоматически
-                </p>
-              </template>
-            </InputField>
-
-            <div class="flex justify-end space-x-3">
-              <button
-                  type="button"
-                  @click="$router.push(ROUTES.TEAM.INDEX)"
-                  class="inline-flex cursor-pointer items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-              >
-                Отмена
-              </button>
-              <button
-                  type="submit"
-                  :disabled="isSubmitting"
-                  class="inline-flex cursor-pointer items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <span v-if="!isSubmitting">Создать команду</span>
-                <svg
-                    v-else
-                    class="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                >
-                  <circle
-                      class="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      stroke-width="4"
-                  ></circle>
-                  <path
-                      class="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
+              <Icon icon="heroicons:x-mark" class="mr-2 h-4 w-4" />
+              Отмена
+            </Button>
+            <Button
+                type="submit"
+                :is-loading="isSubmitting"
+                :loading-text="'Создание...'"
+                :disabled="isSubmitting"
+                class="px-4 py-2"
+            >
+              <Icon icon="heroicons:plus" class="mr-2 h-4 w-4" />
+              Создать команду
+            </Button>
           </div>
         </form>
       </div>
@@ -83,13 +67,31 @@
 </template>
 
 <script setup lang="ts">
-import DashboardLayout from '../../layouts/DashboardLayout.vue';
-import {useTeam} from '../../composables';
-import {InputField} from '../../components/ui';
-import {ROUTES} from '../../router/routes.ts';
-import {useTeamsStore} from '../../stores';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useTeam } from '@/composables';
+import { InputField, Button } from '@/components/ui';
+import { ROUTES } from '@/router/routes.ts';
+import { useTeamsStore } from '@/stores';
+import { Icon } from '@iconify/vue';
 
 const teamsStore = useTeamsStore();
+const { form, errors, isSubmitting } = useTeam();
 
-const {form, errors, isSubmitting} = useTeam();
+const handleSubmit = async () => {
+  await teamsStore.create(form);
+};
 </script>
+
+<style scoped>
+form {
+  transition: all 0.3s ease;
+}
+
+button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+</style>

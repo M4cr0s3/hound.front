@@ -77,3 +77,12 @@ const variantClasses = computed(() => {
   return classes[props.variant] || classes.primary;
 });
 </script>
+<style>
+button {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+</style>

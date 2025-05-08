@@ -1,7 +1,7 @@
 <template>
   <div class="bg-gray-50 rounded-lg border border-gray-200 overflow-hidden">
     <div class="flex items-center justify-between bg-gray-100 px-4 py-2 border-b border-gray-200">
-      <span class="text-xs font-medium text-gray-700">Stack Trace</span>
+      <span class="text-xs font-medium text-gray-700">Стектрейс</span>
       <button
           v-if="canCollapse"
           @click="isCollapsed = !isCollapsed"

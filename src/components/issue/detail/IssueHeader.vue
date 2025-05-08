@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import {defineProps} from 'vue';
 import {type ActionItem, Button, DropdownMenu, PriorityBadge, StatusBadge} from '@/components/ui';
 import {type Issue, IssueStatus} from '@/api';
 import {useIssuesStore} from "@/stores";

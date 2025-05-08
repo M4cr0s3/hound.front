@@ -1,5 +1,5 @@
 import { computed } from 'vue';
-import { formatDateTime } from '../../../utils';
+import { formatDateTime } from '@/utils';
 
 export const columns = computed(() => [
 	{

@@ -21,7 +21,7 @@ interface IssuesState {
 export const useIssuesStore = defineStore('issues', {
   state: (): IssuesState => ({
     issues: [],
-    issue: {},
+    issue: {} as Issue,
     filters: {
       search: '',
       status: null,
@@ -62,7 +62,7 @@ export const useIssuesStore = defineStore('issues', {
       this.isLoading = true;
       try {
         const response = await httpClient.post<Issue>('/issues', data);
-        this.issues.unshift(response.data);
+        this.issues.unshift(response);
       } finally {
         this.isLoading = false;
       }

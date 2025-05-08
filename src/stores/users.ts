@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import type {BaseResponse, Id, Pagination, Role, User} from "@/api";
+import type {BaseResponse, Pagination, User} from "@/api";
 import {httpClient} from "@/api";
 import {ROUTES} from "@/router/routes.ts";
 import {ref, computed} from "vue";
