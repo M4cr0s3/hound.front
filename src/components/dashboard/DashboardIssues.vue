@@ -68,7 +68,7 @@
 <script setup lang="ts">
 import {computed, onMounted, ref} from "vue";
 import {httpClient, type Issue} from "@/api";
-import {formatDateTime} from '@/utils'
+import {formatDateTime, getReadableIssueStatus} from '@/utils'
 import {EmptyState} from "@/components/projects/settings/notification";
 
 const issues = ref<Issue[]>([]);
@@ -91,7 +91,7 @@ const computedIssues = computed<Issue[]>(() => {
     return issues.value.map(issue => ({
       ...issue,
       statusClass: getStatusClass(issue.status),
-
+      status: getReadableIssueStatus(issue.status),
     }))
   }
 
@@ -101,37 +101,4 @@ const computedIssues = computed<Issue[]>(() => {
 onMounted(async () => {
   issues.value = await httpClient.get<{ issues: Issue[]; }>('/issues/dashboard');
 });
-
-// const issues = [
-// 	{
-// 		id: 1,
-// 		title: 'TypeError: Cannot read property of undefined',
-// 		status: 'Не решена',
-// 		statusClass: 'bg-yellow-100 text-yellow-800',
-// 		type: 'JavaScript',
-// 		project: 'Web App',
-// 		datetime: '2023-05-21',
-// 		time: '3 дня назад',
-// 	},
-// 	{
-// 		id: 2,
-// 		title: 'NetworkError when attempting to fetch resource',
-// 		status: 'Решена',
-// 		statusClass: 'bg-green-100 text-green-800',
-// 		type: 'Network',
-// 		project: 'Mobile App',
-// 		datetime: '2023-05-20',
-// 		time: '4 дня назад',
-// 	},
-// 	{
-// 		id: 3,
-// 		title: 'Database connection timeout',
-// 		status: 'Проигнорирована',
-// 		statusClass: 'bg-gray-100 text-gray-800',
-// 		type: 'Backend',
-// 		project: 'API Service',
-// 		datetime: '2023-05-18',
-// 		time: '6 дней назад',
-// 	},
-// ];
 </script>
