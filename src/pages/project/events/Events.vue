@@ -11,7 +11,7 @@
             <div class="flex items-center space-x-3 mt-2">
               <Badge variant="secondary" class="flex items-center">
                 <Icon icon="heroicons:computer-desktop" class="mr-1 h-4 w-4"/>
-                {{ currentEnvironment }}
+                {{ [...events].pop()?.environment }}
               </Badge>
               <RouterLink
                   :to="`/projects/${slug}`"
@@ -32,7 +32,7 @@
               option-label="value"
               option-value="key"
               placeholder="Все уровни"
-              class="min-w-48 bg-white"
+              class="min-w-48"
               icon="heroicons:filter"
           />
         </div>
@@ -62,7 +62,7 @@
         />
         <StatCard
             title="Текущий релиз"
-            :value="currentRelease || 'N/A'"
+            :value=[...events].pop()?.release
             icon="heroicons:tag"
         />
       </div>
@@ -109,14 +109,9 @@
           </template>
 
           <template #cell-actions="{ row }">
-            <DropdownMenu
-                :row="row"
-                :actions="[
-                { key: 'create-issue', label: 'Создать задачу', icon: 'heroicons:plus-circle' },
-                { key: 'delete', label: 'Удалить', icon: 'heroicons:trash', variant: 'danger' }
-              ]"
-                @action="handleActionClick"
-            />
+            <span class="flex justify-start">
+              <DropdownMenu :row :actions @action="handleActionClick"/>
+            </span>
           </template>
         </DataTable>
       </div>
@@ -207,7 +202,7 @@ import {
 } from '@/api';
 import {formatDateTime} from '@/utils';
 import StatCard from "@/components/projects/StatCard.vue";
-import {columns} from "./table.ts";
+import {actions, columns} from "./table.ts";
 import {schema} from "./schema.ts";
 import {useIssuesStore} from "@/stores";
 import {ROUTES} from "@/router/routes.ts";
@@ -228,9 +223,6 @@ const pagination = ref<PaginationType>({
   links: [],
   current_page: 1,
 });
-const releases = ref<string[]>([]);
-const currentEnvironment = ref('production');
-const currentRelease = ref('');
 const isCreateIssueModalOpen = ref(false);
 const selectedEvent = ref<Event>({} as Event);
 const createIssueForm = reactive({
@@ -363,16 +355,6 @@ const handleCreateIssue = async () => {
   }
 }
 
-// const fetchReleases = async () => {
-//   try {
-//     const response = await httpClient.get(`/projects/${slug}/releases`);
-//     releases.value = response.data;
-//     currentRelease.value = response.data[0] || '';
-//   } catch (error) {
-//     console.error('Error fetching releases:', error);
-//   }
-// };
-
 const changePage = (url: string | null) => {
   if (!url) return;
   const page = new URL(url).searchParams.get('page');
@@ -388,7 +370,6 @@ watch(filters.value, async () => {
 });
 
 onMounted(async () => {
-  // await fetchReleases();
   await fetchEvents();
   anotherStats.value = await httpClient.get(`/projects/stats/${slug}/week`);
 });

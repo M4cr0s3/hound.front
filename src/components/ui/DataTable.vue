@@ -28,14 +28,20 @@
               :key="column.key"
               class="px-6 py-4"
               :class="column.cellClass"
+              :style="{
+                'max-width': column.maxWidth || 'none',
+                'min-width': column.minWidth || 'auto'
+              }"
           >
-            <slot
-                :name="`cell-${column.key}`"
-                :row="row"
-                :value="row[column.key]"
-            >
-              {{ formatCellValue(row, column) }}
-            </slot>
+            <div class="cell-content" :style="getCellStyle(column)">
+              <slot
+                  :name="`cell-${column.key}`"
+                  :row="row"
+                  :value="row[column.key]"
+              >
+                {{ formatCellValue(row, column) }}
+              </slot>
+            </div>
           </td>
         </tr>
         </tbody>
@@ -57,12 +63,15 @@
 import {Pagination} from './';
 import {type Pagination as PaginationType} from '@/api';
 
-interface Column {
+export interface Column {
   key: string;
   title: string;
   format?: (value: any) => string;
   headerClass?: string;
   cellClass?: string;
+  maxWidth?: string;
+  minWidth?: string;
+  truncate?: boolean;
 }
 
 interface Props {
@@ -88,6 +97,17 @@ const emit = defineEmits<{
 const formatCellValue = (row: any, column: Column) => {
   const value = row[column.key];
   return column.format ? column.format(value) : value;
+};
+
+const getCellStyle = (column: Column) => {
+  return {
+    'overflow': column.truncate ? 'hidden' : 'visible',
+    'text-overflow': column.truncate ? 'ellipsis' : 'clip',
+    'white-space': column.truncate ? 'nowrap' : 'normal',
+    'max-width': column.maxWidth || 'none',
+    'min-width': column.minWidth || 'auto',
+    'display': 'block'
+  };
 };
 
 const handleRowClick = (row: any) => {
