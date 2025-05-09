@@ -60,7 +60,7 @@
             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
               <button
                   @click="copyToClipboard(key.public_key)"
-                  class="text-gray-400 hover:text-gray-500"
+                  class="text-gray-400 hover:text-gray-500 cursor-pointer"
                   title="Копировать"
               >
                 <Icon icon="heroicons:clipboard" class="h-5 w-5"/>
@@ -93,7 +93,7 @@
               </button>
               <button
                   @click="copyToClipboard(key.private_key)"
-                  class="text-gray-400 hover:text-gray-500"
+                  class="text-gray-400 hover:text-gray-500 cursor-pointer"
                   title="Копировать"
               >
                 <Icon icon="heroicons:clipboard" class="h-5 w-5"/>
@@ -118,7 +118,7 @@
             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
               <button
                   @click="copyToClipboard(key.dsn)"
-                  class="text-gray-400 hover:text-gray-500"
+                  class="text-gray-400 hover:text-gray-500 cursor-pointer"
                   title="Копировать"
               >
                 <Icon icon="heroicons:clipboard" class="h-5 w-5"/>
