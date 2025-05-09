@@ -153,6 +153,7 @@ import {useProjectsStore} from '@/stores';
 import {useRoute} from 'vue-router';
 import {PLATFORMS} from '@/data';
 import type {Project} from "@/api";
+import {toast} from "vue-sonner";
 
 const props = defineProps<{
   project: Project
@@ -173,7 +174,7 @@ const togglePrivateKeyVisibility = () => {
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text);
-  alert('Скопировано в буфер обмена: ' + text);
+  toast.success('Скопировано в буфер обмена');
 };
 
 watch(
