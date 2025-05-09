@@ -18,6 +18,7 @@
             label="Электронная почта"
             type="email"
             icon="heroicons:envelope"
+            placeholder="dev@dev.ru"
             autocomplete="email"
             required
         />
@@ -28,6 +29,7 @@
             label="Пароль"
             type="password"
             icon="heroicons:lock-closed"
+            placeholder="••••••••"
             autocomplete="current-password"
             required
         />
