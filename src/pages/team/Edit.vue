@@ -127,7 +127,7 @@
       <Modal
           :is-open="isAddMemberModalOpen"
           @close="isAddMemberModalOpen = false"
-          size="lg"
+          class="z-[-100]"
       >
         <template #title>
           <div class="flex items-center space-x-2">
