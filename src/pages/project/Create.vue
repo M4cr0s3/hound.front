@@ -18,7 +18,7 @@
 
         <form
             class="p-6 space-y-6"
-            @submit.prevent="projectsStore.create(form)"
+            @submit.prevent="handleSubmit"
         >
           <InputField
               id="project-name"
@@ -71,7 +71,6 @@
                 type="submit"
                 :is-loading="projectsStore.isLoading"
                 :loading-text="'Создание...'"
-                :disabled="projectsStore.isLoading"
                 class="px-4 py-2"
             >
               <Icon icon="heroicons:plus" class="mr-2 h-4 w-4"/>
@@ -93,6 +92,7 @@ import {ROUTES} from '@/router/routes.ts';
 import type {CreateProjectBody} from '@/api';
 import {useProjectsStore, useTeamsStore} from '@/stores';
 import {Icon} from '@iconify/vue';
+import {toast} from "vue-sonner";
 
 const form = ref<CreateProjectBody>({
   name: '',
@@ -100,6 +100,17 @@ const form = ref<CreateProjectBody>({
   team_id: 0,
   platform: '',
 });
+
+const handleSubmit = async () => {
+  try {
+    await projectsStore.create(form.value);
+    toast.success('Проект успешно создан');
+  } catch (e) {
+    toast.error('Произошла ошибка при создании проекта', {
+      description: e.data.message
+    });
+  }
+};
 
 const projectsStore = useProjectsStore();
 const teamsStore = useTeamsStore();

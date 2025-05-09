@@ -3,9 +3,11 @@ import {ref} from 'vue'
 import {watchDebounced} from '@vueuse/core'
 import {Icon} from '@iconify/vue'
 import {httpClient} from "@/api";
-import {Avatar, Modal} from "@/components/ui";
+import {type ActionItem, Avatar, DropdownMenu, Modal} from "@/components/ui";
 import SearchItem from "@/components/search/SearchItem.vue";
 import {useUsersStore} from "@/stores";
+import {router} from "@/router";
+import {ROUTES} from "@/router/routes.ts";
 
 const userStore = useUsersStore();
 
@@ -13,6 +15,18 @@ const searchQuery = ref('')
 const searchResults = ref([])
 const isLoading = ref(false)
 const isOpen = ref(false)
+
+const actions: ActionItem[] = [
+  {
+    icon: 'heroicons:user-circle',
+    key: 'profile',
+    label: 'Профиль',
+    handler: () => {
+      isOpen.value = false;
+      router.push(ROUTES.USER.PROFILE);
+    }
+  }
+];
 
 watchDebounced(
     searchQuery,
@@ -58,14 +72,17 @@ watchDebounced(
           </div>
 
           <button
-              class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          >
             <Icon icon="heroicons:bell"/>
           </button>
           <div class="relative">
             <div class="flex items-center space-x-2 cursor-pointer">
-
               <Avatar :name="userStore.currentUser.name" size="sm"/>
-              <Icon icon="heroicons:chevron-down" class="h-5 w-5 text-gray-500"/>
+              <DropdownMenu
+                  icon="heroicons:chevron-down"
+                  :actions
+              />
             </div>
           </div>
         </div>

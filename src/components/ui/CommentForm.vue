@@ -250,8 +250,6 @@ const checkForMention = () => {
   }
 
   if (lastAtPos >= 0 && (lastAtPos === 0 || /\s/.test(textBeforeCursor[lastAtPos - 1]))) {
-    console.log(cursorPos, lastAtPos, textBeforeCursor);
-
     const text = textBeforeCursor.substring(lastAtPos + 1);
     if (!text.trim()) return;
     if (/\s/.test(text)) return;
@@ -262,7 +260,6 @@ const checkForMention = () => {
     selectedSuggestionIndex.value = 0;
     searchUsers(currentMentionQuery.value);
   } else {
-    console.log(cursorPos, lastAtPos);
     showUserSuggestions.value = false;
   }
 };

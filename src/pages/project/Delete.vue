@@ -44,7 +44,7 @@
       <div class="mt-8 flex justify-end">
         <button
             type="button"
-            class="w-full flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 transition-all duration-200 ease-in-out"
+            class="w-full flex cursor-pointer justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 transition-all duration-200 ease-in-out"
             :class="{
 						'opacity-50 cursor-not-allowed': !isDeleteEnabled,
 						'hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transform hover:scale-105':

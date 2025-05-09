@@ -166,8 +166,9 @@ const resetSelection = () => {
 
 const fetchAvailableUsers = async (query: string) => {
   try {
-    availableUsers.value = (await httpClient.get<{ users: User[] }>('/users/available', {
-      query: {q: query}
+    availableUsers.value = (await httpClient.post<{ users: User[] }>('/users/available', {
+      query: {q: query},
+      issue_id: issueStore.issue.id,
     })).users;
   } catch (error) {
     console.error('Error fetching users:', error);
@@ -177,7 +178,8 @@ const fetchAvailableUsers = async (query: string) => {
 const fetchAvailableTeams = async (query: string) => {
   try {
     availableTeams.value = (await httpClient.get<{ teams: Team[] }>('/teams/available', {
-      query: {q: query}
+      query: {q: query},
+      issue_id: issueStore.issue.id,
     })).teams;
   } catch (error) {
     console.error('Error fetching teams:', error);
@@ -185,8 +187,10 @@ const fetchAvailableTeams = async (query: string) => {
 };
 
 onMounted(async () => {
-  await fetchAvailableUsers();
-  await fetchAvailableTeams();
+  if (issueStore.issue.id) {
+    await fetchAvailableUsers();
+    await fetchAvailableTeams();
+  }
 });
 
 watch(isAddAssigneeOpen, (val) => {

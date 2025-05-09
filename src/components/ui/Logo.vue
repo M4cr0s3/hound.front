@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ROUTES} from "../../router/routes.ts";
+import {ROUTES} from "@/router/routes.ts";
 
 defineProps<{
   width: number

@@ -7,6 +7,7 @@ export interface Project {
   slug: string;
   platform: string;
   team?: Team;
+  key: ProjectKey;
 }
 
 export interface UpdateProjectBody {
@@ -51,3 +52,10 @@ export interface LastDayStat {
 }
 
 export type LastDayStatsResponse = LastDayStat[];
+
+export interface ProjectKey {
+  id: number;
+  public_key: string;
+  private_key: string;
+  dsn: string;
+}

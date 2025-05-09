@@ -24,6 +24,7 @@ export const ROUTES = {
   USER: {
     INDEX: '/users',
     CREATE: '/users/create',
+    PROFILE: '/profile',
   },
   INVITE: '/invite/:token',
 };
@@ -109,14 +110,14 @@ export const routes: RouteRecordRaw[] = [
     meta: {requiresAuth: true},
   },
   {
+    path: ROUTES.USER.PROFILE,
+    component: () => import('../pages/user/Profile.vue'),
+    meta: {requiresAuth: true},
+  },
+  {
     path: ROUTES.INVITE,
     component: () => import('../pages/Invite.vue'),
     meta: {guestOnly: true}
-  },
-  {
-    path: '/projects/:slug/events/:eventId/issue/create',
-    component: () => import('../pages/issue/CreateIssue.vue'),
-    props: true,
   },
   {
     path: '/projects/:slug/settings',

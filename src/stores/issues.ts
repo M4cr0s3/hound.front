@@ -61,8 +61,9 @@ export const useIssuesStore = defineStore('issues', {
     async createIssue(data: Partial<Issue>) {
       this.isLoading = true;
       try {
-        const response = await httpClient.post<Issue>('/issues', data);
+        const response = (await httpClient.post<{ data: Issue }>('/issues', data)).data;
         this.issues.unshift(response);
+        return response;
       } finally {
         this.isLoading = false;
       }

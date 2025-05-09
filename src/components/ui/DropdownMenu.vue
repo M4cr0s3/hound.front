@@ -11,7 +11,7 @@
         aria-label="Действия"
     >
       <Icon
-          icon="heroicons:ellipsis-vertical"
+          :icon="props.icon"
           class="h-5 w-5"
       />
     </button>
@@ -72,6 +72,7 @@ interface Props {
   menuKey?: string | number;
   modelValue?: boolean;
   row?: any;
+  icon?: string;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -91,6 +92,7 @@ const props = withDefaults(defineProps<Props>(), {
   ],
   modelValue: undefined,
   row: undefined,
+  icon: 'heroicons:ellipsis-vertical'
 });
 
 const emit = defineEmits<{

@@ -149,7 +149,7 @@
                 searchable
                 :search-debounce="500"
                 @search="handleUserSearch"
-                placeholder="Начните вводить имя или email"
+                placeholder="Выберите участников"
             >
               <template #option="{ option }">
                 <div class="flex items-center space-x-3">
@@ -204,6 +204,7 @@ import {Button, InputField, Modal, SelectField} from '@/components/ui';
 import {TeamsApi, type Team, type User} from '@/api';
 import {EmptyState} from "@/components/projects/settings/notification";
 import { Icon } from '@iconify/vue';
+import {toast} from "vue-sonner";
 
 const {slug} = defineProps<{
   slug: string;
@@ -252,8 +253,8 @@ const handleSubmit = async () => {
   try {
     await TeamsApi.update(team.value.id, form.value);
     await fetchTeam();
+    toast.success('Команда успешно обновлена');
   } catch (error: any) {
-    console.log(error);
     if (error?.data?.errors) {
       errors.value = error.data.errors;
     }
@@ -294,6 +295,7 @@ const handleAddMembers = async () => {
     selectedUserIds.value = [];
     await fetchAvailableUsers();
     isAddMemberModalOpen.value = false;
+    toast.success('Участник(и) успешно добавлены');
   } catch (error: any) {
     if (error.response?.data?.errors) {
       memberErrors.value = error.response.data.errors;
@@ -305,14 +307,13 @@ const handleAddMembers = async () => {
 };
 
 const removeMember = async (userId: number) => {
-  if (!confirm('Вы уверены, что хотите удалить этого участника?')) return;
-
   try {
     await TeamsApi.removeMember(team.value.id, userId);
     await fetchTeam();
     await fetchAvailableUsers();
+    toast.success('Участник успешно удален');
   } catch (error) {
-    console.error('Ошибка удаления участника:', error);
+    toast.error('Ошибка при удалении участника');
   }
 };
 

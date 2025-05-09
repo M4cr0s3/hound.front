@@ -32,7 +32,7 @@
               option-label="value"
               option-value="key"
               placeholder="Все уровни"
-              class="min-w-48"
+              class="min-w-48 bg-white"
               icon="heroicons:filter"
           />
         </div>
@@ -120,19 +120,84 @@
           </template>
         </DataTable>
       </div>
+      <Modal :is-open="isCreateIssueModalOpen" @close="isCreateIssueModalOpen = false">
+        <template #title>
+          <h2 class="text-xl font-bold text-gray-900 mb-2">Создать задачу</h2>
+        </template>
+        <template #content>
+          <TheForm
+              class="space-y-6"
+              :schema="schema"
+              :data="createIssueForm"
+              :submit="handleCreateIssue"
+              v-slot="{ errors }"
+          >
+            <InputField
+                id="title"
+                v-model="createIssueForm.title"
+                label="Заголовок"
+                placeholder="Заголовок задачи"
+                :error="errors?.title"
+                required
+            />
+
+            <InputField
+                id="description"
+                v-model="createIssueForm.description"
+                label="Описание"
+                placeholder="Описание задачи"
+                required
+                :error="errors?.description"
+            />
+
+            <SelectField
+                id="priority"
+                v-model="createIssueForm.priority"
+                label="Приоритет"
+                placeholder="Приоритет задачи"
+                :options="[
+                  { key: 'low', value: 'Низкий' },
+                  { key: 'medium', value: 'Средний' },
+                  { key: 'high', value: 'Высокий' },
+                  { key: 'critical', value: 'Критический' },
+                ]"
+                option-label="value"
+                option-value="key"
+                required
+                :error="errors?.priority"
+            />
+
+            <div class="flex justify-end gap-3 mt-5">
+              <Button
+                  variant="secondary"
+                  @click="isCreateIssueModalOpen = false"
+                  class="px-4 py-2"
+              >
+                Отмена
+              </Button>
+              <Button
+                  type="submit"
+                  class="px-4 py-2"
+              >
+                Создать
+              </Button>
+            </div>
+          </TheForm>
+        </template>
+      </Modal>
     </div>
   </DashboardLayout>
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, watch} from 'vue';
+import {ref, onMounted, onUnmounted, watch, reactive} from 'vue';
 import {useRouter} from 'vue-router';
 import {Icon} from '@iconify/vue';
 import {
   DataTable,
   DropdownMenu,
   SelectField,
-  Badge,
+  Badge, Modal, TheForm, InputField, Button,
 } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import {
@@ -142,13 +207,18 @@ import {
 } from '@/api';
 import {formatDateTime} from '@/utils';
 import StatCard from "@/components/projects/StatCard.vue";
-import {columns} from "@/pages/project/events/table.ts";
+import {columns} from "./table.ts";
+import {schema} from "./schema.ts";
+import {useIssuesStore} from "@/stores";
+import {ROUTES} from "@/router/routes.ts";
+import {toast} from "vue-sonner";
 
-const router = useRouter();
 const {slug} = defineProps<{
   slug: string;
 }>();
 
+const router = useRouter();
+const issuesStore = useIssuesStore();
 const isLoading = ref<boolean>(false);
 const events = ref<Event[]>([]);
 const pagination = ref<PaginationType>({
@@ -161,6 +231,15 @@ const pagination = ref<PaginationType>({
 const releases = ref<string[]>([]);
 const currentEnvironment = ref('production');
 const currentRelease = ref('');
+const isCreateIssueModalOpen = ref(false);
+const selectedEvent = ref<Event>({} as Event);
+const createIssueForm = reactive({
+  title: '',
+  description: '',
+  priority: 'low',
+  due_date: new Date(),
+  event_id: '',
+});
 
 const anotherStats = ref({
   events: {},
@@ -180,6 +259,7 @@ const filters = ref({
 });
 
 const levelOptions = [
+  {key: '', value: 'Все'},
   {key: 'error', value: 'Ошибки'},
   {key: 'warning', value: 'Предупреждения'},
   {key: 'info', value: 'Информационные'},
@@ -218,7 +298,9 @@ const handleActionClick = ({key, row}: { key: string; row?: any }) => {
       openEvent(row.id);
       break;
     case 'create-issue':
-      router.push(`/projects/${slug}/events/${row.id}/issue/create`);
+      isCreateIssueModalOpen.value = true;
+      selectedEvent.value = row;
+      createIssueForm.event_id = row.id;
       break;
     case 'delete':
       deleteEvent(row.id);
@@ -237,7 +319,7 @@ const deleteEvent = async (eventId: string) => {
 };
 
 const openEvent = (eventId: string) => {
-  router.push(`/projects/${slug}/events/${eventId}`);
+  // router.push(`/projects/${slug}/events/${eventId}`);
 };
 
 const fetchEvents = async () => {
@@ -269,6 +351,17 @@ const fetchEvents = async () => {
     isLoading.value = false;
   }
 };
+
+const handleCreateIssue = async () => {
+  try {
+    const response = await issuesStore.createIssue(createIssueForm);
+    isCreateIssueModalOpen.value = false;
+    await router.push(ROUTES.ISSUE.SHOW.replace(':id', response.id));
+    toast.success('Задача успешно создана');
+  } catch (error) {
+    console.error('Error creating issue:', error);
+  }
+}
 
 // const fetchReleases = async () => {
 //   try {

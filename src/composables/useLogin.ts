@@ -1,7 +1,8 @@
 import {type Ref, ref} from 'vue';
-import {login} from '../api';
+import {login} from '@/api';
 import {useRouter} from 'vue-router';
 import {ROUTES} from '../router/routes.ts';
+import {toast} from "vue-sonner";
 
 export interface LoginCredentials {
   email: string;
@@ -58,6 +59,7 @@ export const useLogin = (): UseLoginReturn => {
       await router.push(ROUTES.DASHBOARD);
     } catch (error: unknown) {
       if (error.status === 422 || error.status === 403) {
+        toast.error('Неправильный логин или пароль', {duration: 3000, description: error.message});
         errors.value.commonError = error.message;
       }
     } finally {

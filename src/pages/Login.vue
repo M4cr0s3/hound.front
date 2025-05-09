@@ -17,9 +17,9 @@
             v-model="credentials.email"
             label="Электронная почта"
             type="email"
+            icon="heroicons:envelope"
             autocomplete="email"
             required
-            :error="errors.fieldErrors.email"
         />
 
         <InputField
@@ -27,9 +27,9 @@
             v-model="credentials.password"
             label="Пароль"
             type="password"
+            icon="heroicons:lock-closed"
             autocomplete="current-password"
             required
-            :error="errors.fieldErrors.password"
         />
 
         <div class="flex items-center justify-between">
@@ -42,7 +42,6 @@
             </a>
           </div>
         </div>
-        <CommonError v-if="errors.commonError" :message="errors.commonError"/>
         <SubmitButton :loading="isLoading"> Войти</SubmitButton>
       </AuthForm>
     </div>
@@ -50,10 +49,10 @@
 </template>
 
 <script setup lang="ts">
-import {InputField, SubmitButton, Logo, CommonError} from '@/components/ui';
+import {InputField, SubmitButton, Logo} from '@/components/ui';
 import AuthForm from '@/components/auth/AuthForm.vue';
 import AuthLayout from '@/layouts/AuthLayout.vue';
 import {useLogin} from '@/composables';
 
-const {credentials, errors, isLoading, handleSubmit} = useLogin();
+const {credentials, isLoading, handleSubmit} = useLogin();
 </script>

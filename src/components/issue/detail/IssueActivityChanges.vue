@@ -1,13 +1,30 @@
 <template>
   <div class="space-y-2">
-    <template v-if="activity.type === 'status_changed'">
+    <template v-if="activity.type === 'created_issue'">
+      <div class="space-y-2">
+        <div v-for="(value, field) in activity.changes.after" :key="field" class="space-y-1">
+          <template v-if="shouldDisplayField(field)">
+            <div class="flex items-start space-x-2">
+              <span class="text-gray-500 capitalize">{{ humanReadableField(field) }}:</span>
+              <span class="text-sm font-medium">
+                {{ formatValue(field, value) }}
+              </span>
+            </div>
+          </template>
+        </div>
+      </div>
+    </template>
+
+    <template v-else-if="activity.type === 'status_changed'">
       <div class="flex items-center space-x-2">
         <span class="text-gray-500">Статус:</span>
-        <span class="px-2 py-0.5 rounded text-xs line-through"
-              :class="statusClass(activity.changes.before.status)">
-          {{ humanReadableStatus(activity.changes.before.status) }}
-        </span>
-        <Icon icon="heroicons-outline:arrow-right" class="h-4 w-4 text-gray-400"/>
+        <template v-if="activity.changes.before">
+          <span class="px-2 py-0.5 rounded text-xs line-through"
+                :class="statusClass(activity.changes.before.status)">
+            {{ humanReadableStatus(activity.changes.before.status) }}
+          </span>
+          <Icon icon="heroicons-outline:arrow-right" class="h-4 w-4 text-gray-400"/>
+        </template>
         <span class="px-2 py-0.5 rounded text-xs"
               :class="statusClass(activity.changes.after.status)">
           {{ humanReadableStatus(activity.changes.after.status) }}
@@ -18,10 +35,12 @@
     <template v-else-if="activity.type === 'due_date_changed'">
       <div class="flex items-center space-x-2">
         <span class="text-gray-500">Дедлайн:</span>
-        <span class="text-sm text-gray-600">
-          {{ formatDate(activity.changes.before.due_date) || 'Не установлен' }}
-        </span>
-        <Icon icon="heroicons-outline:arrow-right" class="h-4 w-4 text-gray-400"/>
+        <template v-if="activity.changes.before">
+          <span class="text-sm text-gray-600">
+            {{ formatDate(activity.changes.before.due_date) || 'Не установлен' }}
+          </span>
+          <Icon icon="heroicons-outline:arrow-right" class="h-4 w-4 text-gray-400"/>
+        </template>
         <span class="text-sm font-medium"
               :class="{'text-red-600': isOverdue(activity.changes.after.due_date)}">
           {{ formatDate(activity.changes.after.due_date) || 'Не установлен' }}
@@ -29,23 +48,19 @@
       </div>
     </template>
 
-    <template v-else-if="activity.type === 'comment_added'">
-      <div class="prose prose-sm max-w-none p-3 bg-gray-50 rounded-lg">
-        <div v-html="renderMarkdown(activity.changes.after.text)"/>
-      </div>
-    </template>
-
     <template v-else>
       <div v-for="(value, field) in activity.changes.after" :key="field" class="space-y-1">
-        <template v-if="shouldDisplayField(field) && activity.changes.before[field] !== value">
+        <template v-if="shouldDisplayField(field) && (!activity.changes.before || activity.changes.before[field] !== value)">
           <div class="flex items-start space-x-2">
             <span class="text-gray-500 capitalize">{{ humanReadableField(field) }}:</span>
             <div class="flex-1">
               <div class="flex items-center space-x-2">
-                <span class="text-sm text-gray-600 line-through">
-                  {{ formatValue(field, activity.changes.before[field]) }}
-                </span>
-                <Icon icon="heroicons-outline:arrow-right" class="h-4 w-4 text-gray-400"/>
+                <template v-if="activity.changes.before">
+                  <span class="text-sm text-gray-600 line-through">
+                    {{ formatValue(field, activity.changes.before[field]) }}
+                  </span>
+                  <Icon icon="heroicons-outline:arrow-right" class="h-4 w-4 text-gray-400"/>
+                </template>
                 <span class="text-sm font-medium">
                   {{ formatValue(field, value) }}
                 </span>
@@ -59,20 +74,11 @@
 </template>
 
 <script setup lang="ts">
-import {Icon} from '@iconify/vue';
-import {ref} from "vue";
-import MarkdownIt from "markdown-it";
+import { Icon } from '@iconify/vue';
 
 const props = defineProps<{
   activity: any;
 }>();
-
-const md = ref(new MarkdownIt({
-  html: true,
-  linkify: true,
-  typographer: true,
-  breaks: true
-}));
 
 const excludedFields = ['updated_at', 'created_at'];
 
@@ -130,11 +136,6 @@ const formatDate = (dateString: string) => {
 const isOverdue = (dateString: string) => {
   if (!dateString) return false;
   return new Date(dateString) < new Date();
-};
-
-const renderMarkdown = (content: string) => {
-  if (!content) return '';
-  return md.value.render(content);
 };
 </script>
 

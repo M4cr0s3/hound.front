@@ -26,6 +26,7 @@
           :autocomplete="autocomplete"
           :required="required"
           :placeholder="placeholder"
+          :readonly="readonly"
           class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           :class="{
             'border-red-400 text-red-900 placeholder-red-500 focus:border-red-500 focus:outline-none focus:ring-red-500': error,
@@ -120,6 +121,10 @@ defineProps({
   size: {
     type: String as () => 'sm' | 'md',
     default: 'md'
+  },
+  readonly: {
+    type: Boolean,
+    default: false
   }
 });
 

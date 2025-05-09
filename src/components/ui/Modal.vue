@@ -40,7 +40,7 @@
               </div>
             </div>
           </div>
-          <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+          <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse" v-if="$slots.footer">
             <slot name="footer"></slot>
           </div>
         </div>

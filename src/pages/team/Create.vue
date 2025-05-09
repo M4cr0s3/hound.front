@@ -3,7 +3,7 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div class="flex items-center space-x-4 mb-8">
         <div class="p-3 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-md">
-          <Icon icon="heroicons:user-group" class="h-8 w-8 text-white" />
+          <Icon icon="heroicons:user-group" class="h-8 w-8 text-white"/>
         </div>
         <div>
           <h1 class="text-2xl font-bold text-gray-900">Создание новой команды</h1>
@@ -16,9 +16,12 @@
           <h2 class="text-lg font-semibold text-gray-900">Основные параметры</h2>
         </div>
 
-        <form
-            @submit.prevent="handleSubmit"
+        <TheForm
+            :submit="handleSubmit"
             class="p-6 space-y-6"
+            :data="form"
+            v-slot="{ errors }"
+            :schema
         >
           <InputField
               id="team-name"
@@ -26,7 +29,7 @@
               label="Название команды"
               placeholder="Например: Backend разработка"
               required
-              :error="errors.name"
+              :error="errors?.name"
               icon="heroicons:tag"
           />
 
@@ -35,7 +38,7 @@
               v-model="form.slug"
               label="URL-идентификатор"
               placeholder="Например: backend-team"
-              :error="errors.slug"
+              :error="errors?.slug"
               description="Если не указан, будет сгенерирован автоматически"
               icon="heroicons:link"
           />
@@ -46,21 +49,20 @@
                 @click="$router.push(ROUTES.TEAM.INDEX)"
                 class="px-4 py-2"
             >
-              <Icon icon="heroicons:x-mark" class="mr-2 h-4 w-4" />
+              <Icon icon="heroicons:x-mark" class="mr-2 h-4 w-4"/>
               Отмена
             </Button>
             <Button
                 type="submit"
                 :is-loading="isSubmitting"
                 :loading-text="'Создание...'"
-                :disabled="isSubmitting"
                 class="px-4 py-2"
             >
-              <Icon icon="heroicons:plus" class="mr-2 h-4 w-4" />
+              <Icon icon="heroicons:plus" class="mr-2 h-4 w-4"/>
               Создать команду
             </Button>
           </div>
-        </form>
+        </TheForm>
       </div>
     </div>
   </DashboardLayout>
@@ -68,17 +70,34 @@
 
 <script setup lang="ts">
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import { useTeam } from '@/composables';
-import { InputField, Button } from '@/components/ui';
-import { ROUTES } from '@/router/routes.ts';
-import { useTeamsStore } from '@/stores';
-import { Icon } from '@iconify/vue';
+import {InputField, Button, TheForm} from '@/components/ui';
+import {ROUTES} from '@/router/routes.ts';
+import {useTeamsStore} from '@/stores';
+import {Icon} from '@iconify/vue';
+import {reactive, ref} from "vue";
+import * as v from 'valibot';
+import {toast} from "vue-sonner";
 
 const teamsStore = useTeamsStore();
-const { form, errors, isSubmitting } = useTeam();
+const form = reactive({
+  name: '',
+  slug: ''
+});
+const isSubmitting = ref(false);
+
+const schema = v.object({
+  name: v.string(),
+  slug: v.optional(v.string()),
+});
 
 const handleSubmit = async () => {
-  await teamsStore.create(form);
+  try {
+    isSubmitting.value = true;
+    await teamsStore.create(form);
+    toast.success('Команда успешно создана');
+  } finally {
+    isSubmitting.value = false;
+  }
 };
 </script>
 

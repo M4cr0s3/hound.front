@@ -1,8 +1,8 @@
 import {defineStore} from 'pinia';
-import {type Team, type CreateTeamBody, type Id, TeamsApi} from '../api';
+import {type Team, type CreateTeamBody, type Id, TeamsApi} from '@/api';
 import {ref, type Ref} from 'vue';
-import {router} from '../router';
-import {ROUTES} from '../router/routes.ts';
+import {router} from '@/router';
+import {ROUTES} from '@/router/routes.ts';
 
 export const useTeamsStore = defineStore('teams', () => {
   const teams = ref<Team[]>([]);

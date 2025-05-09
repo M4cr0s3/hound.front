@@ -1,5 +1,5 @@
-import {api, type CreateProjectBody, type CreateProjectResponse} from "../";
+import {type CreateProjectBody, type CreateProjectResponse, httpClient} from "../";
 
 export const createProject = async (body: CreateProjectBody) => {
-  return api.post<CreateProjectBody, CreateProjectResponse>('/projects', body);
+  return httpClient.post<CreateProjectResponse>('/projects', body);
 };
