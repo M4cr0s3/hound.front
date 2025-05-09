@@ -13,7 +13,7 @@
 
     <div v-if="!isCollapsed" class="divide-y divide-gray-200 max-h-96 overflow-y-auto">
       <div
-          v-for="(frame, index) in parsedFrames"
+          v-for="(frame, index) in stacktrace"
           :key="index"
           class="hover:bg-gray-50 transition-colors duration-100"
       >
@@ -24,6 +24,7 @@
           <span class="text-xs font-mono text-gray-500 w-8 flex-shrink-0">#{{ index }}</span>
           <div class="flex-1 min-w-0">
             <div class="text-sm font-medium text-gray-900 mb-1">
+              <span v-if="frame.class">{{ frame.class }}{{ frame.type }}</span>
               {{ frame.function || '(anonymous function)' }}
             </div>
             <div class="text-xs text-gray-500 font-mono truncate">
@@ -40,27 +41,23 @@
             v-if="expandedFrames.includes(index)"
             class="px-4 pb-3 ml-8"
         >
-          <div v-if="frame.code_snippet" class="bg-white rounded-md border border-gray-200 overflow-hidden">
-            <div
-                v-for="(line, i) in getCodeLines(frame)"
-                :key="i"
-                class="px-3 py-1 text-sm font-mono flex hover:bg-gray-50"
+          <div
+              v-for="(line, i) in getCodeLines(frame)"
+              :key="i"
+              class="px-3 py-1 text-sm font-mono flex hover:bg-gray-50"
+              :class="{
+                'bg-blue-50': line.lineNumber === frame.line,
+                'text-gray-500': line.lineNumber !== frame.line
+              }"
+          >
+            <span class="text-gray-400 w-10 flex-shrink-0 text-right pr-2">{{ line.lineNumber }}</span>
+            <span
+                class="flex-1 whitespace-pre"
                 :class="{
-                  'bg-blue-50': line.lineNumber === frame.line,
-                  'text-gray-500': line.lineNumber !== frame.line
+                  'text-blue-600 font-medium': line.lineNumber === frame.line
                 }"
-            >
-              <span class="text-gray-400 w-10 flex-shrink-0 text-right pr-2">{{ line.lineNumber }}</span>
-              <span
-                  class="flex-1 whitespace-pre"
-                  :class="{
-                    'text-blue-600 font-medium': line.lineNumber === frame.line
-                  }"
-              >{{ line.code }}</span>
-            </div>
-          </div>
-          <div v-else class="text-xs text-gray-400 italic">
-            No source code available
+                :style="{ 'padding-left': `${line.indentLevel * 1.5}rem` }"
+            >{{ line.code || '' }}</span>
           </div>
         </div>
       </div>
@@ -69,46 +66,87 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from 'vue';
+import {ref} from 'vue';
 import {Icon} from '@iconify/vue';
 
-const props = defineProps({
-  stacktrace: {
-    type: [String, Object],
-    required: true
-  },
-  canCollapse: {
-    type: Boolean,
-    default: true
-  }
-});
+interface CodeSnippet {
+  preContext?: string[];
+  contextLine?: string;
+  postContext?: string[];
+}
+
+interface StackFrame {
+  file: string;
+  line: number;
+  function: string;
+  class?: string | null;
+  type?: string | null;
+  codeSnippet?: CodeSnippet | null;
+}
+
+const props = defineProps<{
+  stacktrace: StackFrame[];
+  canCollapse?: boolean;
+}>();
 
 const isCollapsed = ref(false);
 const expandedFrames = ref<number[]>([]);
 
-const parsedFrames = computed(() => {
-  if (typeof props.stacktrace === 'object') {
-    return props.stacktrace.frames || [];
+function shouldIndentLine(code: string | null | undefined): boolean {
+  if (!code) return false;
+
+  const trimmed = code.trim();
+  if (!trimmed) return false;
+
+  return trimmed.endsWith('{') ||
+      trimmed.startsWith('}') ||
+      trimmed.startsWith('try') ||
+      trimmed.startsWith('catch') ||
+      trimmed.startsWith('finally');
+}
+
+function getCodeLines(frame: StackFrame) {
+  if (!frame?.codeSnippet) return [];
+
+  const lines: { lineNumber: number; code: string; indentLevel: number }[] = [];
+  let current = frame.line - (frame.codeSnippet.preContext?.length ?? 0);
+  let indentStack: number[] = [];
+  let currentIndent = 0;
+
+  const processLine = (line: string | null) => {
+    let safeLine = line || '';
+
+    // Фикс для статических методов (объединяем ": :" в "::")
+    safeLine = safeLine.replace(/: :/g, '::');
+
+    const trimmed = safeLine.trim();
+
+    if (trimmed.startsWith('}') && indentStack.length > 0) {
+      currentIndent = indentStack.pop() || 0;
+    }
+
+    lines.push({
+      lineNumber: current++,
+      code: safeLine,
+      indentLevel: currentIndent
+    });
+
+    if (trimmed.endsWith('{')) {
+      indentStack.push(currentIndent);
+      currentIndent++;
+    }
+  };
+
+  frame.codeSnippet.preContext?.forEach(processLine);
+
+  if (frame.codeSnippet.contextLine) {
+    processLine(frame.codeSnippet.contextLine);
   }
 
-  const frames = [];
-  const lines = props.stacktrace.split('\n').filter(line => line.trim()).map(line => line.trim());
+  frame.codeSnippet.postContext?.forEach(processLine);
 
-  const frameRegex = /^(#\d+\s+)?(.*?)\((\d+)\):\s+(.*?)(->|::)(.*)$/;
-
-  lines.forEach(line => {
-    const match = line.match(frameRegex);
-    if (match) {
-      frames.push({
-        file: match[2].trim(),
-        line: parseInt(match[3]),
-        function: match[4].trim(),
-      });
-    }
-  });
-
-  return frames;
-});
+  return lines;
+}
 
 const toggleExpandFrame = (index: number) => {
   const idx = expandedFrames.value.indexOf(index);
@@ -119,29 +157,7 @@ const toggleExpandFrame = (index: number) => {
   }
 };
 
-function getCodeLines(frame: any) {
-  if (!frame.code_snippet) return [];
-
-  const lines: { lineNumber: number; code: string }[] = [];
-  let current = frame.line -
-      (frame.code_snippet.pre_context?.length ?? 0);
-
-  frame.code_snippet.pre_context?.forEach((line: string) => {
-    lines.push({ lineNumber: current++, code: line });
-  });
-
-  if (frame.code_snippet.context_line) {
-    lines.push({ lineNumber: current++, code: frame.code_snippet.context_line });
-  }
-
-  frame.code_snippet.post_context?.forEach((line: string) => {
-    lines.push({ lineNumber: current++, code: line });
-  });
-
-  return lines;
-}
-
-if (parsedFrames.value.length > 0) {
+if (props.stacktrace.length > 0) {
   expandedFrames.value.push(0);
 }
 </script>
