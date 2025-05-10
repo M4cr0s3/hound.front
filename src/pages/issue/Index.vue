@@ -1,61 +1,56 @@
 <template>
   <DashboardLayout>
-    <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-semibold text-gray-900">Задачи</h1>
-    </div>
-    <div class="flex gap-2 items-center">
-      <IssuesFilter v-model="filters"/>
-      <Button class="ml-2" @click="() => resetForm(filters)">
-        Сбросить фильтры
-      </Button>
-    </div>
-    <template v-if="issues.length">
-      <div class="flex justify-end mb-4">
-        <Button
-            icon="heroicons:table-cells"
-            :variant="viewMode === 'table' ? 'primary' : 'secondary'"
-            @click="viewMode = 'table'"
-        >
-          Таблица
-        </Button>
-        <Button
-            icon="heroicons:rectangle-stack"
-            :variant="viewMode === 'board' ? 'primary' : 'secondary'"
-            @click="viewMode = 'board'"
-            class="ml-2"
-        >
-          Доска
-        </Button>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-semibold text-gray-900">Задачи</h1>
+        <div class="flex gap-2 items-center">
+          <IssuesFilter v-model="filters"/>
+          <Button class="ml-2" @click="() => resetForm(filters)">
+            Сбросить фильтры
+          </Button>
+        </div>
       </div>
+      <div class="bg-white shadow rounded-lg overflow-hidden">
+        <template v-if="issues.length">
+          <div class="flex justify-end mb-4">
+            <Button
+                icon="heroicons:table-cells"
+                :variant="viewMode === 'table' ? 'primary' : 'secondary'"
+                @click="viewMode = 'table'"
+            >
+              Таблица
+            </Button>
+            <Button
+                icon="heroicons:rectangle-stack"
+                :variant="viewMode === 'board' ? 'primary' : 'secondary'"
+                @click="viewMode = 'board'"
+                class="ml-2"
+            >
+              Доска
+            </Button>
+          </div>
 
-      <IssuesTable
-          v-if="viewMode === 'table'"
-          :issues="issues"
-          :pagination="pagination"
-          :is-loading="isLoading"
-          @select="(row) => router.push(ROUTES.ISSUE.SHOW.replace(':id', row.id))"
-          @page-change="handlePageChange"
-      />
-      <IssueKanban
-          v-else
-          :issues="issues"
-          :is-loading="isLoading"
-          @select="openDetailsModal"
-      />
-    </template>
-    <template v-else>
-      <EmptyState title="Проблемы отсутствуют" icon="heroicons:document-text" description="Проблемы не найдены"/>
-    </template>
-    <!--    <Modal :is-open="showCreateModal" @close="showCreateModal = false">-->
-    <!--      <template #title>{{ editIssue ? 'Редактировать проблему' : 'Создать проблему' }}</template>-->
-    <!--      <template #content>-->
-    <!--        <IssueCreateForm-->
-    <!--            :issue="editIssue"-->
-    <!--            @submit="handleSubmit"-->
-    <!--            @cancel="showCreateModal = false"-->
-    <!--        />-->
-    <!--      </template>-->
-    <!--    </Modal>-->
+          <IssuesTable
+              v-if="viewMode === 'table'"
+              :issues="issues"
+              :pagination="pagination"
+              :is-loading="isLoading"
+              @select="(row) => router.push(ROUTES.ISSUE.SHOW.replace(':id', row.id))"
+              @page-change="handlePageChange"
+          />
+          <IssueKanban
+              v-else
+              :issues="issues"
+              :is-loading="isLoading"
+              @select="openDetailsModal"
+          />
+        </template>
+        <template v-else>
+          <EmptyState title="Проблемы отсутствуют" icon="heroicons:document-text" description="Проблемы не найдены"/>
+        </template>
+      </div>
+    </div>
+
   </DashboardLayout>
 </template>
 
