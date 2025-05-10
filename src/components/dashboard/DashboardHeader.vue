@@ -26,6 +26,15 @@ const actions: ActionItem[] = [
       isOpen.value = false;
       await router.push(ROUTES.USER.PROFILE);
     }
+  },
+  {
+    icon: 'heroicons:arrow-right-end-on-rectangle',
+    key: 'logout',
+    label: 'Выйти',
+    handler: async () => {
+      isOpen.value = false;
+      await userStore.logout();
+    }
   }
 ];
 

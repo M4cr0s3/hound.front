@@ -68,6 +68,15 @@ export const useUsersStore = defineStore('users', () => {
     }
   }
 
+  const logout = async () => {
+    const response = await httpClient.get('/auth/logout');
+
+    if (response.status === 'success') {
+      localStorage.removeItem('token');
+      await router.push('/login');
+    }
+  };
+
   // Getters
   const getError = computed(() => (key: string) => errors.value[key]);
 
@@ -84,6 +93,7 @@ export const useUsersStore = defineStore('users', () => {
     fetchUsers,
     getCurrentUser,
     createUser,
+    logout,
 
     // Getters
     getError

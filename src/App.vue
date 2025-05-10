@@ -6,7 +6,9 @@ import {Toaster} from "vue-sonner";
 const usersStore = useUsersStore();
 
 onMounted(async () => {
-  await usersStore.getCurrentUser();
+  if (localStorage.getItem('token')) {
+    await usersStore.getCurrentUser();
+  }
 });
 </script>
 

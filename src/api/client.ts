@@ -17,14 +17,18 @@ const apiFetcher = $fetch.create({
 
   async onResponseError({response}) {
     if (response.status === 401) {
-      const response = await httpClient.get<{ token: string }>('/auth/refresh')
-      localStorage.removeItem('token');
-      if (!response.token) {
-        window.location.href = '/login';
-      }
+      try {
+        const response = await httpClient.get<{ token: string }>('/auth/refresh')
+        localStorage.removeItem('token');
+        if (!response.token) {
+          window.location.href = '/login';
+        }
 
-      localStorage.setItem('token', response.token);
-      window.location.reload();
+        localStorage.setItem('token', response.token);
+        window.location.reload();
+      } catch (e) {
+        localStorage.removeItem('token');
+      }
     }
   },
 });
