@@ -83,6 +83,9 @@ watch(
 );
 
 function updateChart(chart: echarts.ECharts) {
+  const maxValue = Math.max(...props.data.map(item => item.count));
+  const yAxisMax = Math.ceil(maxValue * 1.2);
+
 	const option = {
 		grid: {
 			top: 10,
@@ -102,6 +105,7 @@ function updateChart(chart: echarts.ECharts) {
 		},
 		yAxis: {
 			type: 'value',
+      max: yAxisMax,
 			splitLine: {
 				lineStyle: {
 					color: '#f3f4f6',

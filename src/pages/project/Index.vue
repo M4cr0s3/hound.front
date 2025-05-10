@@ -190,7 +190,15 @@
                 </div>
               </div>
 
-              <div class="h-32">
+              <div class="flex justify-center mb-2">
+                <Button
+                    :to="`projects/${project.slug}/events`"
+                >
+                  Посмотреть все события
+                </Button>
+              </div>
+
+              <div class="h-42">
                 <EventsChart
                     :data="project.events_last_day"
                     :slug="project.slug"
@@ -213,6 +221,7 @@ import {storeToRefs} from 'pinia';
 import {onMounted, ref} from 'vue';
 import {getProjectStatsLastDay, type LastDayStat} from '@/api';
 import {EmptyState} from "@/components/projects/settings/notification";
+import {Button} from "@/components/ui";
 
 const projects = ref<LastDayStat[]>([]);
 
