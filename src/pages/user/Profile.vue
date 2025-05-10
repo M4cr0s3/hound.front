@@ -158,6 +158,7 @@
               required
               icon="heroicons:lock-closed"
               id="current-password"
+              placeholder="Текущий пароль"
               :error="errors?.current_password"
           />
           <InputField
@@ -167,6 +168,7 @@
               required
               icon="heroicons:key"
               id="password"
+              placeholder="••••••••"
               :error="errors?.password"
           />
           <InputField
@@ -176,6 +178,7 @@
               required
               icon="heroicons:key"
               id="password-confirmation"
+              placeholder="••••••••"
               :error="errors?.password_confirmation"
           />
           <div class="flex justify-end gap-3">
