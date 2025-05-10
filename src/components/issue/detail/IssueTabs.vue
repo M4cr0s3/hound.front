@@ -31,7 +31,7 @@
 import { Icon } from '@iconify/vue';
 
 const props = defineProps<{
-  activeTab: 'comments' | 'events' | 'activities';
+  activeTab: 'comments' | 'activities';
   eventCount?: number;
 }>();
 
@@ -41,18 +41,12 @@ const tabs = [
   {
     name: 'comments',
     label: 'Комментарии',
-    icon: 'mdi:comment-text-multiple',
+    icon: 'heroicons:chat-bubble-oval-left',
   },
   {
     name: 'activities',
     label: 'Активность',
     icon: 'mdi:history',
-  },
-  {
-    name: 'events',
-    label: 'События',
-    icon: 'mdi:alert-circle',
-    count: props.eventCount,
   },
 ];
 </script>

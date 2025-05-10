@@ -7,7 +7,6 @@ import IssueDescription from "@/components/issue/detail/IssueDescription.vue";
 import IssueCommentsTab from "@/components/issue/detail/IssueCommentsTab.vue";
 import IssueSidebar from "@/components/issue/detail/IssueSidebar.vue";
 import IssueTabs from "@/components/issue/detail/IssueTabs.vue";
-import IssueEvents from "@/components/issue/detail/IssueEvents.vue";
 import IssueAssignees from "@/components/issue/detail/IssueAssignees.vue";
 import IssueMeta from "@/components/issue/detail/IssueMeta.vue";
 import IssueActivityFeed from "@/components/issue/detail/IssueActivityFeed.vue";
@@ -17,9 +16,9 @@ const {id} = defineProps<{
 }>()
 
 const issuesStore = useIssuesStore();
-const activeTab = ref<'comments' | 'events' | 'activities'>('comments');
+const activeTab = ref<'comments' | 'activities'>('comments');
 
-const changeTab = (tab: 'comments' | 'events' | 'activities') => {
+const changeTab = (tab: 'comments' | 'activities') => {
   activeTab.value = tab;
 };
 
@@ -53,10 +52,6 @@ onMounted(async () => {
 
           <template v-else-if="activeTab === 'activities'">
             <IssueActivityFeed :activities="issuesStore.issue.activities"/>
-          </template>
-
-          <template v-else-if="activeTab === 'events'">
-            <IssueEvents :issue-id="issuesStore.issue.id"/>
           </template>
         </div>
 

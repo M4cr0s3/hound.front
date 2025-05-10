@@ -10,26 +10,25 @@
           </Button>
         </div>
       </div>
+      <div class="flex justify-end mb-4">
+        <Button
+            icon="heroicons:table-cells"
+            :variant="viewMode === 'table' ? 'primary' : 'secondary'"
+            @click="viewMode = 'table'"
+        >
+          Таблица
+        </Button>
+        <Button
+            icon="heroicons:rectangle-stack"
+            :variant="viewMode === 'board' ? 'primary' : 'secondary'"
+            @click="viewMode = 'board'"
+            class="ml-2"
+        >
+          Доска
+        </Button>
+      </div>
       <div class="bg-white shadow rounded-lg overflow-hidden">
         <template v-if="issues.length">
-          <div class="flex justify-end mb-4">
-            <Button
-                icon="heroicons:table-cells"
-                :variant="viewMode === 'table' ? 'primary' : 'secondary'"
-                @click="viewMode = 'table'"
-            >
-              Таблица
-            </Button>
-            <Button
-                icon="heroicons:rectangle-stack"
-                :variant="viewMode === 'board' ? 'primary' : 'secondary'"
-                @click="viewMode = 'board'"
-                class="ml-2"
-            >
-              Доска
-            </Button>
-          </div>
-
           <IssuesTable
               v-if="viewMode === 'table'"
               :issues="issues"
@@ -63,11 +62,11 @@ import {watchDebounced} from "@vueuse/core";
 import {resetForm} from "@/utils";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import {EmptyState} from "@/components/projects/settings/notification";
-import {router} from "@/router";
 import {ROUTES} from "@/router/routes.ts";
+import {useRouter} from "vue-router";
 
 const issuesStore = useIssuesStore();
-// const authStore = useAuthStore();
+const router = useRouter();
 
 const filters = ref({
   search: '',
@@ -81,8 +80,6 @@ const pagination = computed(() => issuesStore.pagination);
 const isLoading = computed(() => issuesStore.isLoading);
 
 const viewMode = ref<'table' | 'board'>('table');
-
-// const canCreate = computed(() => authStore.user?.role === 'admin' || authStore.user?.role === 'manager');
 
 watchDebounced(filters, () => {
   issuesStore.updateFilters(filters.value);

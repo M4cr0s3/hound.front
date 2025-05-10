@@ -192,8 +192,8 @@
         </div>
         <EmptyState
             v-else
-            title="Нет связанных проблем"
-            description="Это событие еще не связано ни с одной проблемой."
+            title="Нет связанных задач"
+            description="Это событие еще не связано ни с одной задачей."
             icon="mdi:alert-circle-outline"
         >
           <button
