@@ -1,0 +1,1 @@
+.kanban-board[data-v-d4e43755]{display:flex;gap:1rem;padding:1rem}.kanban-column[data-v-d4e43755]{background:#f4f5f7;border-radius:8px;padding:1rem;width:250px;min-height:200px}@media (max-width: 640px){.kanban-board[data-v-d4e43755]{flex-direction:column}.kanban-column[data-v-d4e43755]{width:100%}}
