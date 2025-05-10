@@ -29,6 +29,7 @@
                 label="Имя пользователя"
                 type="text"
                 placeholder="Иван"
+                required
                 :error="usersStore.getError('name')"
             />
 
@@ -39,6 +40,7 @@
                 placeholder="Выберите роль"
                 option-label="label"
                 option-value="value"
+                required
                 :error="usersStore.getError('role_id')"
             />
 
