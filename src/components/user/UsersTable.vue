@@ -56,7 +56,7 @@ const columns = [
   {key: 'name', title: 'Имя'},
   {key: 'email', title: 'Почта'},
   {key: 'role', title: 'Роль'},
-  {key: 'actions', title: 'Действия', visible: usersStore.currentUser?.role.title === 'Maintainer'},
+  {key: 'actions', title: 'Действия', visible: usersStore.currentUser?.role.title === RoleTitle.Maintainer},
 ];
 
 const actions = ref<ActionItem[]>([
@@ -65,6 +65,12 @@ const actions = ref<ActionItem[]>([
     label: 'Скопировать инвайт-ссылку',
     handler: (row) => handleCopyInviteLink(row),
     visible: row => row.invitations?.length,
+  },
+  {
+    icon: 'heroicons:trash',
+    label: 'Удалить',
+    iconClass: 'text-red-500',
+    handler: (row) => usersStore.destroy(row.id),
   }
 ]);
 

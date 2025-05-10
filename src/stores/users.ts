@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import type {BaseResponse, Pagination, User} from "@/api";
+import type {BaseResponse, Id, Pagination, User} from "@/api";
 import {httpClient} from "@/api";
 import {ROUTES} from "@/router/routes.ts";
 import {ref, computed} from "vue";
@@ -77,6 +77,11 @@ export const useUsersStore = defineStore('users', () => {
     }
   };
 
+  const destroy = async (id: Id) => {
+    await httpClient.delete(`/users/${id}`);
+    await fetchUsers();
+  }
+
   // Getters
   const getError = computed(() => (key: string) => errors.value[key]);
 
@@ -94,6 +99,7 @@ export const useUsersStore = defineStore('users', () => {
     getCurrentUser,
     createUser,
     logout,
+    destroy,
 
     // Getters
     getError
