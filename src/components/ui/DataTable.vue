@@ -5,7 +5,7 @@
         <thead class="bg-gray-50">
         <tr>
           <th
-              v-for="column in columns"
+              v-for="column in visibleColumns"
               :key="column.key"
               scope="col"
               class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -24,7 +24,7 @@
             @click="handleRowClick(row)"
         >
           <td
-              v-for="column in columns"
+              v-for="column in visibleColumns"
               :key="column.key"
               class="px-6 py-4"
               :class="column.cellClass"
@@ -62,6 +62,7 @@
 <script setup lang="ts">
 import {Pagination} from './';
 import {type Pagination as PaginationType} from '@/api';
+import {computed} from "vue";
 
 export interface Column {
   key: string;
@@ -72,6 +73,7 @@ export interface Column {
   maxWidth?: string;
   minWidth?: string;
   truncate?: boolean;
+  visible?: boolean | (() => boolean);
 }
 
 interface Props {
@@ -109,6 +111,15 @@ const getCellStyle = (column: Column) => {
     'display': 'block'
   };
 };
+
+const visibleColumns = computed(() => {
+  return props.columns.filter(column => {
+    if (typeof column.visible === 'function') {
+      return column.visible();
+    }
+    return column.visible !== false;
+  });
+});
 
 const handleRowClick = (row: any) => {
   if (props.rowClickable) {

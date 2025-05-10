@@ -5,6 +5,7 @@ import {Icon} from "@iconify/vue";
 import {useUsersStore} from "@/stores";
 import {onMounted} from "vue";
 import {UsersTable} from "@/components/user";
+import {RoleTitle} from "@/api";
 
 const usersStore = useUsersStore();
 
@@ -24,6 +25,7 @@ onMounted(async () => {
       <div class="flex justify-between items-center mb-6">
         <h1 class="text-2xl font-bold text-gray-900">Пользователи</h1>
         <RouterLink
+            v-if="usersStore.currentUser.role?.title === RoleTitle.Maintainer"
             to="/users/create"
             class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
         >

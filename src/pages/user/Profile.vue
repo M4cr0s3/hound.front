@@ -15,8 +15,8 @@
               <h1 class="text-2xl font-bold text-gray-900">{{ user.name }}</h1>
               <p class="text-gray-600 mt-1">{{ user.email }}</p>
               <div class="mt-2">
-                <Badge :variant="user.role.title === 'maintainer' ? 'primary' : 'secondary'">
-                  {{ userRole.title }}
+                <Badge :variant="user.role.title === RoleTitle.Maintainer ? 'primary' : 'secondary'">
+                  {{ user?.role.title }}
                 </Badge>
               </div>
             </div>
@@ -200,7 +200,7 @@ import {ref, onMounted, computed} from 'vue';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import {Icon} from '@iconify/vue';
 import {Badge, Button, InputField, Modal, TheForm} from '@/components/ui';
-import {httpClient, type User} from '@/api';
+import {httpClient, RoleTitle, type User} from '@/api';
 import {EmptyState} from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
 import {schema} from "./password.schema.ts";
@@ -232,14 +232,6 @@ const passwordForm = ref({
 
 const userInitial = computed(() => {
   return user.value.name ? user.value.name.charAt(0).toUpperCase() : '';
-});
-
-const userRole = computed(() => {
-  const roles = {
-    maintainer: 'Администратор',
-    developer: 'Разработчик'
-  };
-  return roles[user.value.role] || user.value.role;
 });
 
 const teamInitial = (name: string) => {

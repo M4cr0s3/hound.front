@@ -46,15 +46,25 @@ const issuesStore = useIssuesStore();
 
 const actions: ActionItem[] = [
   {
+    icon: 'heroicons:lock-closed',
+    iconClass: 'text-gray-700',
+    key: 'lock',
+    label: 'Закрыть',
+    handler: async () => {
+      await issuesStore.updateIssueStatus(props.issue.id, IssueStatus.Closed);
+    },
+    visible: () => props.issue.status !== IssueStatus.Closed
+  },
+  {
     icon: 'heroicons:trash',
     iconClass: 'text-red-500',
     key: 'delete',
     label: 'Удалить',
-    handler: () => {
-      issuesStore.deleteIssue(props.issue.id);
-      router.push(ROUTES.ISSUE.INDEX);
+    handler: async () => {
+      await issuesStore.deleteIssue(props.issue.id);
+      await router.push(ROUTES.ISSUE.INDEX);
     },
-  },
+  }
 ]
 
 </script>

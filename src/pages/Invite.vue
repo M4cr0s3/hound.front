@@ -61,6 +61,7 @@ import {useRoute, useRouter} from "vue-router";
 import {ROUTES} from "@/router/routes.ts";
 import * as v from 'valibot';
 import {httpClient} from "@/api";
+import {toast} from "vue-sonner";
 
 const route = useRoute();
 const router = useRouter();
@@ -99,6 +100,7 @@ async function handleSubmit(data: any) {
   try {
     const res = await httpClient.post<BaseResponse>(`/invites/${route.params.token}/activate`, data);
     if (res.success) {
+      toast.success('Вы успешно зарегистрировались');
       await router.push(ROUTES.LOGIN);
     }
   } catch (e) {

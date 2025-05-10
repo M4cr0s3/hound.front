@@ -21,7 +21,7 @@
         {{ value.title }}
       </span>
     </template>
-    <template #cell-actions="{ row }">
+    <template #cell-actions="{ row }" v-if="usersStore.currentUser?.role.title === RoleTitle.Maintainer">
       <td class="text-center">
         <DropdownMenu
             :row
@@ -36,6 +36,8 @@
 import {ref} from 'vue';
 import {DataTable, DropdownMenu, type ActionItem} from '@/components/ui';
 import {type Pagination, type Role, RoleTitle, type User} from '@/api';
+import {toast} from "vue-sonner";
+import {useUsersStore} from "@/stores";
 
 const props = defineProps<{
   users: User[];
@@ -48,11 +50,13 @@ const emit = defineEmits<{
   (e: 'page-change', url: string | null): void;
 }>();
 
+const usersStore = useUsersStore();
+
 const columns = [
   {key: 'name', title: 'Имя'},
   {key: 'email', title: 'Почта'},
   {key: 'role', title: 'Роль'},
-  {key: 'actions', title: 'Действия'}
+  {key: 'actions', title: 'Действия', visible: usersStore.currentUser?.role.title === 'Maintainer'},
 ];
 
 const actions = ref<ActionItem[]>([
@@ -74,8 +78,7 @@ const handleCopyInviteLink = async (user: User) => {
 
   url.pathname = `/invite/${user.invitations[invitationsLength - 1].token}`;
   await navigator.clipboard.writeText(url.toString());
-  //TODO toast
-  alert('Скопировано');
+  toast.success('Ссылка скопирована в буфер обмена');
 };
 
 const handlePageChange = (url: string | null) => {

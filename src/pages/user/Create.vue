@@ -33,7 +33,7 @@
             />
 
             <SelectField
-                :options="[{label: 'Maintainer', value: 1}]"
+                :options="[{label: 'Maintainer', value: 1}, {label: 'Developer', value: 2}]"
                 v-model="form.role_id"
                 label="Роль"
                 placeholder="Выберите роль"

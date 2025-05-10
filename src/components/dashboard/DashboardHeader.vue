@@ -6,10 +6,11 @@ import {httpClient} from "@/api";
 import {type ActionItem, Avatar, DropdownMenu, Modal} from "@/components/ui";
 import SearchItem from "@/components/search/SearchItem.vue";
 import {useUsersStore} from "@/stores";
-import {router} from "@/router";
 import {ROUTES} from "@/router/routes.ts";
+import {useRouter} from "vue-router";
 
 const userStore = useUsersStore();
+const router = useRouter();
 
 const searchQuery = ref('')
 const searchResults = ref([])
@@ -21,9 +22,9 @@ const actions: ActionItem[] = [
     icon: 'heroicons:user-circle',
     key: 'profile',
     label: 'Профиль',
-    handler: () => {
+    handler: async () => {
       isOpen.value = false;
-      router.push(ROUTES.USER.PROFILE);
+      await router.push(ROUTES.USER.PROFILE);
     }
   }
 ];
@@ -78,7 +79,7 @@ watchDebounced(
           </button>
           <div class="relative">
             <div class="flex items-center space-x-2 cursor-pointer">
-              <Avatar :name="userStore.currentUser.name" size="sm"/>
+              <Avatar :name="userStore.currentUser?.name" size="sm"/>
               <DropdownMenu
                   icon="heroicons:chevron-down"
                   :actions
