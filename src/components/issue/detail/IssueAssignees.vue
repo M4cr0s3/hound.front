@@ -19,7 +19,7 @@
               <Avatar
                   class="mr-3"
                   size="sm"
-                  :src="`https://i.pravatar.cc/150?u=${user.id}`"
+                  :name="user.name"
               />
               <span class="text-sm font-medium text-gray-900">{{ user.name }}</span>
             </div>
