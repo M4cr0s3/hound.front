@@ -116,7 +116,6 @@ function getCodeLines(frame: StackFrame) {
   const processLine = (line: string | null) => {
     let safeLine = line || '';
 
-    // Фикс для статических методов (объединяем ": :" в "::")
     safeLine = safeLine.replace(/: :/g, '::');
 
     const trimmed = safeLine.trim();

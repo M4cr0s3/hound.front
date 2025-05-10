@@ -8,7 +8,8 @@
       @row-click="emit('select', $event)"
       @page-change="handlePageChange"
       row-class="text-sm text-gray-700"
-      pagination-text="проблем"
+      pagination-text="задач"
+      class="rounded-none"
   >
     <template #cell-status="{ value }">
       <span

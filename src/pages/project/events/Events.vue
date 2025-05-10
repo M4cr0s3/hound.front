@@ -78,7 +78,7 @@
             :is-loading="isLoading"
             row-key="id"
             row-clickable
-            @row-click="openEvent"
+            @row-click="(row: Event) => openEvent(row.id)"
             @page-change="changePage"
             class="rounded-none rounded-bl-lg rounded-br-lg"
             pagination-text="событий"
@@ -312,7 +312,7 @@ const deleteEvent = async (eventId: string) => {
 };
 
 const openEvent = (eventId: string) => {
-  // router.push(`/projects/${slug}/events/${eventId}`);
+  router.push(ROUTES.EVENT.SHOW.replace(':id', eventId));
 };
 
 const fetchEvents = async () => {

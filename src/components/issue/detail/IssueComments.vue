@@ -11,12 +11,12 @@
             <span class="font-medium text-gray-900">{{ comment.user.name }}</span>
             <span class="text-gray-500">{{ formatDate(comment.created_at) }}</span>
 
-            <button
-                @click="startReply(comment)"
-                class="text-indigo-500 hover:text-indigo-700 text-xs"
-            >
-              Ответить
-            </button>
+<!--            <button-->
+<!--                @click="startReply(comment)"-->
+<!--                class="text-indigo-500 hover:text-indigo-700 text-xs"-->
+<!--            >-->
+<!--              Ответить-->
+<!--            </button>-->
           </div>
 
           <div class="mt-1 flex items-center text-sm text-gray-700">

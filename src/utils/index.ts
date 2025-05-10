@@ -42,7 +42,7 @@ export function formatRelativeTime(date: string | Date): string {
   for (const [unit, secondsInUnit] of Object.entries(intervals)) {
     const interval = Math.floor(seconds / secondsInUnit);
     if (interval >= 1) {
-      return `${interval} ${unit}${interval === 1 ? '' : 's'} ago`;
+      return `${interval} ${unit}${interval === 1 ? '' : 's'} назад`;
     }
   }
 
@@ -81,4 +81,71 @@ export function getReadableIssueStatus(status: string): string {
     default:
       return status.charAt(0).toUpperCase() + status.slice(1);
   }
+}
+
+export function getIssueStatusColor(status: string): string {
+  switch (status) {
+    case 'in_progress':
+      return 'info';
+    case 'resolved':
+      return 'success';
+    case 'closed':
+      return 'danger';
+    default:
+      return 'warning';
+  }
+}
+
+type Level = 'error' | 'warning' | 'info' | 'debug' | string;
+type Variant = 'error' | 'warning' | 'info' | 'default';
+
+export function getLevelColor(level: Level): string {
+  const colors: Record<string, string> = {
+    error: 'red',
+    warning: 'yellow',
+    info: 'blue',
+    debug: 'gray',
+    fatal: 'red',
+    critical: 'red',
+  };
+
+  return colors[level.toLowerCase()] || 'gray';
+}
+
+export function getLevelIcon(level: Level): string | IconifyIcon {
+  const icons: Record<string, string> = {
+    error: 'mdi:alert-circle',
+    warning: 'mdi:alert',
+    info: 'mdi:information',
+    debug: 'mdi:bug',
+    fatal: 'mdi:skull',
+    critical: 'mdi:alert-octagon',
+  };
+
+  return icons[level.toLowerCase()] || 'mdi:help-circle';
+}
+
+export function getLevelVariant(level: Level): Variant {
+  const variants: Record<string, Variant> = {
+    error: 'danger',
+    warning: 'warning',
+    info: 'info',
+    fatal: 'error',
+    critical: 'error',
+  };
+
+  return variants[level.toLowerCase()] || 'default';
+}
+
+export function getLevelName(level: Level): string {
+  const names: Record<string, string> = {
+    error: 'Error',
+    warning: 'Warning',
+    info: 'Information',
+    debug: 'Debug',
+    fatal: 'Fatal',
+    critical: 'Critical',
+  };
+
+  return names[level.toLowerCase()] || level;
 }

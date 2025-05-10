@@ -40,7 +40,7 @@
         </div>
       </div>
       <RouterLink
-          :to="`/projects/${projectSlug}/events/${event.id}`"
+          :to="`/events/${event.id}`"
           class="text-gray-400 hover:text-gray-500"
       >
         <Icon icon="heroicons:chevron-right" class="h-5 w-5"/>

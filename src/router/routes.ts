@@ -14,7 +14,8 @@ export const ROUTES = {
     INDEX: '/projects',
     CREATE: '/projects/create',
     EVENTS: '/projects/:slug/events',
-    SHOW: '/projects/:slug'
+    SHOW: '/projects/:slug',
+    SETTINGS: '/projects/:slug/settings',
   },
   ISSUE: {
     INDEX: '/issues',
@@ -25,6 +26,9 @@ export const ROUTES = {
     INDEX: '/users',
     CREATE: '/users/create',
     PROFILE: '/profile',
+  },
+  EVENT: {
+    SHOW: '/events/:id',
   },
   INVITE: '/invite/:token',
 };
@@ -120,7 +124,7 @@ export const routes: RouteRecordRaw[] = [
     meta: {guestOnly: true}
   },
   {
-    path: '/projects/:slug/settings',
+    path: ROUTES.PROJECT.SETTINGS,
     component: () => import('../pages/project/ProjectSettings.vue'),
     children: [
       {
@@ -157,4 +161,10 @@ export const routes: RouteRecordRaw[] = [
     props: true,
     meta: {requiresAuth: true},
   },
+  {
+    path: ROUTES.EVENT.SHOW,
+    component: () => import('../pages/event/Show.vue'),
+    props: true,
+    meta: {requiresAuth: true},
+  }
 ];
