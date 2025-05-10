@@ -71,6 +71,7 @@ const actions = ref<ActionItem[]>([
     label: 'Удалить',
     iconClass: 'text-red-500',
     handler: (row) => usersStore.destroy(row.id),
+    visible: (row: User) => usersStore.currentUser.id !== row.id
   }
 ]);
 
