@@ -240,6 +240,6 @@ const getResponseTimeStatus = (project: LastDayStat) => {
 };
 
 onMounted(async () => {
-  projects.value = (await getProjectStatsLastDay()).data;
+  projects.value = await getProjectStatsLastDay();
 });
 </script>
