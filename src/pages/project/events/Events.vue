@@ -80,6 +80,7 @@
             row-clickable
             @row-click="openEvent"
             @page-change="changePage"
+            class="rounded-none rounded-bl-lg rounded-br-lg"
             pagination-text="событий"
         >
           <template #cell-message="{ row }">

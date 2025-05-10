@@ -30,10 +30,7 @@
 
       <div class="flex justify-between">
         <span class="text-xs font-medium text-gray-500">Тип события</span>
-        <Badge variant="danger" :text="issue.event.type" v-if="issue.event.type === 'error'"/>
-        <Badge variant="warning" :text="issue.event.type" v-if="issue.event.type === 'warning'"/>
-        <Badge variant="info" :text="issue.event.type" v-if="issue.event.type === 'info'"/>
-        <Badge variant="info" :text="issue.event.type" v-if="issue.event.type === 'debug'"/>
+        <Badge variant="default">{{ issueType }}</Badge>
       </div>
 
       <div class="flex justify-between">
@@ -48,11 +45,22 @@
 </template>
 
 <script setup lang="ts">
-import { formatDateTime } from '@/utils';
+import {formatDateTime} from '@/utils';
 import Badge from "@/components/ui/Badge.vue";
+import {computed} from "vue";
+import type {Issue} from "@/api";
 
-defineProps<{
-  issue: any;
+const {issue} = defineProps<{
+  issue: Issue;
 }>();
+
+const issueType = computed(() => {
+  const splitType = issue?.event.type.split('\\');
+  if (splitType.length > 1) {
+    return splitType[splitType.length - 1];
+  }
+
+  return issue?.event.type;
+})
 
 </script>
