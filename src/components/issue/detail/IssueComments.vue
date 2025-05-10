@@ -7,17 +7,26 @@
         </div>
 
         <div class="flex-1 min-w-0">
-          <div class="flex items-center space-x-2 text-sm">
-            <span class="font-medium text-gray-900">{{ comment.user.name }}</span>
-            <span class="text-gray-500">{{ formatDate(comment.created_at) }}</span>
-
-<!--            <button-->
-<!--                @click="startReply(comment)"-->
-<!--                class="text-indigo-500 hover:text-indigo-700 text-xs"-->
-<!--            >-->
-<!--              Ответить-->
-<!--            </button>-->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2 text-sm">
+              <span class="font-medium text-gray-900">{{ comment.user.name }}</span>
+              <span class="text-gray-500">{{ formatDate(comment.created_at) }}</span>
+            </div>
+            <Icon
+                icon="heroicons:trash"
+                @click="deleteComment(comment.id)"
+                class="w-4 h-4 cursor-pointer text-gray-500 hover:text-gray-700"
+                v-if="comment.user.id === usersStore.currentUser?.id"
+            />
           </div>
+
+
+          <!--            <button-->
+          <!--                @click="startReply(comment)"-->
+          <!--                class="text-indigo-500 hover:text-indigo-700 text-xs"-->
+          <!--            >-->
+          <!--              Ответить-->
+          <!--            </button>-->
 
           <div class="mt-1 flex items-center text-sm text-gray-700">
             <template v-if="comment.parent && showParentReferences">
@@ -33,13 +42,14 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
-import type {Comment} from "@/api";
+import {Icon} from '@iconify/vue'
+import {type Comment, httpClient, type Id} from "@/api";
 import {Avatar} from "@/components/ui";
 import MarkdownIt from 'markdown-it';
 import hljs from "highlight.js";
 import 'highlight.js/styles/paraiso-dark.min.css';
-
+import {toast} from "vue-sonner";
+import {useUsersStore} from "@/stores";
 
 const props = withDefaults(defineProps<{
   comments: Comment[],
@@ -47,11 +57,12 @@ const props = withDefaults(defineProps<{
 }>(), {
   showParentReferences: false
 })
+const emit = defineEmits(['submit-reply', 'deleted']);
 
-const emit = defineEmits(['submit-reply']);
+const usersStore = useUsersStore();
 
-const replyText = ref('');
-const replyingTo = ref<number | null>(null);
+// const replyText = ref('');
+// const replyingTo = ref<number | null>(null);
 const md = new MarkdownIt({
   html: true,
   linkify: true,
@@ -82,10 +93,23 @@ const formatDate = (dateString: string) => {
   });
 };
 
-const startReply = (comment: Comment) => {
-  replyingTo.value = comment.id;
-  replyText.value = '';
-};
+const deleteComment = async (id: Id) => {
+  try {
+    await httpClient.delete(`/comments/${id}`);
+    emit('deleted');
+    toast.success('Комментарий успешно удален');
+  } catch (e) {
+    toast.error('Произошла ошибка при удалении комментария', {
+      description: e.data.message,
+    });
+  }
+}
+
+//
+// const startReply = (comment: Comment) => {
+//   replyingTo.value = comment.id;
+//   replyText.value = '';
+// };
 
 </script>
 

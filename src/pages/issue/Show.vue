@@ -47,6 +47,7 @@ onMounted(async () => {
                 :issue-id="issuesStore.issue.id"
                 :comments="issuesStore.issue?.comments"
                 @comment-added="issuesStore.fetchIssue(issuesStore.issue.id)"
+                @comment-deleted="issuesStore.fetchIssue(issuesStore.issue.id)"
             />
           </template>
 
@@ -56,13 +57,9 @@ onMounted(async () => {
         </div>
 
         <div class="lg:col-span-1">
-          <IssueSidebar
-              :issue="issuesStore.issue"
-          />
+          <IssueSidebar :issue="issuesStore.issue"/>
 
-          <IssueAssignees
-              :assignees="issuesStore.issue.assignees"
-          />
+          <IssueAssignees :assignees="issuesStore.issue.assignees"/>
 
           <IssueMeta :issue="issuesStore.issue"/>
         </div>

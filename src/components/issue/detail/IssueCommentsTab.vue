@@ -6,7 +6,11 @@
 
 
     <div class="px-4 py-5 sm:p-6">
-      <IssueComments :comments="comments" show-parent-references/>
+      <IssueComments
+          :comments="comments"
+          @deleted="$emit('comment-deleted')"
+          show-parent-references
+      />
 
       <CommentForm
           @submit="handleCommentSubmit"
@@ -35,7 +39,7 @@ const props = defineProps<{
   comments: Comment[];
 }>();
 
-const emit = defineEmits(['comment-added']);
+const emit = defineEmits(['comment-added', 'comment-deleted']);
 
 const isCommentLoading = ref(false);
 
