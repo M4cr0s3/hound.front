@@ -190,20 +190,28 @@
                 </div>
               </div>
 
-              <div class="flex justify-center mb-2">
-                <Button
-                    :to="`projects/${project.slug}/events`"
-                >
-                  Посмотреть все события
-                </Button>
-              </div>
+              <template v-if="project.events_last_day.length">
+                <div class="flex justify-center mb-2">
+                  <Button
+                      :to="`projects/${project.slug}/events`"
+                  >
+                    Посмотреть все события
+                  </Button>
+                </div>
 
-              <div class="h-42">
-                <EventsChart
-                    :data="project.events_last_day"
-                    :slug="project.slug"
-                />
-              </div>
+                <div class="h-42">
+                  <EventsChart
+                      :data="project.events_last_day"
+                      :slug="project.slug"
+                  />
+                </div>
+              </template>
+              <EmptyState
+                  v-else
+                  title="События отсутствуют"
+                  icon="heroicons:arrow-trending-up"
+                  description="Пока что никаких событий не поступало..."
+              />
             </div>
           </div>
         </div>
