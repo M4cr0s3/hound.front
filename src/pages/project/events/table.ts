@@ -1,6 +1,7 @@
 import { computed } from 'vue';
 import { formatDateTime } from '@/utils';
 import type {Column} from "@/components/ui/DataTable.vue";
+import type {ActionItem} from "@/components/ui";
 
 export const columns = computed<Column[]>(() => [
 	{
@@ -41,7 +42,7 @@ export const columns = computed<Column[]>(() => [
 	},
 ]);
 
-export const actions = [
-	{key: 'create-issue', label: 'Создать задачу', icon: 'heroicons:plus-circle'},
-	{key: 'delete', label: 'Удалить', icon: 'heroicons:trash', variant: 'danger'}
+export const actions: ActionItem[] = [
+	{key: 'create-issue', label: 'Создать задачу', icon: 'heroicons:plus-circle', iconClass: 'text-blue-500'},
+	{key: 'delete', label: 'Удалить', icon: 'heroicons:trash', iconClass: 'text-red-500'}
 ];

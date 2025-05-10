@@ -11,7 +11,7 @@
             <div class="flex items-center space-x-3 mt-2">
               <Badge variant="secondary" class="flex items-center">
                 <Icon icon="heroicons:computer-desktop" class="mr-1 h-4 w-4"/>
-                {{ [...events].pop()?.environment }}
+                {{ [...events].pop()?.environment ?? 'Нет информации' }}
               </Badge>
               <RouterLink
                   :to="`/projects/${slug}`"
@@ -62,7 +62,7 @@
         />
         <StatCard
             title="Текущий релиз"
-            :value=[...events].pop()?.release
+            :value="[...events].pop()?.release ?? 'Нет информации'"
             icon="heroicons:tag"
         />
       </div>
@@ -72,6 +72,7 @@
           <h2 class="text-lg font-semibold text-gray-900">Последние события</h2>
         </div>
         <DataTable
+            v-if="events.length"
             :columns
             :data="events"
             :pagination="pagination"
@@ -115,6 +116,11 @@
             </span>
           </template>
         </DataTable>
+        <EmptyState
+            v-else title="События отсутствуют"
+            icon="heroicons:bell-alert"
+            description="Пока что никаких событий нет"
+        />
       </div>
       <Modal :is-open="isCreateIssueModalOpen" @close="isCreateIssueModalOpen = false">
         <template #title>
@@ -199,7 +205,7 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import {
   getProjectEvents,
   type Event,
-  type Pagination as PaginationType, httpClient,
+  type Pagination as PaginationType, httpClient, type Id,
 } from '@/api';
 import {formatDateTime} from '@/utils';
 import StatCard from "@/components/projects/StatCard.vue";
@@ -208,6 +214,7 @@ import {schema} from "./schema.ts";
 import {useIssuesStore} from "@/stores";
 import {ROUTES} from "@/router/routes.ts";
 import {toast} from "vue-sonner";
+import {EmptyState} from "@/components/projects/settings/notification";
 
 const {slug} = defineProps<{
   slug: string;
@@ -301,18 +308,18 @@ const handleActionClick = ({key, row}: { key: string; row?: any }) => {
   }
 };
 
-const deleteEvent = async (eventId: string) => {
+const deleteEvent = async (id: Id) => {
   if (!confirm('Вы уверены, что хотите удалить это событие?')) return;
   try {
-    await httpClient.delete(`/projects/${slug}/events/${eventId}`);
+    await httpClient.delete(`/events/${id}`);
     await fetchEvents();
   } catch (error) {
     console.error('Error deleting event:', error);
   }
 };
 
-const openEvent = (eventId: string) => {
-  router.push(ROUTES.EVENT.SHOW.replace(':id', eventId));
+const openEvent = (id: Id) => {
+  router.push(ROUTES.EVENT.SHOW.replace(':id', id));
 };
 
 const fetchEvents = async () => {
