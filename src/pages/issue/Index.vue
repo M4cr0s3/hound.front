@@ -1,7 +1,7 @@
 <template>
   <DashboardLayout>
     <div class="flex justify-between items-center mb-6">
-      <h1 class="text-2xl font-semibold text-gray-900">Проблемы</h1>
+      <h1 class="text-2xl font-semibold text-gray-900">Задачи</h1>
     </div>
     <div class="flex gap-2 items-center">
       <IssuesFilter v-model="filters"/>
