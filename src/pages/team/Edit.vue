@@ -97,7 +97,6 @@
                       <div class="h-10 w-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white font-medium shadow-sm">
                         {{ getInitials(member.name) }}
                       </div>
-                      <span class="absolute -bottom-1 -right-1 bg-green-400 rounded-full h-3 w-3 border-2 border-white"></span>
                     </div>
                     <div>
                       <p class="text-base font-medium text-gray-900">{{ member.name }}</p>

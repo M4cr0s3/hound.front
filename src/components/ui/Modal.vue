@@ -23,9 +23,10 @@
         >
 
         <div
+            ref="modalRef"
             class="inline-block align-bottom bg-white rounded-lg text-left shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
         >
-          <div ref="modalRef" class="bg-white px-4 pt-5 rounded-lg pb-4 sm:p-6 sm:pb-4">
+          <div class="bg-white px-4 pt-5 rounded-lg pb-4 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
               <div class="mt-3 text-center sm:mt-0 sm:text-left w-full">
                 <h3
@@ -40,7 +41,7 @@
               </div>
             </div>
           </div>
-          <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse" v-if="$slots.footer">
+          <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse z-10" v-if="$slots.footer">
             <slot name="footer"></slot>
           </div>
         </div>
