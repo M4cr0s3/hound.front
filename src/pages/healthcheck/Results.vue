@@ -171,7 +171,7 @@ const endpointId = Number(route.params.endpointId);
 const healthCheckStore = useHealthCheckStore();
 const {fetchEndpointResults} = healthCheckStore;
 
-const results = computed(() => healthCheckStore.results);
+const results = computed(() => healthCheckStore.results.splice(0, 20));
 const stats = computed(() => healthCheckStore.stats);
 const isLoading = computed(() => healthCheckStore.isLoading);
 const chartData = computed(() => healthCheckStore.chartData);

@@ -263,13 +263,13 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import {Icon} from '@iconify/vue';
 import {Badge, Button, InputField, Modal, SelectField} from '@/components/ui';
 import {httpClient} from '@/api';
-import {PLATFORMS} from '@/data';
 import {EmptyState} from "@/components/projects/settings/notification";
 import IssueItem from "@/components/projects/IssueItem.vue";
 import EndpointItem from "@/components/projects/EndpointItem.vue";
 import EventItem from "@/components/projects/EventItem.vue";
 import StatCard from "@/components/projects/StatCard.vue";
 import LineChart from "@/components/projects/LineChart.vue";
+import {getProjectIcon} from "@/utils";
 
 const route = useRoute();
 const router = useRouter();
@@ -303,10 +303,6 @@ const newEndpoint = ref({
   method: 'GET',
   is_active: true,
 });
-
-const getProjectIcon = (platform: string) => {
-  return PLATFORMS.find(p => p.name === platform)?.icon;
-};
 
 const fetchProject = async () => {
   try {

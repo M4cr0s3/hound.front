@@ -14,6 +14,7 @@ export const ROUTES = {
     INDEX: '/projects',
     CREATE: '/projects/create',
     EVENTS: '/projects/:slug/events',
+    ISSUES: '/projects/:slug/issues',
     SHOW: '/projects/:slug',
     SETTINGS: '/projects/:slug/settings',
   },
@@ -132,11 +133,11 @@ export const routes: RouteRecordRaw[] = [
         component: () => import('../pages/project/GeneralSettings.vue'),
         props: true,
       },
-      {
-        path: 'security',
-        component: () => import('../pages/project/SecuritySettings.vue'),
-        props: true,
-      },
+      // {
+      //   path: 'security',
+      //   component: () => import('../pages/project/SecuritySettings.vue'),
+      //   props: true,
+      // },
       {
         path: 'delete',
         component: () => import('../pages/project/Delete.vue'),
@@ -164,6 +165,12 @@ export const routes: RouteRecordRaw[] = [
   {
     path: ROUTES.EVENT.SHOW,
     component: () => import('../pages/event/Show.vue'),
+    props: true,
+    meta: {requiresAuth: true},
+  },
+  {
+    path: ROUTES.PROJECT.ISSUES,
+    component: () => import('../pages/project/Issues.vue'),
     props: true,
     meta: {requiresAuth: true},
   }

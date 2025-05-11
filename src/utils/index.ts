@@ -1,3 +1,5 @@
+import {PLATFORMS} from "@/data";
+
 /**
  * Форматирует дату в локальное строковое представление
  * @param date Дата в формате строки или объекта Date
@@ -149,3 +151,7 @@ export function getLevelName(level: Level): string {
 
   return names[level.toLowerCase()] || level;
 }
+
+export const getProjectIcon = (platform: string) => {
+  return PLATFORMS.find(p => p.name === platform)?.icon;
+};

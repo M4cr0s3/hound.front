@@ -62,7 +62,7 @@ import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { Icon } from '@iconify/vue';
 import {Badge} from '@/components/ui';
-import { PLATFORMS } from '@/data';
+import { getProjectIcon } from "@/utils";
 
 const route = useRoute();
 const store = useProjectsStore();
@@ -71,14 +71,9 @@ const { project } = storeToRefs(store);
 const tabs = [
   { name: 'Основные', path: 'general', icon: 'heroicons:cog' },
   { name: 'Health Check', path: 'healthcheck', icon: 'heroicons:heart' },
-  { name: 'Безопасность', path: 'security', icon: 'heroicons:lock-closed' },
   { name: 'Уведомления', path: 'notification', icon: 'heroicons:bell' },
   { name: 'Удаление', path: 'delete', icon: 'heroicons:trash' },
 ];
-
-const getProjectIcon = (platform: string) => {
-  return PLATFORMS.find(p => p.name === platform)?.icon;
-};
 
 onMounted(async () => {
   await store.fetchProject(route.params.slug as string);

@@ -229,8 +229,7 @@ import {EmptyState} from "@/components/projects/settings/notification";
 import {useTeamsStore} from '@/stores';
 import {router} from "@/router";
 import {Badge} from "@/components/ui";
-import {getReadableIssueStatus} from "@/utils";
-import {PLATFORMS} from "@/data";
+import {getProjectIcon, getReadableIssueStatus} from "@/utils";
 import {ROUTES} from "@/router/routes.ts";
 
 const route = useRoute();
@@ -249,10 +248,6 @@ const isLoading = ref(true);
 
 const getFirstLetter = (name: string): string => {
   return name.charAt(0).toUpperCase();
-};
-
-const getProjectIcon = (platform: string) => {
-  return PLATFORMS.find(p => p.name === platform)?.icon;
 };
 
 const getBadgeColor = (status: string): string => {
