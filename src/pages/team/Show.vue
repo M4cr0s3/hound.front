@@ -146,16 +146,11 @@
                         class="h-10 w-10 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center text-white text-base font-semibold shadow-sm">
                       {{ getFirstLetter(member.name) }}
                     </div>
-                    <span
-                        class="absolute -bottom-1 -right-1 bg-green-400 rounded-full h-3 w-3 border-2 border-white"></span>
                   </div>
                   <div class="flex-1 min-w-0">
                     <p class="text-base font-medium text-gray-900 truncate">{{ member.name }}</p>
                     <p class="text-sm text-gray-500 truncate">{{ member.email }}</p>
                   </div>
-                  <button class="text-gray-400 hover:text-gray-600">
-                    <Icon icon="heroicons:envelope" class="h-5 w-5"/>
-                  </button>
                 </div>
               </li>
             </ul>
