@@ -24,14 +24,17 @@
         <Badge variant="info" :text="issue.event?.environment"/>
 
         <label class="block text-xs font-medium text-gray-500 mb-1">Релиз</label>
-        <Badge variant="light" :text="issue.event?.release ?? 'Не указан'"/>
+        <Badge
+            variant="light"
+            :text="issue.event?.release === 'unknown/unknown' ? 'Не удалось получить информацию' : issue.event.release"
+        />
       </div>
     </div>
 
-<!--    <div class="bg-white shadow rounded-lg p-4">-->
-<!--      <h3 class="text-sm font-medium text-gray-900 mb-3">Теги</h3>-->
-<!--      <TagList :tags="issue?.event?.metadata?.tags || []"/>-->
-<!--    </div>-->
+    <!--    <div class="bg-white shadow rounded-lg p-4">-->
+    <!--      <h3 class="text-sm font-medium text-gray-900 mb-3">Теги</h3>-->
+    <!--      <TagList :tags="issue?.event?.metadata?.tags || []"/>-->
+    <!--    </div>-->
   </div>
 </template>
 

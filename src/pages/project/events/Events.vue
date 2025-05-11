@@ -62,7 +62,7 @@
         />
         <StatCard
             title="Текущий релиз"
-            :value="[...events].pop()?.release ?? 'Нет информации'"
+            :value="release"
             icon="heroicons:tag"
         />
       </div>
@@ -192,7 +192,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, watch, reactive} from 'vue';
+import {ref, onMounted, onUnmounted, watch, reactive, computed} from 'vue';
 import {useRouter} from 'vue-router';
 import {Icon} from '@iconify/vue';
 import {
@@ -223,6 +223,15 @@ const {slug} = defineProps<{
 const router = useRouter();
 const issuesStore = useIssuesStore();
 const isLoading = ref<boolean>(false);
+const release = computed(() => {
+  if (events.value.length) {
+    return events.value[0].release === 'unknown/unknown'
+        ? events.value.find(ev => ev.release !== 'unknown/unknown').release
+        : events.value[0].release
+  }
+
+  return 'Не указан';
+});
 const events = ref<Event[]>([]);
 const pagination = ref<PaginationType>({
   from: 1,
