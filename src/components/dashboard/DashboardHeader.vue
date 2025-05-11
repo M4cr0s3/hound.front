@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import {ref} from 'vue'
-import {watchDebounced} from '@vueuse/core'
+import {onClickOutside, watchDebounced} from '@vueuse/core'
 import {Icon} from '@iconify/vue'
 import {httpClient} from "@/api";
 import {type ActionItem, Avatar, DropdownMenu, Modal} from "@/components/ui";
@@ -81,13 +81,8 @@ watchDebounced(
             />
           </div>
 
-          <button
-              class="p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          >
-            <Icon icon="heroicons:bell"/>
-          </button>
           <div class="relative">
-            <div class="flex items-center space-x-2 cursor-pointer">
+            <div class="flex items-center space-x-2">
               <Avatar :name="userStore.currentUser?.name" size="sm"/>
               <DropdownMenu
                   icon="heroicons:chevron-down"
