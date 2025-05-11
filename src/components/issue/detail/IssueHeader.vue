@@ -46,6 +46,16 @@ const issuesStore = useIssuesStore();
 
 const actions: ActionItem[] = [
   {
+    icon: 'heroicons:lock-open',
+    iconClass: 'text-gray-700',
+    key: 'open',
+    label: 'Открыть',
+    handler: async () => {
+      await issuesStore.updateIssueStatus(props.issue.id, IssueStatus.Open);
+    },
+    visible: () => props.issue.status !== IssueStatus.Open
+  },
+  {
     icon: 'heroicons:lock-closed',
     iconClass: 'text-gray-700',
     key: 'lock',
