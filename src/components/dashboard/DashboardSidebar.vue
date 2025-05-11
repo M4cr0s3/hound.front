@@ -58,18 +58,18 @@
           </div>
         </template>
         <template v-else>
-          <a
+          <RouterLink
               v-for="project in projects"
               :key="project.id"
-              href="#"
               class="group flex items-center px-3 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50"
+              :to="`/projects/${project.slug}`"
           >
             <span
                 class="w-2.5 h-2.5 mr-3 rounded-full"
                 :class="getColor(project.name)"
             />
             {{ project.name }}
-          </a>
+          </RouterLink>
         </template>
       </div>
     </div>
@@ -98,8 +98,6 @@
               v-for="team in teams"
               :key="team.id"
               :to="`/teams/${team.slug}`"
-              custom
-              v-slot="{ isActive }"
           >
             <a
                 :class="[
@@ -130,8 +128,6 @@ const navigation = [
   {name: 'Команды', to: '/teams', icon: 'heroicons:users'},
   {name: 'Проекты', to: '/projects', icon: 'heroicons:folder-open'},
   {name: 'Пользователи', to: '/users', icon: 'heroicons:user-group'},
-  // {name: 'Settings', to: '/settings', icon: 'heroicons:cog-8-tooth'},
-  // {name: 'Security', to: '/security', icon: 'heroicons:shield-check'},
 ];
 
 const projectsStore = useProjectsStore();
