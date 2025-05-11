@@ -11,17 +11,15 @@ const buildUrl = (item: any) => {
   }
 
   if (item.type === 'project') {
-    return `/projects/${item.slug}/settings/general`
+    return `/projects/${item.slug}`
   }
 
-  // TODO: вместо edit кидать на show со всей инфой о команде
-
   if (item.type === 'team') {
-    return `/teams/${item.slug}/edit`
+    return `/teams/${item.slug}`
   }
 
   if (item.type === 'event') {
-    return `/projects/${item.project.slug}/events/${item.slug}`
+    return `/events/${item.id}`
   }
 }
 </script>
@@ -45,7 +43,7 @@ const buildUrl = (item: any) => {
         <Icon icon="heroicons:users" class="h-5 w-5 text-gray-500"/>
       </span>
       <span class="text-sm text-gray-700 font-medium">
-        {{ item?.title ?? item.name }}
+        {{ item?.title ?? item.name ?? item.message }}
       </span>
     </div>
     <span class="text-sm text-gray-500">
