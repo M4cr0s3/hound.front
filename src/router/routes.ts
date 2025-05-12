@@ -1,9 +1,10 @@
-import type {RouteRecordRaw} from 'vue-router';
+import type { RouteRecordRaw } from 'vue-router';
 
 export const ROUTES = {
   INDEX: '/',
   LOGIN: '/login',
   DASHBOARD: '/dashboard',
+  NOT_FOUND: '/:pathMatch(.*)*',
   TEAM: {
     INDEX: '/teams',
     CREATE: '/teams/create',
@@ -173,5 +174,9 @@ export const routes: RouteRecordRaw[] = [
     component: () => import('../pages/project/Issues.vue'),
     props: true,
     meta: {requiresAuth: true},
-  }
+  },
+  {
+    path: ROUTES.NOT_FOUND,
+    component: () => import('../pages/NotFound.vue'),
+  },
 ];
