@@ -69,7 +69,7 @@
           <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
             <div class="flex -space-x-2">
               <Avatar
-                  v-for="member in project.team.members"
+                  v-for="member in project.team?.members"
                   :key="member.id"
                   :name="member.name"
               />
