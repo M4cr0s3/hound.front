@@ -1,8 +1,4 @@
-import { ROUTES } from "@/router/routes.ts";
 import { $fetch, type FetchOptions } from 'ofetch';
-import { useRouter } from 'vue-router';
-
-const router = useRouter();
 
 const apiFetcher = $fetch.create({
   baseURL: '/api',
@@ -29,7 +25,7 @@ const apiFetcher = $fetch.create({
         const response = await httpClient.get<{ token: string }>('/auth/refresh')
         localStorage.removeItem('token');
         if (!response.token) {
-          router.push(ROUTES.LOGIN);
+          window.location.href = '/login'
         }
 
         localStorage.setItem('token', response.token);
