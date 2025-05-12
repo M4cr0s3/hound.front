@@ -22,3 +22,4 @@ dist-ssr
 *.sln
 *.sw?
 bun.lockb
+pnpm-lock.yaml

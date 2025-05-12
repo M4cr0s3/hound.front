@@ -24,7 +24,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { StacktraceViewer, JsonViewer } from '@/components/ui';
 import type { Event } from '@/api';
 
