@@ -1,4 +1,8 @@
-import {$fetch, type FetchOptions} from 'ofetch';
+import { ROUTES } from "@/router/routes.ts";
+import { $fetch, type FetchOptions } from 'ofetch';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const apiFetcher = $fetch.create({
   baseURL: '/api',
@@ -8,20 +12,24 @@ const apiFetcher = $fetch.create({
     Accept: 'application/json',
   },
 
-  async onRequest({options}) {
+  async onRequest({ options }) {
     const token = localStorage.getItem('token');
     if (token) {
       options.headers.append('Authorization', `Bearer ${token}`);
     }
   },
 
-  async onResponseError({response}) {
-    if (response.status === 401) {
+  async onResponseError({ response }) {
+    const status = response.status;
+
+    if (status === 404) {
+      window.location.href = '/not-found'
+    } else if (status === 401) {
       try {
         const response = await httpClient.get<{ token: string }>('/auth/refresh')
         localStorage.removeItem('token');
         if (!response.token) {
-          window.location.href = '/login';
+          router.push(ROUTES.LOGIN);
         }
 
         localStorage.setItem('token', response.token);
@@ -39,10 +47,10 @@ type RequestMethod = 'get' | 'post' | 'put' | 'patch' | 'delete';
 
 export const httpClient = {
   async request<T>(
-      method: RequestMethod,
-      url: string,
-      data?: any,
-      options?: FetchOptions<'json'>
+    method: RequestMethod,
+    url: string,
+    data?: any,
+    options?: FetchOptions<'json'>
   ): Promise<ApiResponse<T>> {
     try {
       return await apiFetcher<ApiResponse<T>>(url, {
