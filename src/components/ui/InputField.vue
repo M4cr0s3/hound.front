@@ -66,7 +66,6 @@
 
 <script setup lang="ts">
 import { Icon } from '@iconify/vue';
-import { maxValue } from 'valibot';
 
 defineProps({
   id: {
