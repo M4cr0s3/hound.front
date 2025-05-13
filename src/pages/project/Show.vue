@@ -11,7 +11,7 @@
             <div class="flex flex-wrap items-center gap-2 mt-2">
               <Badge variant="primary" class="flex items-center">
                 <Icon icon="heroicons:user-group" class="mr-1 h-4 w-4"/>
-                {{ project.team.name }}
+                {{ project?.team?.name }}
               </Badge>
               <Badge variant="secondary" class="flex items-center">
                 <Icon icon="heroicons:computer-desktop" class="mr-1 h-4 w-4"/>
