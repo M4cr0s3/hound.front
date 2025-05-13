@@ -32,7 +32,7 @@
       </div>
       <div class="flex items-center space-x-4">
         <button
-            @click.stop="$emit('delete', endpoint.id)"
+            @click="endpointStore.deleteEndpoint(endpoint.id)"
             class="text-gray-400 hover:text-red-500"
         >
           <Icon icon="heroicons:trash" class="h-4 w-4 cursor-pointer"/>
@@ -43,12 +43,12 @@
 </template>
 
 <script setup lang="ts">
-import {Icon} from '@iconify/vue';
-import type {HealthCheckEndpoint} from "@/stores";
+import { useHealthCheckStore, type HealthCheckEndpoint } from "@/stores";
+import { Icon } from '@iconify/vue';
 
 defineProps<{
   endpoint: HealthCheckEndpoint;
 }>();
 
-defineEmits(['delete']);
+const endpointStore = useHealthCheckStore();
 </script>

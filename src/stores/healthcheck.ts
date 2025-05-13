@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { api, type Slug } from '../api';
+import { httpClient, type Slug } from '../api';
 
 export interface HealthCheckResult {
 	id: number;
@@ -62,10 +62,10 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 		async fetchEndpoints(slug: Slug) {
 			try {
 				this.isLoading = true;
-				const response = await api.get<HealthCheckEndpoint[]>(
+				const response = await httpClient.get<HealthCheckEndpoint[]>(
 					`/projects/${slug}/healthcheck`
 				);
-				this.endpoints = response.data;
+				this.endpoints = response;
 			} catch (error) {
 				console.error('Failed to fetch endpoints:', error);
 				throw error;
@@ -76,14 +76,14 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 		async fetchEndpointResults(endpointId: number) {
 			try {
 				this.isLoading = true;
-				const response = await api.get<{
+				const response = await httpClient.get<{
 					data: HealthCheckResult[];
 					stats: HealthCheckStats;
 					endpoint: HealthCheckEndpoint;
 				}>(`/healthcheck/${endpointId}`);
-				this.results = response.data.data;
-				this.stats = response.data.stats;
-				this.endpoint = response.data.endpoint;
+				this.results = response.data;
+				this.stats = response.stats;
+				this.endpoint = response.endpoint;
 			} catch (error) {
 				console.error('Failed to fetch endpoint results:', error);
 				throw error;
@@ -95,7 +95,7 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 		async addEndpoint(slug: Slug, form: HealthCheckEndpointForm) {
 			try {
 				this.isAdding = true;
-				await api.post<HealthCheckEndpoint>(`/healthcheck/${slug}`, form);
+				await httpClient.post<HealthCheckEndpoint>(`/healthcheck/${slug}`, form);
 				await this.fetchEndpoints(slug);
 			} catch (error) {
 				console.error('Failed to add endpoint:', error);
@@ -111,7 +111,7 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 				if (!endpoint) return;
 
 				const newStatus = !endpoint.is_active;
-				await api.patch<HealthCheckEndpoint>(`/healthcheck/${endpointId}`, {
+				await httpClient.patch<HealthCheckEndpoint>(`/healthcheck/${endpointId}`, {
 					is_active: newStatus,
 				});
 
@@ -124,8 +124,9 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 
 		async deleteEndpoint(endpointId: number) {
 			try {
-				await api.delete(`/healthcheck/${endpointId}`);
+				await httpClient.delete(`/healthcheck/${endpointId}`);
 				this.endpoints = this.endpoints.filter((e) => e.id !== endpointId);
+				window.location.reload();
 			} catch (error) {
 				console.error('Failed to delete endpoint:', error);
 				throw error;
