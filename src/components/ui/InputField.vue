@@ -125,6 +125,14 @@ defineProps({
   readonly: {
     type: Boolean,
     default: false
+  },
+  minValue: {
+    type: Number,
+    default: 0
+  },
+  maxValue: {
+    type: Number,
+    default: 550
   }
 });
 
