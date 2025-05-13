@@ -13,7 +13,7 @@ import { computed } from 'vue';
 const variants = ['default', 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'] as const;
 
 interface Props {
-  variant: typeof variants;
+  variant: typeof variants[number];
   text?: string;
 }
 
