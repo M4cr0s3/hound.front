@@ -34,6 +34,8 @@
 							type="number"
 							placeholder="200"
 							required
+							:minValue="1"
+							:maxValue="550"
 						/>
 
 						<InputField
@@ -43,6 +45,8 @@
 							type="number"
 							placeholder="1"
 							required
+							:minValue="1"
+							:maxValue="60"
 						/>
 
 						<Checkbox
@@ -163,16 +167,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue';
-import { Icon } from '@iconify/vue';
-import { useRoute } from 'vue-router';
+import { Checkbox, InputField, SelectField } from '@/components/ui';
 import {
 	useHealthCheckStore,
 	type HealthCheckEndpointForm,
-} from '../../stores';
-import InputField from '../../components/ui/InputField.vue';
-import SelectField from '../../components/ui/SelectField.vue';
-import Checkbox from '../../components/ui/Checkbox.vue';
+} from '@/stores';
+import { Icon } from '@iconify/vue';
+import { onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const slug = route.params.slug as string;
