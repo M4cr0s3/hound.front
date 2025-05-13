@@ -224,6 +224,8 @@
               placeholder="200"
               required
               icon="heroicons:hashtag"
+              :minValue="1"
+              :maxValue="550"
           />
           <InputField
               v-model="newEndpoint.interval"
@@ -233,6 +235,8 @@
               required
               icon="heroicons:clock"
               id="check-interval"
+              :minValue="1"
+              :maxValue="60"
           />
           <SelectField
               :options="['GET', 'POST', 'PUT', 'PATCH', 'OPTIONS']"
@@ -257,19 +261,19 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import {Icon} from '@iconify/vue';
-import {Badge, Button, InputField, Modal, SelectField} from '@/components/ui';
-import {httpClient} from '@/api';
-import {EmptyState} from "@/components/projects/settings/notification";
-import IssueItem from "@/components/projects/IssueItem.vue";
+import { httpClient } from '@/api';
 import EndpointItem from "@/components/projects/EndpointItem.vue";
 import EventItem from "@/components/projects/EventItem.vue";
-import StatCard from "@/components/projects/StatCard.vue";
+import IssueItem from "@/components/projects/IssueItem.vue";
 import LineChart from "@/components/projects/LineChart.vue";
-import {getProjectIcon} from "@/utils";
+import { EmptyState } from "@/components/projects/settings/notification";
+import StatCard from "@/components/projects/StatCard.vue";
+import { Badge, Button, InputField, Modal, SelectField } from '@/components/ui';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { getProjectIcon } from "@/utils";
+import { Icon } from '@iconify/vue';
+import { onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
