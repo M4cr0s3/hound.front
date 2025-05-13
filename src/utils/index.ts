@@ -1,4 +1,5 @@
-import {PLATFORMS} from "@/data";
+import { PLATFORMS } from "@/data";
+import type { IconifyIcon } from "@iconify/vue";
 
 /**
  * Форматирует дату в локальное строковое представление
@@ -99,7 +100,7 @@ export function getIssueStatusColor(status: string): string {
 }
 
 type Level = 'error' | 'warning' | 'info' | 'debug' | string;
-type Variant = 'error' | 'warning' | 'info' | 'default';
+type Variant = 'danger' | 'warning' | 'info' | 'default';
 
 export function getLevelColor(level: Level): string {
   const colors: Record<string, string> = {
@@ -132,8 +133,8 @@ export function getLevelVariant(level: Level): Variant {
     error: 'danger',
     warning: 'warning',
     info: 'info',
-    fatal: 'error',
-    critical: 'error',
+    fatal: 'danger',
+    critical: 'danger',
   };
 
   return variants[level.toLowerCase()] || 'default';
@@ -152,6 +153,6 @@ export function getLevelName(level: Level): string {
   return names[level.toLowerCase()] || level;
 }
 
-export const getProjectIcon = (platform: string) => {
-  return PLATFORMS.find(p => p.name === platform)?.icon;
+export const getProjectIcon = (platform: string): string => {
+  return PLATFORMS.find(p => p.name === platform)?.icon ?? '';
 };
