@@ -50,7 +50,5 @@ defineProps<{
   endpoint: HealthCheckEndpoint;
 }>();
 
-defineEmits(['delete']);
-
 const endpointStore = useHealthCheckStore();
 </script>
