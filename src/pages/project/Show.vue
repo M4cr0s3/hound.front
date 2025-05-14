@@ -4,25 +4,25 @@
       <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
         <div class="flex items-start space-x-4">
           <div class="p-3 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-md">
-            <Icon :icon="getProjectIcon(project.platform)" class="h-8 w-8 text-white"/>
+            <Icon :icon="getProjectIcon(projectStore.project.platform)" class="h-8 w-8 text-white"/>
           </div>
           <div>
-            <h1 class="text-2xl font-bold text-gray-900">{{ project.name }}</h1>
+            <h1 class="text-2xl font-bold text-gray-900">{{ projectStore.project.name }}</h1>
             <div class="flex flex-wrap items-center gap-2 mt-2">
               <Badge variant="primary" class="flex items-center">
                 <Icon icon="heroicons:user-group" class="mr-1 h-4 w-4"/>
-                {{ project?.team?.name }}
+                {{ projectStore.project.team?.name }}
               </Badge>
               <Badge variant="secondary" class="flex items-center">
                 <Icon icon="heroicons:computer-desktop" class="mr-1 h-4 w-4"/>
-                {{ project.platform }}
+                {{ projectStore.project.platform }}
               </Badge>
             </div>
           </div>
         </div>
         <div class="flex space-x-3">
           <RouterLink
-              :to="`/projects/${project.slug}/settings/general`"
+              :to="`/projects/${projectStore.project.slug}/settings/general`"
               class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
             <Icon icon="heroicons:cog-6-tooth" class="mr-2 h-4 w-4"/>
@@ -57,7 +57,7 @@
         />
         <StatCard
             title="Uptime"
-            :value="`${stats?.uptime_percentage?.toFixed(2)}%`"
+            :value="`${uptimePercent}%`"
             icon="heroicons:shield-check"
             variant="success"
         />
@@ -84,7 +84,7 @@
                 class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
               <h2 class="text-lg font-semibold text-gray-900">Последние события</h2>
               <RouterLink
-                  :to="`/projects/${project.slug}/events`"
+                  :to="`/projects/${projectStore.project.slug}/events`"
                   class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
               >
                 Показать все
@@ -92,14 +92,14 @@
             </div>
             <div class="divide-y divide-gray-100">
               <EventItem
-                  v-for="event in project.events"
+                  v-for="event in projectStore.project.events"
                   :key="event.id"
                   :event="event"
                   class="hover:bg-gray-50 transition-colors duration-150"
-                  :project-slug="project.slug"
+                  :project-slug="projectStore.project.slug"
               />
               <EmptyState
-                  v-if="!project.events.length"
+                  v-if="!projectStore.project.events.length"
                   title="Событий не найдено"
                   icon="heroicons:bell"
                   description="Здесь будут отображаться последние события вашего проекта."
@@ -124,14 +124,14 @@
             </div>
             <div class="divide-y divide-gray-100">
               <EndpointItem
-                  :slug="project.slug"
-                  v-for="endpoint in project.endpoints"
+                  v-for="endpoint in projectStore.project.endpoints"
+                  :slug="projectStore.project.slug"
                   :key="endpoint.id"
                   :endpoint="endpoint"
                   class="hover:bg-gray-50 transition-colors duration-150"
               />
               <EmptyState
-                  v-if="!project.endpoints.length"
+                  v-if="!projectStore.project.endpoints.length"
                   title="Нет endpoints"
                   icon="heroicons:link"
                   description="Добавьте health check endpoints для мониторинга."
@@ -146,7 +146,7 @@
                 class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
               <h2 class="text-lg font-semibold text-gray-900">Последние проблемы</h2>
               <RouterLink
-                  :to="`/projects/${project.slug}/issues`"
+                  :to="`/projects/${projectStore.project.slug}/issues`"
                   class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
               >
                 Показать все
@@ -154,14 +154,14 @@
             </div>
             <div class="divide-y divide-gray-100">
               <IssueItem
-                  v-for="issue in project.issues"
+                  v-for="issue in projectStore.project.issues"
                   :key="issue.id"
                   :issue="issue"
                   class="hover:bg-gray-50 transition-colors duration-150"
-                  :project-slug="project.slug"
+                  :project-slug="projectStore.project.slug"
               />
               <EmptyState
-                  v-if="!project.issues.length"
+                  v-if="!projectStore.project.issues.length"
                   title="Проблем не найдено"
                   icon="heroicons:check-badge"
                   description="Отличная работа! Активных проблем нет."
@@ -184,7 +184,7 @@
           <Icon icon="heroicons:exclamation-triangle" class="mx-auto h-12 w-12 text-red-500"/>
           <h3 class="mt-2 text-lg font-medium text-gray-900">Удалить проект?</h3>
           <div class="mt-2 text-sm text-gray-500">
-            <p>Вы уверены, что хотите удалить проект "{{ project.name }}"?</p>
+            <p>Вы уверены, что хотите удалить проект "{{ projectStore.project.name }}"?</p>
             <p class="mt-1">Это действие нельзя отменить.</p>
           </div>
         </div>
@@ -270,25 +270,16 @@ import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
 import { Badge, Button, InputField, Modal, SelectField } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useProjectsStore } from '@/stores';
 import { getProjectIcon } from "@/utils";
 import { Icon } from '@iconify/vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 const route = useRoute();
 const router = useRouter();
 
-const project = ref({
-  id: 0,
-  name: '',
-  slug: '',
-  platform: '',
-  team: {name: ''},
-  events: [],
-  issues: [],
-  endpoints: [],
-  notificationRules: [],
-});
+const projectStore = useProjectsStore();
 
 const stats = ref({
   events_today: 0,
@@ -308,10 +299,18 @@ const newEndpoint = ref({
   is_active: true,
 });
 
+const uptimePercent = computed(() => {
+  if(!projectStore.project.endpoints.length) {
+    return 0;
+  }
+
+  return stats.value.uptime_percentage / projectStore.project.endpoints.length
+});
+
 const fetchProject = async () => {
   try {
     const response = await httpClient.get(`/projects/${route.params.slug}`);
-    project.value = response.project;
+    projectStore.project = response.project;
     stats.value = response.stats;
     dailyStats.value = response.daily_stats;
   } catch (error) {
@@ -321,7 +320,7 @@ const fetchProject = async () => {
 
 const deleteProject = async () => {
   try {
-    await httpClient.delete(`/projects/${project.value.id}`);
+    await httpClient.delete(`/projects/${projectStore.project.id}`);
     await router.push('/projects');
   } catch (error) {
     console.error('Error deleting project:', error);
@@ -332,7 +331,7 @@ const deleteProject = async () => {
 
 const addEndpoint = async () => {
   try {
-    await httpClient.post(`/healthcheck/${project.value.slug}`, newEndpoint.value);
+    await httpClient.post(`/healthcheck/${projectStore.project.slug}`, newEndpoint.value);
     await fetchProject();
     showEndpointModal.value = false;
     newEndpoint.value = {
