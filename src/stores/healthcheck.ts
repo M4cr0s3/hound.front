@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia';
 import { httpClient, type Slug } from '../api';
+import { useProjectsStore } from './projects';
 
 export interface HealthCheckResult {
 	id: number;
@@ -46,6 +47,7 @@ interface HealthCheckState {
 	stats: HealthCheckStats | null;
 	isLoading: boolean;
 	isAdding: boolean;
+	projectStore: ReturnType<typeof useProjectsStore>
 }
 
 export const useHealthCheckStore = defineStore('healthCheck', {
@@ -56,6 +58,7 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 		stats: null,
 		isLoading: false,
 		isAdding: false,
+		projectStore: useProjectsStore()
 	}),
 
 	actions: {
@@ -122,11 +125,11 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 			}
 		},
 
-		async deleteEndpoint(endpointId: number) {
+		async deleteEndpoint(endpointId: number, slug: Slug) {
 			try {
 				await httpClient.delete(`/healthcheck/${endpointId}`);
 				this.endpoints = this.endpoints.filter((e) => e.id !== endpointId);
-				window.location.reload();
+				await this.projectStore.fetchProject(slug)
 			} catch (error) {
 				console.error('Failed to delete endpoint:', error);
 				throw error;
