@@ -1,22 +1,37 @@
-import {defineStore} from 'pinia';
 import {
+  createProject,
+  deleteProject,
   getProject,
   getProjects,
   updateProject,
-  createProject,
-  deleteProject,
-  type Project,
-  type UpdateProjectBody,
   type CreateProjectBody,
+  type Project,
+  type ProjectKey,
   type Slug,
+  type Team,
+  type UpdateProjectBody,
 } from '@/api';
-import {ref} from 'vue';
-import {router} from '@/router';
-import {ROUTES} from '@/router/routes.ts';
+import { router } from '@/router';
+import { ROUTES } from '@/router/routes.ts';
+import { defineStore } from 'pinia';
+import { ref } from 'vue';
 
 export const useProjectsStore = defineStore('projects', () => {
   const projects = ref<Project[]>([]);
-  const project = ref<Project>({} as Project);
+  const project = ref<Project>(
+    {
+      id: 0,
+      team_id: 0,
+      name: 'none',
+      slug: '',
+      platform: '',
+      team: {} as Team,
+      key: {} as ProjectKey,
+      events: [],
+      issues: [],
+      endpoints: [],
+      notificationRules: [],
+  });
   const updateBody = ref<UpdateProjectBody>({
     name: '',
     slug: '',

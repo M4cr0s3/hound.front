@@ -1,4 +1,5 @@
-import type {Id, Team} from '@/api';
+import type { Id, Team } from '@/api';
+import type { HealthCheckEndpoint } from '@/stores';
 
 export interface Project {
   id: number;
@@ -8,6 +9,10 @@ export interface Project {
   platform: string;
   team?: Team;
   key: ProjectKey;
+  events: [],
+  issues: [],
+  endpoints: HealthCheckEndpoint[]
+  notificationRules: [],
 }
 
 export interface UpdateProjectBody {
