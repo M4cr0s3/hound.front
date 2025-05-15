@@ -137,8 +137,8 @@
                         <span
                             v-if="project.stats !== undefined"
                             class="text-xs font-normal ml-1"
-                            ?:class="
-														project.stats.errors_last_day > 0
+                            :class="
+														project?.stats?.errors_last_day > 0
 															? 'text-red-500'
 															: 'text-green-500'
 													"
