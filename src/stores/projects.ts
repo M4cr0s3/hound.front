@@ -79,6 +79,7 @@ export const useProjectsStore = defineStore('projects', () => {
 
   const destroy = async (slug: Slug) => {
     isLoading.value = true;
+    await router.push('/projects');
     try {
       await deleteProject(slug);
       await fetchProjects();
