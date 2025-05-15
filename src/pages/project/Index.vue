@@ -110,7 +110,7 @@
                         Всего событий
                       </p>
                       <p class="text-xl font-bold text-gray-900">
-                        {{ project.stats.total_events.toLocaleString() }}
+                        {{ project?.stats?.total_events.toLocaleString() }}
                       </p>
                     </div>
                   </div>
@@ -133,10 +133,11 @@
                         Ошибки (24ч)
                       </p>
                       <p class="text-xl font-bold text-gray-900">
-                        {{ project.stats.errors_last_day.toLocaleString() }}
+                        {{ project?.stats?.errors_last_day.toLocaleString() }}
                         <span
+                            v-if="project.stats != undefined"
                             class="text-xs font-normal ml-1"
-                            :class="
+                            ?:class="
 														project.stats.errors_last_day > 0
 															? 'text-red-500'
 															: 'text-green-500'
@@ -166,7 +167,7 @@
                         Время ответа
                       </p>
                       <p class="text-xl font-bold text-gray-900">
-                        {{ project.stats.avg_response_time.toFixed(2) }}ms
+                        {{ project.stats?.avg_response_time.toFixed(2) }}ms
                         <span
                             class="text-xs font-normal ml-1"
                             :class="
@@ -235,7 +236,9 @@ const projects = ref<Project[]>([]);
 const {isLoading} = storeToRefs(useProjectsStore());
 
 const getResponseTimeStatus = (project: Project) => {
-  return project.stats.avg_response_time < 200 ? 'good' : 'warning';
+  const avg_response_time = project.stats?.avg_response_time 
+  if(avg_response_time === undefined){ return 'undefined'}
+  return avg_response_time < 200 ? 'good' : 'warning';
 };
 
 onMounted(async () => {

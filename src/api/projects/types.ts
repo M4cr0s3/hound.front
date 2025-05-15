@@ -13,7 +13,7 @@ export interface Project {
   issues: [],
   endpoints: HealthCheckEndpoint[]
   notificationRules: [],
-  stats: ProjectStatistic,
+  stats?: ProjectStatistic,
   events_last_day?: {
     hour: string;
     count: number;
