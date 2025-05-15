@@ -1,4 +1,4 @@
-import { api, type BaseResponse, type Slug } from '..';
+import { httpClient, type BaseResponse, type Slug } from '..';
 
 export const deleteProject = async (slug: Slug) =>
-	api.delete<BaseResponse>(`/projects/${slug}`);
+	httpClient.delete<BaseResponse>(`/projects/${slug}`);

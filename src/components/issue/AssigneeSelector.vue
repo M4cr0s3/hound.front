@@ -17,9 +17,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { httpClient, type User } from '../../api';
 import { SelectField } from '../../components/ui/';
-import { api, type User } from '../../api';
 
 const props = defineProps<{
 	modelValue: User[];
@@ -34,8 +34,8 @@ const selectedAssigneeIds = ref<number[]>([]);
 
 onMounted(async () => {
 	try {
-		const response = await api.get('/users');
-		users.value = response.data;
+		const response = await httpClient.get<User[]>('/users');
+		users.value = response;
 	} catch (error) {
 		console.error('Error fetching users:', error);
 	}

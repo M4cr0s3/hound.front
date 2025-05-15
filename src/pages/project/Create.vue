@@ -84,15 +84,15 @@
 </template>
 
 <script setup lang="ts">
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import type { CreateProjectBody } from '@/api';
 import PlatformCard from '@/components/projects/PlatformCard.vue';
-import {InputField, SelectField, Button} from '@/components/ui'
-import {ref} from 'vue';
-import {ROUTES} from '@/router/routes.ts';
-import type {CreateProjectBody} from '@/api';
-import {useProjectsStore, useTeamsStore} from '@/stores';
-import {Icon} from '@iconify/vue';
-import {toast} from "vue-sonner";
+import { Button, InputField, SelectField } from '@/components/ui';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { ROUTES } from '@/router/routes.ts';
+import { useProjectsStore, useTeamsStore } from '@/stores';
+import { Icon } from '@iconify/vue';
+import { ref } from 'vue';
+import { toast } from "vue-sonner";
 
 const form = ref<CreateProjectBody>({
   name: '',

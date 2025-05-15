@@ -1,8 +1,7 @@
-import { api, type UpdateProjectBody, type UpdateProjectResponse } from '../';
-import type { AxiosResponse } from 'axios';
+import { httpClient, type UpdateProjectBody, type UpdateProjectResponse } from '../';
 
 export const updateProject = async (
 	slug: string,
 	body: UpdateProjectBody
-): Promise<AxiosResponse<UpdateProjectResponse>> =>
-	api.put(`/projects/${slug}`, body);
+): Promise<UpdateProjectResponse> =>
+	httpClient.put(`/projects/${slug}`, body);
