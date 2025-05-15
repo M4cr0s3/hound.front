@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import { httpClient, type Slug } from '../api';
+import { httpClient, type Slug } from '@/api';
 import { useProjectsStore } from './projects';
 
 export interface HealthCheckResult {
@@ -65,10 +65,9 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 		async fetchEndpoints(slug: Slug) {
 			try {
 				this.isLoading = true;
-				const response = await httpClient.get<HealthCheckEndpoint[]>(
-					`/projects/${slug}/healthcheck`
+				this.endpoints = await httpClient.get<HealthCheckEndpoint[]>(
+						`/projects/${slug}/healthcheck`
 				);
-				this.endpoints = response;
 			} catch (error) {
 				console.error('Failed to fetch endpoints:', error);
 				throw error;

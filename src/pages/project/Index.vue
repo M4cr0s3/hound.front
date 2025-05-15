@@ -221,7 +221,7 @@
 </template>
 
 <script setup lang="ts">
-import { getProjectStatsLastDay, type Project } from '@/api';
+import { type Project } from '@/api';
 import EventsChart from '@/components/charts/EventsChart.vue';
 import { EmptyState } from "@/components/projects/settings/notification";
 import { Button } from "@/components/ui";
@@ -229,11 +229,11 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { useProjectsStore } from '@/stores';
 import { Icon } from '@iconify/vue';
 import { storeToRefs } from 'pinia';
-import { onMounted, ref } from 'vue';
+import { onMounted } from 'vue';
 
-const projects = ref<Project[]>([]);
+const projectsStore = useProjectsStore();
 
-const {isLoading} = storeToRefs(useProjectsStore());
+const {isLoading, projects} = storeToRefs(projectsStore);
 
 const getResponseTimeStatus = (project: Project) => {
   const avg_response_time = project.stats?.avg_response_time; 
@@ -242,6 +242,6 @@ const getResponseTimeStatus = (project: Project) => {
 };
 
 onMounted(async () => {
-  projects.value = await getProjectStatsLastDay();
+  await projectsStore.fetchProjectsWithStats();
 });
 </script>

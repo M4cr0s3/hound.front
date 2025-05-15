@@ -4,6 +4,7 @@ import {
   getProject,
   getProjects,
   updateProject,
+  getProjectsStatsLastDay,
   type CreateProjectBody,
   type Project,
   type ProjectKey,
@@ -88,6 +89,15 @@ export const useProjectsStore = defineStore('projects', () => {
     }
   };
 
+  const fetchProjectsWithStats = async () => {
+    isLoading.value = true;
+    try {
+      projects.value = await getProjectsStatsLastDay();
+    } finally {
+      isLoading.value = false;
+    }
+  };
+
   return {
     projects,
     project,
@@ -95,6 +105,7 @@ export const useProjectsStore = defineStore('projects', () => {
     isLoading,
     fetchProjects,
     fetchProject,
+    fetchProjectsWithStats,
     update,
     create,
     destroy,
