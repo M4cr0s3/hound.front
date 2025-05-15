@@ -31,7 +31,7 @@ export const useProjectsStore = defineStore('projects', () => {
       issues: [],
       endpoints: [],
       notificationRules: [],
-  });
+    });
   const updateBody = ref<UpdateProjectBody>({
     name: '',
     slug: '',
@@ -59,7 +59,7 @@ export const useProjectsStore = defineStore('projects', () => {
   const update = async (slug: string, body: UpdateProjectBody) => {
     isLoading.value = true;
     try {
-      const {data: response} = await updateProject(slug, body);
+      const { data: response } = await updateProject(slug, body);
       await fetchProjects();
       await router.push(`/projects/${response.data.slug}/settings/general`);
     } finally {
@@ -79,10 +79,10 @@ export const useProjectsStore = defineStore('projects', () => {
 
   const destroy = async (slug: Slug) => {
     isLoading.value = true;
-    await router.push('/projects');
     try {
       await deleteProject(slug);
       await fetchProjects();
+      await router.push('/projects');
     } finally {
       isLoading.value = false;
     }

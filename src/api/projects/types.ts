@@ -1,4 +1,4 @@
-import type { Id, Team } from '@/api';
+import type { Team } from '@/api';
 import type { HealthCheckEndpoint } from '@/stores';
 
 export interface Project {
@@ -13,6 +13,11 @@ export interface Project {
   issues: [],
   endpoints: HealthCheckEndpoint[]
   notificationRules: [],
+  stats?: ProjectStatistic,
+  events_last_day?: {
+    hour: string;
+    count: number;
+  }[];
 }
 
 export interface UpdateProjectBody {
@@ -43,20 +48,7 @@ export interface ProjectStatistic {
   avg_response_time: number;
 }
 
-export interface LastDayStat {
-  id: Id;
-  name: string;
-  slug: string;
-  platform: string;
-
-  stats: ProjectStatistic;
-  events_last_day: {
-    hour: string;
-    count: number;
-  }[];
-}
-
-export type LastDayStatsResponse = LastDayStat[];
+export type LastDayStatsResponse = Project[];
 
 export interface ProjectKey {
   id: number;
