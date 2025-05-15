@@ -71,12 +71,12 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed} from 'vue';
-import {useProjectsStore} from '@/stores';
-import {useRouter} from 'vue-router';
-import {InputField} from '@/components/ui';
-import {Icon} from '@iconify/vue';
-import {ROUTES} from '@/router/routes.ts';
+import { InputField } from '@/components/ui';
+import { ROUTES } from '@/router/routes.ts';
+import { useProjectsStore } from '@/stores';
+import { Icon } from '@iconify/vue';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const {project} = defineProps<{
   project: {

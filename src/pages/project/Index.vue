@@ -197,7 +197,7 @@
                   Посмотреть все события
                 </Button>
               </div>
-              <template v-if="project.events_last_day.length">
+              <template v-if="project.events_last_day?.length">
                 <div class="h-42">
                   <EventsChart
                       :data="project.events_last_day"
@@ -220,21 +220,21 @@
 </template>
 
 <script setup lang="ts">
+import { getProjectStatsLastDay, type Project } from '@/api';
 import EventsChart from '@/components/charts/EventsChart.vue';
+import { EmptyState } from "@/components/projects/settings/notification";
+import { Button } from "@/components/ui";
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import {Icon} from '@iconify/vue';
-import {useProjectsStore} from '@/stores';
-import {storeToRefs} from 'pinia';
-import {onMounted, ref} from 'vue';
-import {getProjectStatsLastDay, type LastDayStat} from '@/api';
-import {EmptyState} from "@/components/projects/settings/notification";
-import {Button} from "@/components/ui";
+import { useProjectsStore } from '@/stores';
+import { Icon } from '@iconify/vue';
+import { storeToRefs } from 'pinia';
+import { onMounted, ref } from 'vue';
 
-const projects = ref<LastDayStat[]>([]);
+const projects = ref<Project[]>([]);
 
 const {isLoading} = storeToRefs(useProjectsStore());
 
-const getResponseTimeStatus = (project: LastDayStat) => {
+const getResponseTimeStatus = (project: Project) => {
   return project.stats.avg_response_time < 200 ? 'good' : 'warning';
 };
 
