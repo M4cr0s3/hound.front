@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { onMounted, ref, watch } from 'vue';
+import { httpClient, type Team } from '../../api';
 import { SelectField } from '../../components/ui';
-import { api, type Team } from '../../api';
 
 const props = defineProps<{
 	modelValue: Team[];
@@ -32,8 +32,8 @@ const selectedTeamIds = ref<number[]>([]);
 
 onMounted(async () => {
 	try {
-		const response = await api.get('/teams');
-		teams.value = response.data;
+		const response = await httpClient.get<Team[]>('/teams');
+		teams.value = response;
 	} catch (error) {
 		console.error('Error fetching teams:', error);
 	}
