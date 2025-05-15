@@ -135,7 +135,7 @@
                       <p class="text-xl font-bold text-gray-900">
                         {{ project?.stats?.errors_last_day.toLocaleString() }}
                         <span
-                            v-if="project.stats != undefined"
+                            v-if="project.stats !== undefined"
                             class="text-xs font-normal ml-1"
                             ?:class="
 														project.stats.errors_last_day > 0
@@ -236,8 +236,8 @@ const projects = ref<Project[]>([]);
 const {isLoading} = storeToRefs(useProjectsStore());
 
 const getResponseTimeStatus = (project: Project) => {
-  const avg_response_time = project.stats?.avg_response_time 
-  if(avg_response_time === undefined){ return 'undefined'}
+  const avg_response_time = project.stats?.avg_response_time; 
+  if(!avg_response_time) return 'undefined';
   return avg_response_time < 200 ? 'good' : 'warning';
 };
 
