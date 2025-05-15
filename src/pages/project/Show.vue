@@ -1,3 +1,83 @@
+<script setup lang="ts">
+import { httpClient } from '@/api';
+import EndpointItem from "@/components/projects/EndpointItem.vue";
+import EventItem from "@/components/projects/EventItem.vue";
+import IssueItem from "@/components/projects/IssueItem.vue";
+import LineChart from "@/components/projects/LineChart.vue";
+import { EmptyState } from "@/components/projects/settings/notification";
+import StatCard from "@/components/projects/StatCard.vue";
+import { Badge, Button, InputField, Modal, SelectField } from '@/components/ui';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useProjectsStore } from '@/stores';
+import { getProjectIcon } from "@/utils";
+import { Icon } from '@iconify/vue';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const projectStore = useProjectsStore();
+
+
+const stats = ref({
+  events_today: 0,
+  events_week: 0,
+  active_issues: 0,
+  uptime_percentage: 100,
+});
+
+const dailyStats = ref([]);
+const showDeleteConfirm = ref(false);
+const showEndpointModal = ref(false);
+const newEndpoint = ref({
+  url: '',
+  expected_status: 200,
+  interval: 5,
+  method: 'GET',
+  is_active: true,
+});
+
+const uptimePercent = computed(() => {
+  if(!projectStore.project.endpoints.length) {
+    return 0;
+  }
+
+  return stats.value.uptime_percentage / projectStore.project.endpoints.length
+});
+
+const fetchProject = async () => {
+  try {
+    const response = await httpClient.get(`/projects/${route.params.slug}`);
+    projectStore.project = response.project;
+    stats.value = response.stats;
+    dailyStats.value = response.daily_stats;
+  } catch (error) {
+    console.error('Error fetching project:', error);
+  }
+};
+
+const addEndpoint = async () => {
+  try {
+    await httpClient.post(`/healthcheck/${projectStore.project.slug}`, newEndpoint.value);
+    await fetchProject();
+    showEndpointModal.value = false;
+    newEndpoint.value = {
+      url: '',
+      expected_status: 200,
+      interval: 5,
+      method: 'GET',
+      is_active: true
+    };
+  } catch (error) {
+    console.error('Error adding endpoint:', error);
+  }
+};
+
+onMounted(() => {
+  fetchProject();
+});
+</script>
+
 <template>
   <DashboardLayout>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
@@ -194,7 +274,7 @@
           <Button variant="secondary" @click="showDeleteConfirm = false">
             Отмена
           </Button>
-          <Button variant="danger" @click="deleteProject">
+          <Button variant="danger" @click="projectStore.destroy(projectStore.project.slug)">
             Удалить
           </Button>
         </div>
@@ -259,94 +339,3 @@
     </Modal>
   </DashboardLayout>
 </template>
-
-<script setup lang="ts">
-import { httpClient } from '@/api';
-import EndpointItem from "@/components/projects/EndpointItem.vue";
-import EventItem from "@/components/projects/EventItem.vue";
-import IssueItem from "@/components/projects/IssueItem.vue";
-import LineChart from "@/components/projects/LineChart.vue";
-import { EmptyState } from "@/components/projects/settings/notification";
-import StatCard from "@/components/projects/StatCard.vue";
-import { Badge, Button, InputField, Modal, SelectField } from '@/components/ui';
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import { useProjectsStore } from '@/stores';
-import { getProjectIcon } from "@/utils";
-import { Icon } from '@iconify/vue';
-import { computed, onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-
-const route = useRoute();
-const router = useRouter();
-
-const projectStore = useProjectsStore();
-
-const stats = ref({
-  events_today: 0,
-  events_week: 0,
-  active_issues: 0,
-  uptime_percentage: 100,
-});
-
-const dailyStats = ref([]);
-const showDeleteConfirm = ref(false);
-const showEndpointModal = ref(false);
-const newEndpoint = ref({
-  url: '',
-  expected_status: 200,
-  interval: 5,
-  method: 'GET',
-  is_active: true,
-});
-
-const uptimePercent = computed(() => {
-  if(!projectStore.project.endpoints.length) {
-    return 0;
-  }
-
-  return stats.value.uptime_percentage / projectStore.project.endpoints.length
-});
-
-const fetchProject = async () => {
-  try {
-    const response = await httpClient.get(`/projects/${route.params.slug}`);
-    projectStore.project = response.project;
-    stats.value = response.stats;
-    dailyStats.value = response.daily_stats;
-  } catch (error) {
-    console.error('Error fetching project:', error);
-  }
-};
-
-const deleteProject = async () => {
-  try {
-    await httpClient.delete(`/projects/${projectStore.project.id}`);
-    await router.push('/projects');
-  } catch (error) {
-    console.error('Error deleting project:', error);
-  } finally {
-    showDeleteConfirm.value = false;
-  }
-};
-
-const addEndpoint = async () => {
-  try {
-    await httpClient.post(`/healthcheck/${projectStore.project.slug}`, newEndpoint.value);
-    await fetchProject();
-    showEndpointModal.value = false;
-    newEndpoint.value = {
-      url: '',
-      expected_status: 200,
-      interval: 5,
-      method: 'GET',
-      is_active: true
-    };
-  } catch (error) {
-    console.error('Error adding endpoint:', error);
-  }
-};
-
-onMounted(() => {
-  fetchProject();
-});
-</script>
