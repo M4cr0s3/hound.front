@@ -3,8 +3,8 @@ import {
   deleteProject,
   getProject,
   getProjects,
-  updateProject,
   getProjectsStatsLastDay,
+  updateProject,
   type CreateProjectBody,
   type Project,
   type ProjectKey,
@@ -62,7 +62,7 @@ export const useProjectsStore = defineStore('projects', () => {
     try {
       const { data: response } = await updateProject(slug, body);
       await fetchProjects();
-      await router.push(`/projects/${response.data.slug}/settings/general`);
+      await router.push(`/projects/${response.slug}/settings/general`);
     } finally {
       isLoading.value = false;
     }

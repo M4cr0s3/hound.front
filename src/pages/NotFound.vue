@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import {Button} from "@/components/ui";
-import {useRouter} from "vue-router";
-import {ROUTES} from "@/router/routes.ts";
-import {useUsersStore} from "@/stores";
-import {computed} from "vue";
+import { Button } from "@/components/ui";
+import { ROUTES } from "@/router/routes.ts";
+import { useUsersStore } from "@/stores";
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 const usersStore = useUsersStore();
