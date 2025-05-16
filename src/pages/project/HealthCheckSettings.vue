@@ -225,7 +225,7 @@ const deleteEndpoint = async (endpoint: { id: number }) => {
 	if (!confirm('Are you sure you want to delete this endpoint?')) return;
 
 	try {
-		await healthCheckStore.deleteEndpoint(endpoint.id);
+		await healthCheckStore.deleteEndpoint(endpoint.id, slug);
 	} catch (error) {
 		console.error('Error deleting endpoint:', error);
 	}
