@@ -169,9 +169,8 @@ const route = useRoute();
 const endpointId = Number(route.params.endpointId);
 
 const healthCheckStore = useHealthCheckStore();
-const {fetchEndpointResults} = healthCheckStore;
 
-const results = computed(() => healthCheckStore.results.splice(0, 20));
+const results = computed(() => [...healthCheckStore.results].splice(0, 20));
 const stats = computed(() => healthCheckStore.stats);
 const isLoading = computed(() => healthCheckStore.isLoading);
 const chartData = computed(() => healthCheckStore.chartData);
@@ -203,7 +202,7 @@ const copyError = (result: HealthCheckResult) => {
 };
 
 onMounted(async () => {
-  await fetchEndpointResults(endpointId);
+  await healthCheckStore.fetchEndpointResults(endpointId);
 });
 </script>
 

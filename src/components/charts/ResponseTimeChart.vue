@@ -33,6 +33,11 @@ watch(
 function initChart() {
 	if (!chartRef.value) return;
 
+  const existingInstance = echarts.getInstanceByDom(chartRef.value);
+  if (existingInstance) {
+    echarts.dispose(chartRef.value);
+  }
+
 	const chart = echarts.init(chartRef.value);
 	const option = {
 		tooltip: {
