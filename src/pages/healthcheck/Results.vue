@@ -56,11 +56,11 @@
         />
       </div>
       
-      <ThePanel title="Время ответа (последние 24 часа)">
+      <Panel title="Время ответа (последние 24 часа)">
         <ResponseTimeChart :data="chartData"/>
-      </ThePanel>
+      </Panel>
       
-      <ThePanel title="История проверок">
+      <Panel title="История проверок">
         <div class="divide-y divide-gray-100">
           <template v-if="isLoading">
             <div v-for="i in 5" :key="i" class="p-6">
@@ -139,7 +139,7 @@
             </div>
           </template>
         </div>
-      </ThePanel>
+      </Panel>
     </div>
   </DashboardLayout>
 </template>
@@ -148,8 +148,7 @@
 import ResponseTimeChart from "@/components/charts/ResponseTimeChart.vue";
 import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
-import { Badge, Button } from '@/components/ui';
-import { default as ThePanel } from '@/components/ui/ThePanel.vue';
+import { Badge, Button, Panel } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { useHealthCheckStore, type HealthCheckResult } from '@/stores';
 import { formatDateTime } from '@/utils';

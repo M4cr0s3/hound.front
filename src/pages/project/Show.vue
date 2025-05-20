@@ -6,8 +6,7 @@ import IssueItem from "@/components/projects/IssueItem.vue";
 import LineChart from "@/components/projects/LineChart.vue";
 import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
-import { Badge, Button, InputField, Modal, SelectField } from '@/components/ui';
-import ThePanel from '@/components/ui/ThePanel.vue';
+import { Badge, Button, InputField, Modal, Panel, SelectField } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { useProjectsStore } from '@/stores';
 import { getProjectIcon } from "@/utils";
@@ -146,16 +145,16 @@ onMounted(() => {
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
-          <ThePanel title="Активность (7 дней)">
+          <Panel title="Активность (7 дней)">
             <LineChart
                   :data="dailyStats"
                   title="Активность событий"
                   color="#8B5CF6"
                   :show-mark-line="true"
             />
-          </ThePanel>
+          </Panel>
 
-          <ThePanel title="Последние события">
+          <Panel title="Последние события">
             <template v-slot:button>
               <RouterLink
                   :to="`/projects/${projectStore.project.slug}/events`"
@@ -182,11 +181,11 @@ onMounted(() => {
                   small
               />
             </div>
-          </ThePanel>
+          </Panel>
         </div>
 
         <div class="space-y-6">
-          <ThePanel title="Health Check Endpoints">
+          <Panel title="Health Check Endpoints">
             <template v-slot:button>
               <button
                   @click="showEndpointModal = true"
@@ -212,9 +211,9 @@ onMounted(() => {
                   small
               />
             </div>
-          </ThePanel>
+          </Panel>
 
-          <ThePanel title="Последние проблемы">
+          <Panel title="Последние проблемы">
             <template v-slot:button>
               <RouterLink
                   :to="`/projects/${projectStore.project.slug}/issues`"
@@ -240,7 +239,7 @@ onMounted(() => {
                   small
               />
             </div>
-          </ThePanel>
+          </Panel>
         </div>
       </div>
     </div>

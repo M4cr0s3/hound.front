@@ -1,4 +1,4 @@
-import type { BaseResponse, Id, Project, User } from "../";
+import type { BaseResponse, Id, Issue, Project, User } from "../";
 
 export interface Team {
   id: number;
@@ -11,11 +11,7 @@ export interface Team {
 
 interface Assignments { 
   id: number,
-  issue:{
-    id:string,
-    title:string,
-    status:string
-  }
+  issue: Pick<Issue, "id" | "title" | "status">
 }
 
 export interface CreateTeamBody {
