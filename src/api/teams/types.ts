@@ -6,14 +6,16 @@ export interface Team {
   slug: string;
   members: User[]
   projects: Project[],
-  assignments: [{ 
-    id: number,
-    issue:{
-      id:string,
-      title:string,
-      status:string
-    }
-  }]
+  assignments: Assignments[]
+}
+
+interface Assignments { 
+  id: number,
+  issue:{
+    id:string,
+    title:string,
+    status:string
+  }
 }
 
 export interface CreateTeamBody {
