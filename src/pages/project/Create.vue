@@ -11,7 +11,7 @@
         </div>
       </div>
 
-      <ThePanel title="Основные параметры">
+      <Panel title="Основные параметры">
         <form
             class="p-6 space-y-6"
             @submit.prevent="handleSubmit"
@@ -74,7 +74,7 @@
             </Button>
           </div>
         </form>
-      </ThePanel>
+      </Panel>
     </div>
   </DashboardLayout>
 </template>
@@ -82,8 +82,7 @@
 <script setup lang="ts">
 import type { CreateProjectBody } from '@/api';
 import PlatformCard from '@/components/projects/PlatformCard.vue';
-import { Button, InputField, SelectField } from '@/components/ui';
-import ThePanel from '@/components/ui/ThePanel.vue';
+import { Button, InputField, Panel, SelectField } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { ROUTES } from '@/router/routes.ts';
 import { useProjectsStore, useTeamsStore } from '@/stores';

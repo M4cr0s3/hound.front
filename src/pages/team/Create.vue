@@ -10,7 +10,7 @@
           <p class="text-sm text-gray-500">Объедините участников для совместной работы над проектами</p>
         </div>
       </div>
-      <ThePanel title="Основные параметры">
+      <Panel title="Основные параметры">
         <TheForm
             :submit="handleSubmit"
             class="p-6 space-y-6"
@@ -58,14 +58,13 @@
             </Button>
           </div>
         </TheForm>
-      </ThePanel>
+      </Panel>
     </div>
   </DashboardLayout>
 </template>
 
 <script setup lang="ts">
-import { Button, InputField, TheForm } from '@/components/ui';
-import ThePanel from '@/components/ui/ThePanel.vue';
+import { Button, InputField, Panel, TheForm } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { ROUTES } from '@/router/routes.ts';
 import { useTeamsStore } from '@/stores';

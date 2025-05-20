@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import IssueItem from "@/components/projects/IssueItem.vue";
 import { EmptyState } from "@/components/projects/settings/notification";
-import { Badge } from "@/components/ui";
-import ThePanel from "@/components/ui/ThePanel.vue";
+import { Badge, Panel } from "@/components/ui";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import { useProjectsStore } from "@/stores";
 import { getProjectIcon } from "@/utils";
@@ -51,12 +50,12 @@ onMounted(async () => {
         </div>
       </div>
 
-      <ThePanel title="Последние проблемы">
+      <Panel title="Последние проблемы">
         <IssueItem v-for="issue in projectStore.project.issues" :key="issue.id" :issue="issue"
           class="hover:bg-gray-50 transition-colors duration-150" :project-slug="projectStore.project.slug" />
         <EmptyState v-if="!projectStore.project.issues?.length" title="Проблем не найдено" icon="heroicons:check-badge"
           description="Отличная работа! Активных проблем нет." class="p-6" />
-      </ThePanel>
+      </Panel>
     </div>
   </DashboardLayout>
 </template>

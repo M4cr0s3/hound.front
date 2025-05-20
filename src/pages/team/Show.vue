@@ -30,7 +30,7 @@
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
          
-          <ThePanel title="Основная информация">
+          <Panel title="Основная информация">
              <div class="p-6">
               <dl class="space-y-4">
                 <div class="flex items-start">
@@ -43,9 +43,9 @@
                 </div>
               </dl>
               </div>
-          </ThePanel>
+          </Panel>
 
-          <ThePanel v-if="team.projects.length" title="Проекты команды">
+          <Panel v-if="team.projects.length" title="Проекты команды">
             <template #button>
               <Badge variant="primary">
                 {{ team.projects.length }} проектов
@@ -68,9 +68,9 @@
                 </div>
               </RouterLink>
             </div>
-          </ThePanel>
+          </Panel>
 
-          <ThePanel v-if="team.assignments.length" title="Активные задачи">
+          <Panel v-if="team.assignments.length" title="Активные задачи">
             <template #button>
               <Badge variant="primary">
                 {{ team.assignments.length }} проектов
@@ -94,11 +94,11 @@
                 </div>
               </li>
             </ul>
-          </ThePanel> 
+          </Panel> 
         </div>
 
         <div class="space-y-6">
-          <ThePanel v-if="team.members.length" title="Участники команды">
+          <Panel v-if="team.members.length" title="Участники команды">
             <template #button>
               <Badge variant="success">
               {{ team.members.length }} человек
@@ -129,9 +129,9 @@
                 Пригласить участника
               </RouterLink>
             </div>
-          </ThePanel>
+          </Panel>
           
-          <ThePanel title="Быстрые действия">
+          <Panel title="Быстрые действия">
             <div class="p-6 space-y-4">
               <RouterLink :to="ROUTES.PROJECT.CREATE"
                 class="w-full flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-indigo-300 hover:bg-indigo-50 transition-all duration-200">
@@ -154,7 +154,7 @@
                 <Icon icon="heroicons:chevron-right" class="h-5 w-5 text-gray-400" />
               </RouterLink>
             </div>
-          </ThePanel>
+          </Panel>
         </div>
       </div>
 
@@ -175,8 +175,7 @@
 <script setup lang="ts">
 import { httpClient, type Team } from '@/api';
 import { EmptyState } from "@/components/projects/settings/notification";
-import { Badge } from "@/components/ui";
-import ThePanel from '@/components/ui/ThePanel.vue';
+import { Badge, Panel } from "@/components/ui";
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { router } from "@/router";
 import { ROUTES } from "@/router/routes.ts";
