@@ -55,20 +55,12 @@
             icon="heroicons:exclamation-circle"
         />
       </div>
-
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
-        <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-          <h2 class="text-lg font-semibold text-gray-900">Время ответа (последние 24 часа)</h2>
-        </div>
-        <div class="p-6 h-80">
-          <ResponseTimeChart :data="chartData"/>
-        </div>
-      </div>
-
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-          <h2 class="text-lg font-semibold text-gray-900">История проверок</h2>
-        </div>
+      
+      <Panel title="Время ответа (последние 24 часа)">
+        <ResponseTimeChart :data="chartData"/>
+      </Panel>
+      
+      <Panel title="История проверок">
         <div class="divide-y divide-gray-100">
           <template v-if="isLoading">
             <div v-for="i in 5" :key="i" class="p-6">
@@ -82,7 +74,6 @@
               </div>
             </div>
           </template>
-
           <template v-else-if="results.length === 0">
             <EmptyState
                 title="Нет данных"
@@ -148,22 +139,22 @@
             </div>
           </template>
         </div>
-      </div>
+      </Panel>
     </div>
   </DashboardLayout>
 </template>
 
 <script lang="ts" setup>
-import {computed, onMounted, ref} from 'vue';
-import {useRoute} from 'vue-router';
-import {Icon} from '@iconify/vue';
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import {useHealthCheckStore, type HealthCheckResult} from '@/stores';
-import {formatDateTime} from '@/utils';
-import {Badge, Button} from '@/components/ui'
-import {EmptyState} from "@/components/projects/settings/notification";
 import ResponseTimeChart from "@/components/charts/ResponseTimeChart.vue";
+import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
+import { Badge, Button, Panel } from '@/components/ui';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useHealthCheckStore, type HealthCheckResult } from '@/stores';
+import { formatDateTime } from '@/utils';
+import { Icon } from '@iconify/vue';
+import { computed, onMounted, ref } from 'vue';
+import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const endpointId = Number(route.params.endpointId);

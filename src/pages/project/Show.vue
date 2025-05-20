@@ -6,7 +6,7 @@ import IssueItem from "@/components/projects/IssueItem.vue";
 import LineChart from "@/components/projects/LineChart.vue";
 import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
-import { Badge, Button, InputField, Modal, SelectField } from '@/components/ui';
+import { Badge, Button, InputField, Modal, Panel, SelectField } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { useProjectsStore } from '@/stores';
 import { getProjectIcon } from "@/utils";
@@ -136,7 +136,7 @@ onMounted(() => {
             variant="warning"
         />
         <StatCard
-            title="Uptime"
+            title="Аптайм"
             :value="`${uptimePercent}%`"
             icon="heroicons:shield-check"
             variant="success"
@@ -145,31 +145,25 @@ onMounted(() => {
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-              <h2 class="text-lg font-semibold text-gray-900">Активность (7 дней)</h2>
-            </div>
-            <div class="p-6">
-              <LineChart
+          <Panel title="Активность (7 дней)">
+            <LineChart
                   :data="dailyStats"
                   title="Активность событий"
                   color="#8B5CF6"
                   :show-mark-line="true"
-              />
-            </div>
-          </div>
+            />
+          </Panel>
 
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div
-                class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-gray-900">Последние события</h2>
+          <Panel title="Последние события">
+            <template v-slot:button>
               <RouterLink
                   :to="`/projects/${projectStore.project.slug}/events`"
                   class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
               >
                 Показать все
               </RouterLink>
-            </div>
+            </template>
+             
             <div class="divide-y divide-gray-100">
               <EventItem
                   v-for="event in projectStore.project.events"
@@ -187,21 +181,19 @@ onMounted(() => {
                   small
               />
             </div>
-          </div>
+          </Panel>
         </div>
 
         <div class="space-y-6">
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div
-                class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-gray-900">Health Check Endpoints</h2>
+          <Panel title="Health Check Endpoints">
+            <template v-slot:button>
               <button
                   @click="showEndpointModal = true"
                   class="text-sm text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer"
               >
                 <Icon icon="heroicons:plus" class="h-4 w-4"/>
               </button>
-            </div>
+            </template>
             <div class="divide-y divide-gray-100">
               <EndpointItem
                   v-for="endpoint in projectStore.project.endpoints"
@@ -219,19 +211,17 @@ onMounted(() => {
                   small
               />
             </div>
-          </div>
+          </Panel>
 
-          <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div
-                class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white flex items-center justify-between">
-              <h2 class="text-lg font-semibold text-gray-900">Последние проблемы</h2>
+          <Panel title="Последние проблемы">
+            <template v-slot:button>
               <RouterLink
                   :to="`/projects/${projectStore.project.slug}/issues`"
                   class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
               >
                 Показать все
               </RouterLink>
-            </div>
+            </template>
             <div class="divide-y divide-gray-100">
               <IssueItem
                   v-for="issue in projectStore.project.issues"
@@ -249,7 +239,7 @@ onMounted(() => {
                   small
               />
             </div>
-          </div>
+          </Panel>
         </div>
       </div>
     </div>
