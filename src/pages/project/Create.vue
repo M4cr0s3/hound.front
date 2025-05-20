@@ -11,11 +11,7 @@
         </div>
       </div>
 
-      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-        <div class="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
-          <h2 class="text-lg font-semibold text-gray-900">Основные параметры</h2>
-        </div>
-
+      <ThePanel title="Основные параметры">
         <form
             class="p-6 space-y-6"
             @submit.prevent="handleSubmit"
@@ -78,7 +74,7 @@
             </Button>
           </div>
         </form>
-      </div>
+      </ThePanel>
     </div>
   </DashboardLayout>
 </template>
@@ -87,6 +83,7 @@
 import type { CreateProjectBody } from '@/api';
 import PlatformCard from '@/components/projects/PlatformCard.vue';
 import { Button, InputField, SelectField } from '@/components/ui';
+import ThePanel from '@/components/ui/ThePanel.vue';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { ROUTES } from '@/router/routes.ts';
 import { useProjectsStore, useTeamsStore } from '@/stores';

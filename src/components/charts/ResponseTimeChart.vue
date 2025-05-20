@@ -1,14 +1,14 @@
 <template>
 	<div
 		ref="chartRef"
-		class="w-full h-full"
+		class="w-full h-full min-w-100 min-h-100"
 	></div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue';
 import * as echarts from 'echarts';
 import type { PropType } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const props = defineProps({
 	data: {
@@ -48,8 +48,8 @@ function initChart() {
 			},
 		},
 		grid: {
-			left: '3%',
-			right: '4%',
+			left: '4%',
+			right: '5%',
 			bottom: '3%',
 			containLabel: true,
 		},
