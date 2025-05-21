@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { httpClient } from '@/api';
+import { httpClient, type CreateProjectBody } from '@/api';
 import EndpointItem from "@/components/projects/EndpointItem.vue";
 import EventItem from "@/components/projects/EventItem.vue";
 import IssueItem from "@/components/projects/IssueItem.vue";
@@ -7,8 +7,9 @@ import LineChart from "@/components/projects/LineChart.vue";
 import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
 import { Badge, Button, InputField, Modal, Panel, SelectField } from '@/components/ui';
+import { useColor } from '@/composables';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import { useProjectsStore } from '@/stores';
+import { useProjectsStore, useTeamsStore } from '@/stores';
 import { getProjectIcon } from "@/utils";
 import { Icon } from '@iconify/vue';
 import { computed, onMounted, ref } from 'vue';
@@ -18,6 +19,11 @@ const route = useRoute();
 
 const projectStore = useProjectsStore();
 
+const {getColor} = useColor();
+
+const getFirstLetter = (name: string) => {
+  return name.charAt(0).toUpperCase();
+};
 
 const stats = ref({
   events_today: 0,
@@ -29,6 +35,7 @@ const stats = ref({
 const dailyStats = ref([]);
 const showDeleteConfirm = ref(false);
 const showEndpointModal = ref(false);
+const showChooseModal = ref(false);
 const newEndpoint = ref({
   url: '',
   expected_status: 200,
@@ -36,6 +43,15 @@ const newEndpoint = ref({
   method: 'GET',
   is_active: true,
 });
+
+const form = ref<CreateProjectBody>({
+  name: '',
+  slug: '',
+  team_id: 0,
+  platform: '',
+});
+
+const teams = useTeamsStore();
 
 const uptimePercent = computed(() => {
   if(!projectStore.project.endpoints.length) {
@@ -240,10 +256,83 @@ onMounted(() => {
               />
             </div>
           </Panel>
+
+          <Panel title="Команда">
+            <template v-if="!projectStore.project.team" v-slot:button>
+              <button
+                  @click="showChooseModal = true"
+                  class="text-sm text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer"
+              >
+                <Icon icon="heroicons:plus" class="h-4 w-4"/>
+              </button>
+            </template>
+            <div class="divide-y divide-gray-100">
+              <RouterLink
+                v-if="projectStore.project.team?.name"
+                :to="`/teams/${projectStore.project.team?.slug}`"
+                class="block hover:bg-gray-50 px-4 py-4 sm:px-6"
+            >
+              <div class="flex items-center space-x-4">
+                <div
+                    
+                    class="flex-shrink-0 h-10 w-10 rounded-md flex items-center justify-center text-white font-medium"
+                    :class="getColor(projectStore.project.team?.name)"
+                >
+                  {{ getFirstLetter(projectStore.project.team?.name) }}
+                </div>
+    
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center justify-between">
+                    <p class="text-sm font-medium text-indigo-600 truncate">
+                      {{ projectStore.project.team?.name }}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </RouterLink>
+              <EmptyState
+                  v-if="!projectStore.project.team"
+                  title="Нет команды"
+                  icon="heroicons:users"
+                  description="Добавьте команду"
+                  class="p-6"
+                  small
+              />
+            </div>
+          </Panel>
         </div>
       </div>
     </div>
-
+    <Modal
+        :is-open="showChooseModal"
+        @close="showChooseModal = false"
+        title="Выбор команды"
+    >
+    <template #content>
+      <div class="text-center">
+        <h3 class="mt-2 text-lg font-medium text-gray-900">Выберите команду</h3>
+      </div>
+      <SelectField
+              v-model="form.team_id"
+              :options="teams.teams"
+              label="Команда"
+              placeholder="Выберите команду"
+              option-label="name"
+              option-value="id"
+              no-options-value="Команды отсутствуют"
+              required
+        />
+        <div class="flex justify-center gap-10 pt-5">
+          <Button variant="secondary" @click="showChooseModal = false">
+            Отмена
+          </Button>
+          <Button variant="danger" @click="">
+            Добавить
+          </Button>
+        </div>
+    </template>
+        
+  </Modal>
     <Modal
         :is-open="showDeleteConfirm"
         @close="showDeleteConfirm = false"
