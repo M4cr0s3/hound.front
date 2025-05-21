@@ -107,12 +107,12 @@
 </template>
 
 <script setup lang="ts">
+import { EmptyState } from "@/components/projects/settings/notification";
+import { useColor } from '@/composables';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import {Icon} from '@iconify/vue';
-import {useTeamsStore} from '@/stores';
-import {storeToRefs} from 'pinia';
-import {useColor} from '@/composables';
-import {EmptyState} from "@/components/projects/settings/notification";
+import { useTeamsStore } from '@/stores';
+import { Icon } from '@iconify/vue';
+import { storeToRefs } from 'pinia';
 
 const teamsStore = useTeamsStore();
 const {teams, isLoadingTeams} = storeToRefs(teamsStore);
