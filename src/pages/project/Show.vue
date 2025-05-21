@@ -163,11 +163,20 @@ onMounted(() => {
         <div class="lg:col-span-2 space-y-6">
           <Panel title="Активность (7 дней)">
             <LineChart
+                  v-if="dailyStats.length"
                   :data="dailyStats"
                   title="Активность событий"
                   color="#8B5CF6"
                   :show-mark-line="true"
             />
+            <EmptyState
+                  v-else
+                  title="Нет активностей"
+                  icon="heroicons:users"
+                  description="Добавьте endpoints и здесь будет график."
+                  class="p-6"
+                  small
+              />
           </Panel>
 
           <Panel title="Последние события">
