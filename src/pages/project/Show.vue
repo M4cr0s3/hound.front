@@ -12,14 +12,14 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { useProjectsStore, useTeamsStore } from '@/stores';
 import { getProjectIcon } from "@/utils";
 import { Icon } from '@iconify/vue';
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
 
 const projectStore = useProjectsStore();
 
-const {getColor} = useColor();
+const { getColor } = useColor();
 
 const getFirstLetter = (name: string) => {
   return name.charAt(0).toUpperCase();
@@ -54,7 +54,7 @@ const form = ref<CreateProjectBody>({
 const teams = useTeamsStore();
 
 const uptimePercent = computed(() => {
-  if(!projectStore.project.endpoints.length) {
+  if (!projectStore.project.endpoints.length) {
     return 0;
   }
 
@@ -89,6 +89,11 @@ const addEndpoint = async () => {
   }
 };
 
+watch(
+  () => route.params.slug,
+  () => fetchProject()
+)
+
 onMounted(() => {
   fetchProject();
 });
@@ -100,111 +105,66 @@ onMounted(() => {
       <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
         <div class="flex items-start space-x-4">
           <div class="p-3 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-md">
-            <Icon :icon="getProjectIcon(projectStore.project.platform)" class="h-8 w-8 text-white"/>
+            <Icon :icon="getProjectIcon(projectStore.project.platform)" class="h-8 w-8 text-white" />
           </div>
           <div>
             <h1 class="text-2xl font-bold text-gray-900">{{ projectStore.project.name }}</h1>
             <div class="flex flex-wrap items-center gap-2 mt-2">
               <Badge variant="primary" class="flex items-center">
-                <Icon icon="heroicons:user-group" class="mr-1 h-4 w-4"/>
+                <Icon icon="heroicons:user-group" class="mr-1 h-4 w-4" />
                 {{ projectStore.project.team?.name }}
               </Badge>
               <Badge variant="secondary" class="flex items-center">
-                <Icon icon="heroicons:computer-desktop" class="mr-1 h-4 w-4"/>
+                <Icon icon="heroicons:computer-desktop" class="mr-1 h-4 w-4" />
                 {{ projectStore.project.platform }}
               </Badge>
             </div>
           </div>
         </div>
         <div class="flex space-x-3">
-          <RouterLink
-              :to="`/projects/${projectStore.project.slug}/settings/general`"
-              class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          >
-            <Icon icon="heroicons:cog-6-tooth" class="mr-2 h-4 w-4"/>
+          <RouterLink :to="`/projects/${projectStore.project.slug}/settings/general`"
+            class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+            <Icon icon="heroicons:cog-6-tooth" class="mr-2 h-4 w-4" />
             Настройки
           </RouterLink>
-          <button
-              @click="showDeleteConfirm = true"
-              class="inline-flex items-center px-4 py-2 cursor-pointer bg-white border border-gray-200 text-red-600 text-sm font-medium rounded-lg shadow-sm hover:bg-red-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
-          >
-            <Icon icon="heroicons:trash" class="mr-2 h-4 w-4"/>
+          <button @click="showDeleteConfirm = true"
+            class="inline-flex items-center px-4 py-2 cursor-pointer bg-white border border-gray-200 text-red-600 text-sm font-medium rounded-lg shadow-sm hover:bg-red-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2">
+            <Icon icon="heroicons:trash" class="mr-2 h-4 w-4" />
             Удалить
           </button>
         </div>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard
-            title="Событий сегодня"
-            :value="stats.events_today"
-            icon="heroicons:bell-alert"
-        />
-        <StatCard
-            title="Событий за неделю"
-            :value="stats.events_week"
-            icon="heroicons:calendar-days"
-        />
-        <StatCard
-            title="Активных задач"
-            :value="stats.active_issues"
-            icon="heroicons:exclamation-triangle"
-            variant="warning"
-        />
-        <StatCard
-            title="Аптайм"
-            :value="`${uptimePercent}%`"
-            icon="heroicons:shield-check"
-            variant="success"
-        />
+        <StatCard title="Событий сегодня" :value="stats.events_today" icon="heroicons:bell-alert" />
+        <StatCard title="Событий за неделю" :value="stats.events_week" icon="heroicons:calendar-days" />
+        <StatCard title="Активных задач" :value="stats.active_issues" icon="heroicons:exclamation-triangle"
+          variant="warning" />
+        <StatCard title="Аптайм" :value="`${uptimePercent}%`" icon="heroicons:shield-check" variant="success" />
       </div>
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
           <Panel title="Активность (7 дней)">
-            <LineChart
-                  v-if="dailyStats.length"
-                  :data="dailyStats"
-                  title="Активность событий"
-                  color="#8B5CF6"
-                  :show-mark-line="true"
-            />
-            <EmptyState
-                  v-else
-                  title="Нет активностей"
-                  icon="heroicons:users"
-                  description="Добавьте endpoints и здесь будет график."
-                  class="p-6"
-                  small
-              />
+            <LineChart v-if="dailyStats.length" :data="dailyStats" title="Активность событий" color="#8B5CF6"
+              :show-mark-line="true" />
+            <EmptyState v-else title="Нет активностей" icon="heroicons:users"
+              description="Добавьте endpoints и здесь будет график." class="p-6" small />
           </Panel>
 
           <Panel title="Последние события">
             <template v-slot:button>
-              <RouterLink
-                  :to="`/projects/${projectStore.project.slug}/events`"
-                  class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-              >
+              <RouterLink :to="`/projects/${projectStore.project.slug}/events`"
+                class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
                 Показать все
               </RouterLink>
             </template>
-             
+
             <div class="divide-y divide-gray-100">
-              <EventItem
-                  v-for="event in projectStore.project.events"
-                  :key="event.id"
-                  :event="event"
-                  class="hover:bg-gray-50 transition-colors duration-150"
-                  :project-slug="projectStore.project.slug"
-              />
-              <EmptyState
-                  v-if="!projectStore.project.events.length"
-                  title="Событий не найдено"
-                  icon="heroicons:bell"
-                  description="Здесь будут отображаться последние события вашего проекта."
-                  class="p-6"
-                  small
-              />
+              <EventItem v-for="event in projectStore.project.events" :key="event.id" :event="event"
+                class="hover:bg-gray-50 transition-colors duration-150" :project-slug="projectStore.project.slug" />
+              <EmptyState v-if="!projectStore.project.events.length" title="Событий не найдено" icon="heroicons:bell"
+                description="Здесь будут отображаться последние события вашего проекта." class="p-6" small />
             </div>
           </Panel>
         </div>
@@ -212,125 +172,74 @@ onMounted(() => {
         <div class="space-y-6">
           <Panel title="Health Check Endpoints">
             <template v-slot:button>
-              <button
-                  @click="showEndpointModal = true"
-                  class="text-sm text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer"
-              >
-                <Icon icon="heroicons:plus" class="h-4 w-4"/>
+              <button @click="showEndpointModal = true"
+                class="text-sm text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer">
+                <Icon icon="heroicons:plus" class="h-4 w-4" />
               </button>
             </template>
             <div class="divide-y divide-gray-100">
-              <EndpointItem
-                  v-for="endpoint in projectStore.project.endpoints"
-                  :slug="projectStore.project.slug"
-                  :key="endpoint.id"
-                  :endpoint="endpoint"
-                  class="hover:bg-gray-50 transition-colors duration-150"
-              />
-              <EmptyState
-                  v-if="!projectStore.project.endpoints.length"
-                  title="Нет endpoints"
-                  icon="heroicons:link"
-                  description="Добавьте health check endpoints для мониторинга."
-                  class="p-6"
-                  small
-              />
+              <EndpointItem v-for="endpoint in projectStore.project.endpoints" :slug="projectStore.project.slug"
+                :key="endpoint.id" :endpoint="endpoint" class="hover:bg-gray-50 transition-colors duration-150" />
+              <EmptyState v-if="!projectStore.project.endpoints.length" title="Нет endpoints" icon="heroicons:link"
+                description="Добавьте health check endpoints для мониторинга." class="p-6" small />
             </div>
           </Panel>
 
           <Panel title="Последние проблемы">
             <template v-slot:button>
-              <RouterLink
-                  :to="`/projects/${projectStore.project.slug}/issues`"
-                  class="text-sm text-indigo-600 hover:text-indigo-800 font-medium"
-              >
+              <RouterLink :to="`/projects/${projectStore.project.slug}/issues`"
+                class="text-sm text-indigo-600 hover:text-indigo-800 font-medium">
                 Показать все
               </RouterLink>
             </template>
             <div class="divide-y divide-gray-100">
-              <IssueItem
-                  v-for="issue in projectStore.project.issues"
-                  :key="issue.id"
-                  :issue="issue"
-                  class="hover:bg-gray-50 transition-colors duration-150"
-                  :project-slug="projectStore.project.slug"
-              />
-              <EmptyState
-                  v-if="!projectStore.project.issues.length"
-                  title="Проблем не найдено"
-                  icon="heroicons:check-badge"
-                  description="Отличная работа! Активных проблем нет."
-                  class="p-6"
-                  small
-              />
+              <IssueItem v-for="issue in projectStore.project.issues" :key="issue.id" :issue="issue"
+                class="hover:bg-gray-50 transition-colors duration-150" :project-slug="projectStore.project.slug" />
+              <EmptyState v-if="!projectStore.project.issues.length" title="Проблем не найдено"
+                icon="heroicons:check-badge" description="Отличная работа! Активных проблем нет." class="p-6" small />
             </div>
           </Panel>
 
           <Panel title="Команда">
             <template v-if="!projectStore.project.team" v-slot:button>
-              <button
-                  @click="showChooseModal = true"
-                  class="text-sm text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer"
-              >
-                <Icon icon="heroicons:plus" class="h-4 w-4"/>
+              <button @click="showChooseModal = true"
+                class="text-sm text-indigo-600 hover:text-indigo-800 font-medium cursor-pointer">
+                <Icon icon="heroicons:plus" class="h-4 w-4" />
               </button>
             </template>
             <div class="divide-y divide-gray-100">
-              <RouterLink
-                v-if="projectStore.project.team?.name"
-                :to="`/teams/${projectStore.project.team?.slug}`"
-                class="block hover:bg-gray-50 px-4 py-4 sm:px-6"
-            >
-              <div class="flex items-center space-x-4">
-                <div
-                    
+              <RouterLink v-if="projectStore.project.team?.name" :to="`/teams/${projectStore.project.team?.slug}`"
+                class="block hover:bg-gray-50 px-4 py-4 sm:px-6">
+                <div class="flex items-center space-x-4">
+                  <div
                     class="flex-shrink-0 h-10 w-10 rounded-md flex items-center justify-center text-white font-medium"
-                    :class="getColor(projectStore.project.team?.name)"
-                >
-                  {{ getFirstLetter(projectStore.project.team?.name) }}
-                </div>
-    
-                <div class="flex-1 min-w-0">
-                  <div class="flex items-center justify-between">
-                    <p class="text-sm font-medium text-indigo-600 truncate">
-                      {{ projectStore.project.team?.name }}
-                    </p>
+                    :class="getColor(projectStore.project.team?.name)">
+                    {{ getFirstLetter(projectStore.project.team?.name) }}
+                  </div>
+
+                  <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between">
+                      <p class="text-sm font-medium text-indigo-600 truncate">
+                        {{ projectStore.project.team?.name }}
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </RouterLink>
-              <EmptyState
-                  v-if="!projectStore.project.team"
-                  title="Нет команды"
-                  icon="heroicons:users"
-                  description="Добавьте команду"
-                  class="p-6"
-                  small
-              />
+              </RouterLink>
+              <EmptyState v-if="!projectStore.project.team" title="Нет команды" icon="heroicons:users"
+                description="Добавьте команду" class="p-6" small />
             </div>
           </Panel>
         </div>
       </div>
     </div>
-    <Modal
-        :is-open="showChooseModal"
-        @close="showChooseModal = false"
-        title="Выбор команды"
-    >
-    <template #content>
-      <div class="text-center">
-        <h3 class="mt-2 text-lg font-medium text-gray-900">Выберите команду</h3>
-      </div>
-      <SelectField
-              v-model="form.team_id"
-              :options="teams.teams"
-              label="Команда"
-              placeholder="Выберите команду"
-              option-label="name"
-              option-value="id"
-              no-options-value="Команды отсутствуют"
-              required
-        />
+    <Modal :is-open="showChooseModal" @close="showChooseModal = false" title="Выбор команды">
+      <template #content>
+        <div class="text-center">
+          <h3 class="mt-2 text-lg font-medium text-gray-900">Выберите команду</h3>
+        </div>
+        <SelectField v-model="form.team_id" :options="teams.teams" label="Команда" placeholder="Выберите команду"
+          option-label="name" option-value="id" no-options-value="Команды отсутствуют" required />
         <div class="flex justify-center gap-10 pt-5">
           <Button variant="secondary" @click="showChooseModal = false">
             Отмена
@@ -339,17 +248,13 @@ onMounted(() => {
             Добавить
           </Button>
         </div>
-    </template>
-        
-  </Modal>
-    <Modal
-        :is-open="showDeleteConfirm"
-        @close="showDeleteConfirm = false"
-        title="Подтверждение удаления"
-    >
+      </template>
+
+    </Modal>
+    <Modal :is-open="showDeleteConfirm" @close="showDeleteConfirm = false" title="Подтверждение удаления">
       <template #content>
         <div class="text-center">
-          <Icon icon="heroicons:exclamation-triangle" class="mx-auto h-12 w-12 text-red-500"/>
+          <Icon icon="heroicons:exclamation-triangle" class="mx-auto h-12 w-12 text-red-500" />
           <h3 class="mt-2 text-lg font-medium text-gray-900">Удалить проект?</h3>
           <div class="mt-2 text-sm text-gray-500">
             <p>Вы уверены, что хотите удалить проект "{{ projectStore.project.name }}"?</p>
@@ -369,49 +274,17 @@ onMounted(() => {
       </template>
     </Modal>
 
-    <Modal
-        :is-open="showEndpointModal"
-        @close="showEndpointModal = false"
-        title="Добавить Health Check Endpoint"
-    >
+    <Modal :is-open="showEndpointModal" @close="showEndpointModal = false" title="Добавить Health Check Endpoint">
       <template #content>
         <form @submit.prevent="addEndpoint" class="space-y-4">
-          <InputField
-              id="endpoint-url"
-              v-model="newEndpoint.url"
-              label="URL Endpoint"
-              placeholder="https://example.com/health"
-              required
-              icon="heroicons:link"
-          />
-          <InputField
-              id="exp-status"
-              v-model="newEndpoint.expected_status"
-              label="Ожидаемый HTTP статус"
-              type="number"
-              placeholder="200"
-              required
-              icon="heroicons:hashtag"
-              :minValue="1"
-              :maxValue="550"
-          />
-          <InputField
-              v-model="newEndpoint.interval"
-              label="Интервал проверки (минуты)"
-              type="number"
-              placeholder="5"
-              required
-              icon="heroicons:clock"
-              id="check-interval"
-              :minValue="1"
-              :maxValue="60"
-          />
-          <SelectField
-              :options="['GET', 'POST', 'PUT', 'PATCH', 'OPTIONS']"
-              v-model="newEndpoint.method"
-              label="Метод"
-              required
-          />
+          <InputField id="endpoint-url" v-model="newEndpoint.url" label="URL Endpoint"
+            placeholder="https://example.com/health" required icon="heroicons:link" />
+          <InputField id="exp-status" v-model="newEndpoint.expected_status" label="Ожидаемый HTTP статус" type="number"
+            placeholder="200" required icon="heroicons:hashtag" :minValue="1" :maxValue="550" />
+          <InputField v-model="newEndpoint.interval" label="Интервал проверки (минуты)" type="number" placeholder="5"
+            required icon="heroicons:clock" id="check-interval" :minValue="1" :maxValue="60" />
+          <SelectField :options="['GET', 'POST', 'PUT', 'PATCH', 'OPTIONS']" v-model="newEndpoint.method" label="Метод"
+            required />
         </form>
       </template>
       <template #footer>
