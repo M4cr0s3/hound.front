@@ -9,7 +9,7 @@ export interface Team {
   assignments: Assignments[]
 }
 
-interface Assignments { 
+export interface Assignments { 
   id: number,
   issue: Pick<Issue, "id" | "title" | "status">
 }
