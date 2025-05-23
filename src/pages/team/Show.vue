@@ -45,14 +45,14 @@
               </div>
           </Panel>
 
-          <Panel v-if="teamsStore.team.projects.length" title="Проекты команды">
+          <Panel title="Проекты команды">
             <template #button>
               <Badge variant="primary">
                 {{ teamsStore.team.projects.length }} проектов
               </Badge>
             </template>
             <div class="divide-y divide-gray-100">
-              <RouterLink v-for="project in teamsStore.team.projects" :key="project.id" :to="`/projects/${project.slug}`"
+              <RouterLink v-if="teamsStore.team.projects.length" v-for="project in teamsStore.team.projects" :key="project.id" :to="`/projects/${project.slug}`"
                 class="block p-5 hover:bg-gray-50 transition-colors duration-150">
                 <div class="flex items-center space-x-4">
                   <div class="flex-shrink-0 p-2 bg-indigo-50 rounded-lg">
@@ -67,23 +67,26 @@
                   </div>
                 </div>
               </RouterLink>
+              <EmptyState v-else title="Нет проектов" icon="heroicons:folder-open"
+              description="Добавьте команду в проект." class="p-6" small />
             </div>
           </Panel>
 
-          <Panel v-if="teamsStore.team.assignments.length" title="Активные задачи">
+          <Panel title="Активные задачи">
             <template #button>
               <Badge variant="primary">
                 {{ teamsStore.team.assignments.length }} проектов
               </Badge>
             </template>
             <ul class="divide-y divide-gray-100">
-              <li v-for="assignment in teamsStore.team.assignments" :key="assignment.id"
+              <li v-if="teamsStore.team.assignments.length" v-for="assignment in teamsStore.team.assignments" :key="assignment.id"
                 class="p-5 hover:bg-gray-50 transition-colors duration-150">
                 <div class="flex items-start justify-between space-x-4">
                   <div class="flex-1 min-w-0">
                     <p class="text-base font-medium text-gray-900 mb-1">{{ assignment.issue.title }}</p>
                     <div class="flex items-center space-x-3">
-                      <Badge :variant="getBadgeColor(assignment.issue.status)"
+                      <Badge 
+                        :variant="getBadgeColor(assignment.issue.status)"
                         :text="getReadableIssueStatus(assignment.issue.status)" />
                       <span class="text-xs text-gray-500">Обновлено 2 дня назад</span>
                     </div>
@@ -93,12 +96,14 @@
                   </button>
                 </div>
               </li>
+              <EmptyState v-else title="Нет активных задач" icon="heroicons:document-text"
+              description="Добавьте команду в задачу." class="p-6" small />
             </ul>
           </Panel> 
         </div>
 
         <div class="space-y-6">
-          <Panel v-if="teamsStore.team.members.length" title="Участники команды">
+          <Panel title="Участники команды">
             <template #button>
               <Badge variant="success">
               {{ teamsStore.team.members.length }} человек
@@ -106,7 +111,7 @@
             </template>
                
             <ul class="divide-y divide-gray-100">
-              <li v-for="member in teamsStore.team.members" :key="member.id"
+              <li v-if="teamsStore.team.members.length" v-for="member in teamsStore.team.members" :key="member.id"
                 class="p-5 hover:bg-gray-50 transition-colors duration-150">
                 <div class="flex items-center space-x-4">
                   <div class="relative">
@@ -121,6 +126,8 @@
                   </div>
                 </div>
               </li>
+              <EmptyState v-else title="Нет участников команды" icon="heroicons:user-group"
+              description="Пригласите участников в команду." class="p-6" small />
             </ul>
             <div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
               <RouterLink :to="ROUTES.TEAM.EDIT.replace(':slug', teamsStore.team.slug)"
@@ -157,24 +164,14 @@
           </Panel>
         </div>
       </div>
-
-      <EmptyState v-if="!teamsStore.team.projects.length && !teamsStore.team.assignments.length" title="Команда пуста"
-        icon="heroicons:user-group"
-        description="Начните добавлять проекты и участников, чтобы раскрыть потенциал вашей команды."
-        class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
-        <RouterLink :to="ROUTES.PROJECT.CREATE"
-          class="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-          <Icon icon="heroicons:plus" class="-ml-1 mr-2 h-5 w-5" />
-          Добавить проект
-        </RouterLink>
-      </EmptyState>
     </div>
   </DashboardLayout>
 </template>
 
 <script setup lang="ts">
-import { EmptyState } from "@/components/projects/settings/notification";
+import EmptyState from "@/components/projects/settings/notification/EmptyState.vue";
 import { Badge, Panel } from "@/components/ui";
+import { variants } from "@/components/ui/Badge.vue";
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { router } from "@/router";
 import { ROUTES } from "@/router/routes.ts";
@@ -192,14 +189,14 @@ const getFirstLetter = (name: string): string => {
   return name.charAt(0).toUpperCase();
 };
 
-const getBadgeColor = (status: string): string => {
+const getBadgeColor = (status: string) => {
   const statusMap: Record<string, string> = {
-    in_progress: 'warning',
-    resolved: 'success',
-    closed: 'secondary',
-    open: 'primary',
+    in_progress: variants[5],
+    resolved: variants[3],
+    closed: variants[2],
+    open: variants[1],
   };
-  return statusMap[status] || 'default';
+  return (statusMap[status] || 'default') as typeof variants[number];
 };
 
 watch(
