@@ -171,7 +171,6 @@
 <script setup lang="ts">
 import EmptyState from "@/components/projects/settings/notification/EmptyState.vue";
 import { Badge, Panel } from "@/components/ui";
-import { variants } from "@/components/ui/Badge.vue";
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import { router } from "@/router";
 import { ROUTES } from "@/router/routes.ts";
@@ -196,7 +195,7 @@ const getBadgeColor = (status: string) => {
     closed: 'secondary',
     open: 'primary',
   };
-  return (statusMap[status] || 'default') as typeof variants[number];
+  return statusMap[status] || 'default';
 };
 
 watch(
