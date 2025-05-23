@@ -191,10 +191,10 @@ const getFirstLetter = (name: string): string => {
 
 const getBadgeColor = (status: string) => {
   const statusMap: Record<string, string> = {
-    in_progress: variants[5],
-    resolved: variants[3],
-    closed: variants[2],
-    open: variants[1],
+    in_progress: 'warning',
+    resolved: 'success',
+    closed: 'secondary',
+    open: 'primary',
   };
   return (statusMap[status] || 'default') as typeof variants[number];
 };
