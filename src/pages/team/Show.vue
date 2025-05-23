@@ -8,13 +8,13 @@
           </div>
           <div>
             <h1 class="text-3xl font-bold text-gray-900 tracking-tight animate-fade-in">
-              {{ team.name }}
+              {{ teamsStore.team.name }}
             </h1>
-            <p class="text-sm text-gray-500 mt-1">Команда • {{ team.members.length }} участников</p>
+            <p class="text-sm text-gray-500 mt-1">Команда • {{ teamsStore.team.members.length }} участников</p>
           </div>
         </div>
         <div class="flex flex-wrap gap-3">
-          <RouterLink :to="`/teams/${team.slug}/edit`"
+          <RouterLink :to="`/teams/${teamsStore.team.slug}/edit`"
             class="inline-flex items-center px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
             <Icon icon="heroicons:pencil-square" class="mr-2 h-4 w-4" />
             Редактировать
@@ -35,24 +35,24 @@
               <dl class="space-y-4">
                 <div class="flex items-start">
                   <dt class="flex-1 text-sm font-medium text-gray-500">Название команды</dt>
-                  <dd class="text-base font-medium text-gray-900">{{ team.name }}</dd>
+                  <dd class="text-base font-medium text-gray-900">{{ teamsStore.team.name }}</dd>
                 </div>
                 <div class="flex items-start">
                   <dt class="flex-1 text-sm font-medium text-gray-500">Идентификатор</dt>
-                  <dd class="text-base font-medium text-gray-900">{{ team.slug }}</dd>
+                  <dd class="text-base font-medium text-gray-900">{{ teamsStore.team.slug }}</dd>
                 </div>
               </dl>
               </div>
           </Panel>
 
-          <Panel v-if="team.projects.length" title="Проекты команды">
+          <Panel v-if="teamsStore.team.projects.length" title="Проекты команды">
             <template #button>
               <Badge variant="primary">
-                {{ team.projects.length }} проектов
+                {{ teamsStore.team.projects.length }} проектов
               </Badge>
             </template>
             <div class="divide-y divide-gray-100">
-              <RouterLink v-for="project in team.projects" :key="project.id" :to="`/projects/${project.slug}`"
+              <RouterLink v-for="project in teamsStore.team.projects" :key="project.id" :to="`/projects/${project.slug}`"
                 class="block p-5 hover:bg-gray-50 transition-colors duration-150">
                 <div class="flex items-center space-x-4">
                   <div class="flex-shrink-0 p-2 bg-indigo-50 rounded-lg">
@@ -70,14 +70,14 @@
             </div>
           </Panel>
 
-          <Panel v-if="team.assignments.length" title="Активные задачи">
+          <Panel v-if="teamsStore.team.assignments.length" title="Активные задачи">
             <template #button>
               <Badge variant="primary">
-                {{ team.assignments.length }} проектов
+                {{ teamsStore.team.assignments.length }} проектов
               </Badge>
             </template>
             <ul class="divide-y divide-gray-100">
-              <li v-for="assignment in team.assignments" :key="assignment.id"
+              <li v-for="assignment in teamsStore.team.assignments" :key="assignment.id"
                 class="p-5 hover:bg-gray-50 transition-colors duration-150">
                 <div class="flex items-start justify-between space-x-4">
                   <div class="flex-1 min-w-0">
@@ -98,15 +98,15 @@
         </div>
 
         <div class="space-y-6">
-          <Panel v-if="team.members.length" title="Участники команды">
+          <Panel v-if="teamsStore.team.members.length" title="Участники команды">
             <template #button>
               <Badge variant="success">
-              {{ team.members.length }} человек
+              {{ teamsStore.team.members.length }} человек
             </Badge>
             </template>
                
             <ul class="divide-y divide-gray-100">
-              <li v-for="member in team.members" :key="member.id"
+              <li v-for="member in teamsStore.team.members" :key="member.id"
                 class="p-5 hover:bg-gray-50 transition-colors duration-150">
                 <div class="flex items-center space-x-4">
                   <div class="relative">
@@ -123,7 +123,7 @@
               </li>
             </ul>
             <div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
-              <RouterLink :to="ROUTES.TEAM.EDIT.replace(':slug', team.slug)"
+              <RouterLink :to="ROUTES.TEAM.EDIT.replace(':slug', teamsStore.team.slug)"
                 class="w-full inline-flex items-center justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                 <Icon icon="heroicons:plus" class="-ml-1 mr-2 h-5 w-5 text-gray-400" />
                 Пригласить участника
@@ -143,7 +143,7 @@
                 </div>
                 <Icon icon="heroicons:chevron-right" class="h-5 w-5 text-gray-400" />
               </RouterLink>
-              <RouterLink :to="ROUTES.TEAM.EDIT.replace(':slug', team.slug)"
+              <RouterLink :to="ROUTES.TEAM.EDIT.replace(':slug', teamsStore.team.slug)"
                 class="w-full flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:border-green-300 hover:bg-green-50 transition-all duration-200">
                 <div class="flex items-center space-x-3">
                   <div class="p-2 bg-green-100 rounded-lg">
@@ -158,7 +158,7 @@
         </div>
       </div>
 
-      <EmptyState v-if="!team.projects.length && !team.assignments.length" title="Команда пуста"
+      <EmptyState v-if="!teamsStore.team.projects.length && !teamsStore.team.assignments.length" title="Команда пуста"
         icon="heroicons:user-group"
         description="Начните добавлять проекты и участников, чтобы раскрыть потенциал вашей команды."
         class="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 text-center">
@@ -173,7 +173,6 @@
 </template>
 
 <script setup lang="ts">
-import { httpClient, type Team } from '@/api';
 import { EmptyState } from "@/components/projects/settings/notification";
 import { Badge, Panel } from "@/components/ui";
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
@@ -182,29 +181,12 @@ import { ROUTES } from "@/router/routes.ts";
 import { useTeamsStore } from '@/stores';
 import { getProjectIcon, getReadableIssueStatus } from "@/utils";
 import { Icon } from '@iconify/vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, watch } from 'vue';
 import { RouterLink, useRoute } from 'vue-router';
 
 const route = useRoute();
+
 const teamsStore = useTeamsStore();
-
-const team = ref<Team>({
-  id: 0,
-  name: '',
-  slug: '',
-  members: [],
-  projects: [],
-  assignments: [{
-    id: 0,
-    issue:{
-      id:'',
-      title:'',
-      status:''
-    }
-  }],
-});
-
-const isLoading = ref(true);
 
 const getFirstLetter = (name: string): string => {
   return name.charAt(0).toUpperCase();
@@ -220,21 +202,19 @@ const getBadgeColor = (status: string): string => {
   return statusMap[status] || 'default';
 };
 
-onMounted(async () => {
-  try {
-    team.value = await httpClient.get(`/teams/${route.params.slug}`);
-  } catch (error) {
-    console.error('Ошибка загрузки данных команды', error);
-  } finally {
-    isLoading.value = false;
-  }
+watch(
+  () => route.params.slug,
+  () => teamsStore.fetchTeam(`${route.params.slug}`)
+)
+onMounted(() => {
+  teamsStore.fetchTeam(`${route.params.slug}`)
 });
 
 const deleteTeam = async () => {
   if (!confirm('Вы уверены, что хотите удалить эту команду?')) return;
 
   try {
-    await teamsStore.destroy(team.value.id);
+    await teamsStore.destroy(teamsStore.team.id);
     alert('Команда успешно удалена');
     await router.push('/teams');
   } catch (error) {
