@@ -1,0 +1,1 @@
+export type Trend = 'up' | 'down' | 'neutral' | 'week';

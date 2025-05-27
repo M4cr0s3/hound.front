@@ -188,8 +188,10 @@ const getFirstLetter = (name: string): string => {
   return name.charAt(0).toUpperCase();
 };
 
+const variants = ['default', 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'] as const;
+
 const getBadgeColor = (status: string) => {
-  const statusMap: Record<string, string> = {
+  const statusMap: Record<string, typeof variants[number]> = {
     in_progress: 'warning',
     resolved: 'success',
     closed: 'secondary',

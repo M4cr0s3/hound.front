@@ -10,10 +10,8 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 
-const variants = ['default', 'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'] as const;
-
 interface Props {
-  variant: typeof variants[number];
+  variant: Variant;
   text?: string;
 }
 
