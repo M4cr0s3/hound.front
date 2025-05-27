@@ -59,10 +59,10 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import {Pagination} from './';
-import {type Pagination as PaginationType} from '@/api';
-import {computed} from "vue";
+<script setup lang="ts" generic="T">
+import { type Pagination as PaginationType } from '@/api';
+import { computed } from "vue";
+import { Pagination } from './';
 
 export interface Column {
   key: string;
@@ -78,7 +78,7 @@ export interface Column {
 
 interface Props {
   columns: Column[];
-  data: any[];
+  data: T[];
   rowKey?: string;
   pagination?: PaginationType;
   rowClickable?: boolean;
