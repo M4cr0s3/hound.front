@@ -54,14 +54,15 @@
 </template>
 
 <script setup lang="ts">
-import {InputField, Logo, Button, TheForm} from '@/components/ui';
+import { httpClient, type BaseResponse, type Invitation } from "@/api";
+import { Button, InputField, Logo, TheForm } from '@/components/ui';
 import AuthLayout from '@/layouts/AuthLayout.vue';
-import {onMounted, reactive} from "vue";
-import {useRoute, useRouter} from "vue-router";
-import {ROUTES} from "@/router/routes.ts";
+import { ROUTES } from "@/router/routes.ts";
+import { FetchError } from "ofetch";
 import * as v from 'valibot';
-import {httpClient} from "@/api";
-import {toast} from "vue-sonner";
+import { onMounted, reactive } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import { toast } from "vue-sonner";
 
 const route = useRoute();
 const router = useRouter();
@@ -90,8 +91,11 @@ async function fetchInvitationInfo(token: string) {
     const res = await httpClient.get<{ invite: Invitation }>('/invites/' + token);
     credentials.email = res.invite.user.email;
   } catch (e) {
-    if (e.status === 409) {
+    if (e instanceof FetchError && e.status === 409) {
       await router.push(ROUTES.LOGIN);
+    }
+    else {
+      throw e
     }
   }
 }
