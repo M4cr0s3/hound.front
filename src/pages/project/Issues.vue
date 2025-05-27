@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import type { Issue } from "@/api";
 import IssueItem from "@/components/projects/IssueItem.vue";
 import { EmptyState } from "@/components/projects/settings/notification";
 import { Badge, Panel } from "@/components/ui";
@@ -52,7 +51,7 @@ onMounted(async () => {
       </div>
 
       <Panel title="Последние проблемы">
-        <IssueItem v-for="issue in projectStore.project.issues as Issue[]" :key="issue.id" :issue="issue"
+        <IssueItem v-for="issue in projectStore.project.issues" :key="issue.id" :issue="issue"
           class="hover:bg-gray-50 transition-colors duration-150" :project-slug="projectStore.project.slug" />
         <EmptyState v-if="!projectStore.project.issues?.length" title="Проблем не найдено" icon="heroicons:check-badge"
           description="Отличная работа! Активных проблем нет." class="p-6" />
