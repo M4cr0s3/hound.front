@@ -1,4 +1,4 @@
-import type {Team, Event} from "@/api";
+import type { Assignments, Event, Project, Team } from "@/api";
 
 export enum IssueStatus {
   Open = 'open',
@@ -19,7 +19,9 @@ export interface User {
   name: string;
   email: string;
   role?: Role;
-  invitations?: Invitation[]
+  teams?: Team[];
+  assignments?: Assignments[];
+  invitations?: Invitation[];
 }
 
 export interface Invitation {
@@ -68,4 +70,5 @@ export interface Issue {
     teams: Team[];
   };
   comments?: Comment[];
+  project?: Project
 }
