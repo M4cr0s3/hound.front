@@ -41,18 +41,18 @@
       <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
         <StatCard
             title="Всего событий"
-            :value="anotherStats.events.count"
+            :value="eventsStats.total"
             icon="heroicons:chart-bar"
-            :trend="anotherStats.events.trend"
-            :trend-value="anotherStats.events.trend_value"
+            :trend="eventsStats.changeDirection"
+            :trend-value="eventsStats.totalChangedFor"
         />
         <StatCard
             title="Ошибки"
-            :value="anotherStats.errors.count"
+            :value="errorsStats.total"
             icon="heroicons:exclamation-circle"
             variant="danger"
-            :trend="anotherStats.errors.trend"
-            :trend-value="anotherStats.errors.trend_value"
+            :trend="errorsStats.changeDirection"
+            :trend-value="errorsStats.totalChangedFor"
         />
         <StatCard
             title="Предупреждения"
@@ -62,7 +62,7 @@
         />
         <StatCard
             title="Текущий релиз"
-            :value="release"
+            :value="release || 0"
             icon="heroicons:tag"
         />
       </div>
@@ -143,15 +143,6 @@
                 required
             />
 
-            <InputField
-                id="description"
-                v-model="createIssueForm.description"
-                label="Описание"
-                placeholder="Описание задачи"
-                required
-                :error="errors?.description"
-            />
-
             <SelectField
                 id="priority"
                 v-model="createIssueForm.priority"
@@ -192,29 +183,38 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, onUnmounted, watch, reactive, computed} from 'vue';
-import {useRouter} from 'vue-router';
-import {Icon} from '@iconify/vue';
-import {
-  DataTable,
-  DropdownMenu,
-  SelectField,
-  Badge, Modal, TheForm, InputField, Button,
-} from '@/components/ui';
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import {
   getProjectEvents,
+  httpClient,
+  IssuePriority,
   type Event,
-  type Pagination as PaginationType, httpClient, type Id,
+  type Id,
+  type Issue,
+  type Pagination as PaginationType,
 } from '@/api';
-import {formatDateTime} from '@/utils';
+import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
-import {actions, columns} from "./table.ts";
-import {schema} from "./schema.ts";
-import {useIssuesStore} from "@/stores";
-import {ROUTES} from "@/router/routes.ts";
-import {toast} from "vue-sonner";
-import {EmptyState} from "@/components/projects/settings/notification";
+import {
+  Badge,
+  Button,
+  DataTable,
+  DropdownMenu,
+  InputField,
+  Modal,
+  SelectField,
+  TheForm,
+} from '@/components/ui';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { ROUTES } from "@/router/routes.ts";
+import { useIssuesStore } from "@/stores";
+import { formatDateTime } from '@/utils';
+import { Icon } from '@iconify/vue';
+import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { toast } from "vue-sonner";
+import { schema } from "./schema.ts";
+import { actions, columns } from "./table.ts";
+import type { Trend } from './types.ts';
 
 const {slug} = defineProps<{
   slug: string;
@@ -226,7 +226,7 @@ const isLoading = ref<boolean>(false);
 const release = computed(() => {
   if (events.value.length) {
     return events.value[0].release === 'unknown/unknown'
-        ? events.value.find(ev => ev.release !== 'unknown/unknown').release
+        ? events.value.find(ev => ev.release !== 'unknown/unknown')?.release
         : events.value[0].release
   }
 
@@ -239,22 +239,30 @@ const pagination = ref<PaginationType>({
   total: 0,
   links: [],
   current_page: 1,
+  data: []
 });
 const isCreateIssueModalOpen = ref(false);
 const selectedEvent = ref<Event>({} as Event);
-const createIssueForm = reactive({
+const createIssueForm = reactive<Partial<Issue>>({
   title: '',
-  description: '',
-  priority: 'low',
-  due_date: new Date(),
-  event_id: '',
+  priority: IssuePriority.Low,
+  due_date:  new Date().toDateString(),
+  event_id: 0,
 });
 
-const anotherStats = ref({
-  events: {},
-  errors: {},
-});
-const stats = ref({
+const eventsStats = reactive({
+  total: 0,
+  totalChangedFor: "",
+  changeDirection: "up" as Trend
+})
+
+const errorsStats = reactive({
+  total: 0,
+  totalChangedFor: "",
+  changeDirection: "up" as Trend
+})
+
+const stats = reactive({
   total: 0,
   errors: 0,
   warnings: 0,
@@ -274,31 +282,34 @@ const levelOptions = [
   {key: 'info', value: 'Информационные'},
 ];
 
-const getLevelVariant = (level: string) => {
-  const map = {
+const LEVEL_VARIANTS = {
     error: 'danger',
     warning: 'warning',
     info: 'primary'
   };
-  return map[level] || 'secondary';
+
+const LEVEL_COLOR = {
+  error: 'red',
+  warning: 'yellow',
+  info: 'blue'
 };
 
-const getLevelColor = (level: string) => {
-  const map = {
-    error: 'red',
-    warning: 'yellow',
-    info: 'blue'
-  };
-  return map[level] || 'gray';
+const LEVEL_ICON = {
+  error: 'heroicons:exclamation-circle',
+  warning: 'heroicons:exclamation-triangle',
+  info: 'heroicons:information-circle'
+}
+
+const getLevelVariant = (level: keyof typeof LEVEL_VARIANTS) => {
+  return (LEVEL_VARIANTS[level] || 'secondary') as Variant;
 };
 
-const getLevelIcon = (level: string) => {
-  const map = {
-    error: 'heroicons:exclamation-circle',
-    warning: 'heroicons:exclamation-triangle',
-    info: 'heroicons:information-circle'
-  };
-  return map[level] || 'heroicons:bell';
+const getLevelColor = (level: keyof typeof LEVEL_COLOR) => {
+  return (LEVEL_COLOR[level] || 'gray') as Variant;
+};
+
+const getLevelIcon = (level: keyof typeof LEVEL_ICON) => {
+  return (LEVEL_ICON[level] || 'heroicons:bell') as Variant;
 };
 
 const handleActionClick = ({key, row}: { key: string; row?: any }) => {
@@ -328,7 +339,7 @@ const deleteEvent = async (id: Id) => {
 };
 
 const openEvent = (id: Id) => {
-  router.push(ROUTES.EVENT.SHOW.replace(':id', id));
+  router.push(ROUTES.EVENT.SHOW.replace(':id', id.toString()));
 };
 
 const fetchEvents = async () => {
@@ -348,12 +359,11 @@ const fetchEvents = async () => {
     events.value = evts;
     pagination.value = paginationInfo;
 
-    stats.value = {
-      total: evts.length,
-      errors: evts.filter(e => e.level === 'error').length,
-      warnings: evts.filter(e => e.level === 'warning').length,
-      infos: evts.filter(e => e.level === 'info').length
-    };
+    stats.total = evts.length;
+    stats.errors = evts.filter(e => e.level === 'error').length
+    stats.warnings = evts.filter(e => e.level === 'warning').length
+    stats.infos = evts.filter(e => e.level === 'info').length
+
   } catch (error) {
     console.error('Error fetching events:', error);
   } finally {
@@ -365,7 +375,7 @@ const handleCreateIssue = async () => {
   try {
     const response = await issuesStore.createIssue(createIssueForm);
     isCreateIssueModalOpen.value = false;
-    await router.push(ROUTES.ISSUE.SHOW.replace(':id', response.id));
+    await router.push(ROUTES.ISSUE.SHOW.replace(':id', response.id.toString()));
     toast.success('Задача успешно создана');
   } catch (error) {
     console.error('Error creating issue:', error);
@@ -386,9 +396,28 @@ watch(filters.value, async () => {
   await fetchEvents();
 });
 
+type GetStatsResponse = {
+  events: {
+    count: number,
+    trend: Trend,
+    trend_value: string
+  }
+  errors: {
+    count: number,
+    trend: Trend,
+    trend_value: string
+  }
+}
+
 onMounted(async () => {
   await fetchEvents();
-  anotherStats.value = await httpClient.get(`/projects/stats/${slug}/week`);
+  const res = await httpClient.get<GetStatsResponse>(`/projects/stats/${slug}/week`);
+  eventsStats.total = res.events.count
+  eventsStats.totalChangedFor = res.events.trend_value
+  eventsStats.changeDirection = res.events.trend as Trend
+  errorsStats.total = res.errors.count
+  errorsStats.totalChangedFor = res.errors.trend_value 
+  errorsStats.changeDirection = res.errors.trend as Trend
 });
 
 const refreshInterval = setInterval(fetchEvents, 30000);

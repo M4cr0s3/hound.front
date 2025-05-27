@@ -1,3 +1,5 @@
+import type { Event } from "./events";
+
 export type Id = number;
 export type Slug = string;
 
@@ -18,4 +20,5 @@ export interface Pagination {
 	total: number;
 	links: PaginationLink[];
 	current_page: number;
+	data: Event[]
 }
