@@ -105,15 +105,15 @@
                 <div
                     class="flex-shrink-0 h-10 w-10 flex items-center justify-center p-3 bg-gradient-to-br from-indigo-500 to-indigo-600 rounded-xl shadow-md">
                   <Icon
-                      :icon="PLATFORMS.find(p => p.name === eventsStore.event.project.platform)?.icon"
+                      :icon="PLATFORMS.find(p => p.name === eventsStore?.event.project?.platform)?.icon || ' '"
                       class="h-5 w-5"
                   />
                 </div>
                 <div class="ml-4">
-                  <h4 class="text-sm font-medium text-gray-900">{{ eventsStore.event.project.name }}</h4>
-                  <p class="text-sm text-gray-500">{{ eventsStore.event.project.slug }}</p>
+                  <h4 class="text-sm font-medium text-gray-900">{{ eventsStore.event.project?.name }}</h4>
+                  <p class="text-sm text-gray-500">{{ eventsStore.event.project?.slug }}</p>
                   <RouterLink
-                      :to="`/projects/${eventsStore.event?.project.slug}`"
+                      :to="`/projects/${eventsStore.event.project?.slug}`"
                       class="mt-1 inline-flex items-center text-xs text-indigo-600 hover:text-indigo-800"
                   >
                     Перейти в проект
@@ -211,17 +211,16 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue';
-import {Icon} from '@iconify/vue';
-import {Badge, JsonViewer, StacktraceViewer} from '@/components/ui';
-import {EmptyState} from "@/components/projects/settings/notification";
-import {formatDateTime, getIssueStatusColor, getReadableIssueStatus} from '@/utils';
-import {getLevelColor, getLevelIcon, getLevelVariant} from '@/utils';
-import {useEventsStore} from "@/stores";
+import { EmptyState } from "@/components/projects/settings/notification";
+import { Badge, JsonViewer, StacktraceViewer } from '@/components/ui';
+import { PLATFORMS } from "@/data";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
-import {useClipboard} from '@vueuse/core';
-import {toast} from "vue-sonner";
-import {PLATFORMS} from "@/data";
+import { useEventsStore } from "@/stores";
+import { formatDateTime, getIssueStatusColor, getLevelColor, getLevelIcon, getLevelVariant, getReadableIssueStatus } from '@/utils';
+import { Icon } from '@iconify/vue';
+import { useClipboard } from '@vueuse/core';
+import { computed, onMounted, ref } from 'vue';
+import { toast } from "vue-sonner";
 
 const props = defineProps<{
   id: string;

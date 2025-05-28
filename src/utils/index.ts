@@ -97,7 +97,7 @@ export function getReadableIssueStatus(status: string): string {
   }
 }
 
-export function getIssueStatusColor(status: string): string {
+export function getIssueStatusColor(status: string): Variant {
   switch (status) {
     case 'in_progress':
       return 'info';
@@ -111,7 +111,7 @@ export function getIssueStatusColor(status: string): string {
 }
 
 type Level = 'error' | 'warning' | 'info' | 'debug' | string;
-type Variant = 'danger' | 'warning' | 'info' | 'default';
+type Variant = 'danger' | 'warning' | 'info' | 'success' | 'default';
 
 export function getLevelColor(level: Level): string {
   const colors: Record<string, string> = {

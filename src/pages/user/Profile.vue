@@ -12,11 +12,11 @@
         <div class="flex-1">
           <div class="flex justify-between items-start">
             <div>
-              <h1 class="text-2xl font-bold text-gray-900">{{ user.name }}</h1>
-              <p class="text-gray-600 mt-1">{{ user.email }}</p>
+              <h1 class="text-2xl font-bold text-gray-900">{{ currentUser.name }}</h1>
+              <p class="text-gray-600 mt-1">{{ currentUser.email }}</p>
               <div class="mt-2">
-                <Badge :variant="user.role.title === RoleTitle.Maintainer ? 'primary' : 'secondary'">
-                  {{ user?.role.title }}
+                <Badge :variant="currentUser.role?.title === RoleTitle.Maintainer ? 'primary' : 'secondary'">
+                  {{ currentUser.role?.title }}
                 </Badge>
               </div>
             </div>
@@ -60,7 +60,7 @@
         </div>
         <div class="divide-y divide-gray-100">
           <RouterLink
-              v-for="team in user.teams"
+              v-for="team in currentUser.teams"
               :key="team.id"
               :to="`/teams/${team.slug}`"
               class="block p-5 hover:bg-gray-50 transition-colors duration-150"
@@ -77,7 +77,7 @@
             </div>
           </RouterLink>
           <EmptyState
-              v-if="!user.teams.length"
+              v-if="!currentUser.teams?.length"
               title="Нет команд"
               icon="heroicons:user-group"
               description="Вы не состоите ни в одной команде"
@@ -92,7 +92,7 @@
         </div>
         <div class="divide-y divide-gray-100">
           <div
-              v-for="assignment in user.assignments"
+              v-for="assignment in currentUser.assignments"
               :key="assignment.id"
               class="p-5 hover:bg-gray-50 transition-colors duration-150"
           >
@@ -113,7 +113,7 @@
                 </p>
                 <div class="mt-1 flex items-center space-x-3">
                   <span class="text-xs text-gray-500">
-                    Проект: {{ assignment.issue.project.name }}
+                    Проект: {{ assignment.issue.project?.name }}
                   </span>
                 </div>
               </div>
@@ -126,7 +126,7 @@
             </div>
           </div>
           <EmptyState
-              v-if="!user.assignments.length"
+              v-if="!currentUser.assignments?.length"
               title="Нет задач"
               icon="heroicons:check-badge"
               description="Вам не назначено ни одной задачи"
@@ -199,23 +199,20 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, computed} from 'vue';
-import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import {Icon} from '@iconify/vue';
-import {Badge, Button, InputField, Modal, TheForm} from '@/components/ui';
-import {httpClient, RoleTitle, type User} from '@/api';
-import {EmptyState} from "@/components/projects/settings/notification";
+import { httpClient, RoleTitle, type User } from '@/api';
+import { EmptyState } from "@/components/projects/settings/notification";
 import StatCard from "@/components/projects/StatCard.vue";
-import {schema} from "./password.schema.ts";
-import {toast} from "vue-sonner";
+import { Badge, Button, InputField, Modal, TheForm } from '@/components/ui';
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import { useUsersStore } from '@/stores/users.ts';
+import { Icon } from '@iconify/vue';
+import { storeToRefs } from 'pinia';
+import { computed, onMounted, ref } from 'vue';
+import { toast } from "vue-sonner";
+import { schema } from "./password.schema.ts";
 
-const user = ref({
-  name: '',
-  email: '',
-  role: '',
-  teams: [],
-  assignments: []
-});
+const store = useUsersStore();
+const { currentUser } = storeToRefs(store)
 
 const stats = ref({
   teams: 0,
@@ -233,47 +230,50 @@ const passwordForm = ref({
   password_confirmation: ''
 });
 
+const BADGE_VARIANT = { 
+  open: 'primary',
+  in_progress: 'warning',
+  resolved: 'success',
+  closed: 'secondary'
+}
+
+const BADGE_COLOR = {
+  error: 'danger',
+  warning: 'warning',
+  info: 'info',
+}
+
+const ISSUE_STATUS = {
+  open: 'Открыта',
+  in_progress: 'В работе',
+  resolved: 'Решена',
+  closed: 'Закрыта'
+}
+
 const userInitial = computed(() => {
-  return user.value.name ? user.value.name.charAt(0).toUpperCase() : '';
+  return currentUser.value.name ? currentUser.value.name.charAt(0).toUpperCase() : '';
 });
 
 const teamInitial = (name: string) => {
   return name ? name.charAt(0).toUpperCase() : '';
 };
 
-const getIssueBadgeVariant = (status: string) => {
-  const statusMap: Record<string, string> = {
-    open: 'primary',
-    in_progress: 'warning',
-    resolved: 'success',
-    closed: 'secondary'
-  };
-  return statusMap[status] || 'default';
+const getIssueBadgeVariant = (status: keyof typeof BADGE_VARIANT): Variant => {
+  return (BADGE_VARIANT[status] || 'default') as Variant;
 };
 
-const getIssueLevelBadgeColor = (status: string) => {
-  const statusMap: Record<string, string> = {
-    error: 'danger',
-    warning: 'warning',
-    info: 'info',
-  };
-  return statusMap[status] || 'default';
+const getIssueLevelBadgeColor = (status: keyof typeof BADGE_COLOR): Variant => {
+  return (BADGE_COLOR[status] || 'default') as Variant;
 };
 
-const getIssueStatusText = (status: string) => {
-  const statusTextMap: Record<string, string> = {
-    open: 'Открыта',
-    in_progress: 'В работе',
-    resolved: 'Решена',
-    closed: 'Закрыта'
-  };
-  return statusTextMap[status] || status;
+const getIssueStatusText = (status: keyof typeof ISSUE_STATUS): Variant  => {
+  return (ISSUE_STATUS[status] || status) as Variant;
 };
 
 const fetchProfile = async () => {
   try {
-    const response = await httpClient.get<{ user: User, stats: Record<string, number> }>('/users/profile');
-    user.value = response.user;
+    const response = await httpClient.get<{ user: User, stats: typeof stats.value }>('/users/profile');
+    currentUser.value = response.user;
     stats.value = response.stats;
   } catch (error) {
     console.error('Error fetching profile:', error);

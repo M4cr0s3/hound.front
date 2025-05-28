@@ -41,7 +41,7 @@
                 option-label="label"
                 option-value="value"
                 required
-                :error="usersStore.getError('role_id')"
+                :error="usersStore.getError('role_id').toString()"
             />
 
             <div class="flex justify-end space-x-3">
@@ -66,11 +66,11 @@
 </template>
 
 <script setup lang="ts">
+import { Button, InputField, SelectField } from '@/components/ui';
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
-import {Button, InputField, SelectField} from '@/components/ui';
-import {useUsersStore} from '@/stores';
-import {ROUTES} from "@/router/routes.ts";
-import {reactive} from "vue";
+import { ROUTES } from "@/router/routes.ts";
+import { useUsersStore } from '@/stores';
+import { reactive } from "vue";
 
 const usersStore = useUsersStore();
 

@@ -1,4 +1,4 @@
-import type {Project} from "@/api";
+import type { Issue, Project } from "@/api";
 
 export interface Event {
   id: number;
@@ -17,6 +17,7 @@ export interface Event {
     [key: string]: any;
   };
   project?: Project;
+  issues: Issue[];
   count: number;
   created_at: string;
   updated_at: string;

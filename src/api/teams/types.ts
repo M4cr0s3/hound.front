@@ -11,7 +11,7 @@ export interface Team {
 
 export interface Assignments { 
   id: number,
-  issue: Pick<Issue, "id" | "title" | "status">
+  issue: Pick<Issue, "id" | "title" | "status" | "event" | "project">
 }
 
 export interface CreateTeamBody {
