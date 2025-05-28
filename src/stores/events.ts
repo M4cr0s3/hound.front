@@ -18,7 +18,7 @@ export const useEventsStore = defineStore('events', () => {
     project_id: 0,
     environment: '',
     project: {} as Event['project'],
-    issues: {} as Issue[]
+    issues: [],
   });
   const isLoading = ref(false);
 
