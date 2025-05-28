@@ -169,14 +169,14 @@ const lastResult = computed(() => results.value[0]);
 const showTooltip = ref<number | null>(null);
 
 const responseTimeTrend = computed(() => {
-  if (!chartData.value || chartData.value.length < 2) return null;
+  if (!chartData.value || chartData.value.length < 2) return undefined;
   const first = chartData.value[0].response_time;
   const last = chartData.value[chartData.value.length - 1].response_time;
-  return last > first ? 'up' : last < first ? 'down' : null;
+  return last > first ? 'up' : last < first ? 'down' : undefined;
 });
 
 const responseTimeTrendValue = computed(() => {
-  if (!chartData.value || chartData.value.length < 2) return null;
+  if (!chartData.value || chartData.value.length < 2) return undefined;
   const first = chartData.value[0].response_time;
   const last = chartData.value[chartData.value.length - 1].response_time;
   const diff = ((last - first) / first * 100).toFixed(2);

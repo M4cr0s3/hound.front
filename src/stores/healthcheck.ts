@@ -1,5 +1,5 @@
-import { defineStore } from 'pinia';
 import { httpClient, type Slug } from '@/api';
+import { defineStore } from 'pinia';
 import { useProjectsStore } from './projects';
 
 export interface HealthCheckResult {
