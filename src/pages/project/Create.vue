@@ -101,7 +101,7 @@ const handleSubmit = async () => {
   try {
     await projectsStore.create(form.value);
     toast.success('Проект успешно создан');
-  } catch (e) {
+  } catch (e: any) {
     toast.error('Произошла ошибка при создании проекта', {
       description: e.data.message
     });

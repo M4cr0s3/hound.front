@@ -63,7 +63,7 @@ const uptimePercent = computed(() => {
 
 const fetchProject = async () => {
   try {
-    const response = await httpClient.get(`/projects/${route.params.slug}`);
+    const response = await httpClient.get<any>(`/projects/${route.params.slug}`);
     projectStore.project = response.project;
     stats.value = response.stats;
     dailyStats.value = response.daily_stats;

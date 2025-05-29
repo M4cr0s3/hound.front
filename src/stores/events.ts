@@ -1,4 +1,4 @@
-import { type Event, httpClient, type Id, type Issue } from "@/api";
+import { type Event, httpClient, type Id } from "@/api";
 import { defineStore } from "pinia";
 import { ref } from "vue";
 
