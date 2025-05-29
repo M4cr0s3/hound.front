@@ -16,4 +16,4 @@ export type EventType = 'error' | 'warning' | 'info' | 'critical';
 export type TriggerType = 'rate_limit' | 'count';
 export type Channel = 'email' | 'slack' | 'telegram' | 'webhook';
 
-export type NotificationRuleForm = Omit<NotificationRule, 'id', 'project_id', 'created_at', 'updated_at'>
+export type NotificationRuleForm = Omit<NotificationRule, 'id' | 'project_id' | 'created_at' | 'updated_at'>

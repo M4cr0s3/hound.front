@@ -99,16 +99,16 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref} from 'vue';
+import { onMounted, reactive, ref, shallowRef } from 'vue';
+import { type Id, type NotificationRule, type NotificationRuleForm, NotificationRulesApi } from '../../api';
+import { EmptyState, LoadingState, NotificationRuleCard } from "../../components/projects/settings/notification";
 import {
   Checkbox,
   InputField,
   SelectField,
   SubmitButton,
 } from '../../components/ui';
-import {type Id, type NotificationRule, type NotificationRuleForm, NotificationRulesApi} from '../../api';
-import {EmptyState, LoadingState, NotificationRuleCard} from "../../components/projects/settings/notification";
-import {resetForm} from "../../utils";
+import { resetForm } from "../../utils";
 
 const {slug} = defineProps<{
   slug: string;
@@ -128,10 +128,18 @@ const CHANNELS = [
 const isLoading = ref(false);
 const isLoadingRules = ref(false);
 const rules = ref<NotificationRule[]>([])
-const errors = ref<Record<keyof NotificationRuleForm, string[]>>({});
-const form = reactive({
+const errors = shallowRef({ 
   event_type: '',
   trigger_type: '',
+  trigger_params: {
+    threshold: 10,
+    time_window: 60,
+  },
+  channels: [],
+});
+const form = reactive<NotificationRuleForm>({
+  event_type: 'warning',
+  trigger_type: 'count',
   trigger_params: {
     threshold: 10,
     time_window: 60,

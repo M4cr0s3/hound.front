@@ -105,7 +105,7 @@ defineProps({
     default: false,
   },
   error: {
-    type: [String, Array],
+    type: [String, Array, Number],
     default: '',
   },
   disabled: {
