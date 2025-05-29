@@ -136,25 +136,27 @@ export const useHealthCheckStore = defineStore('healthCheck', {
 		},
 	},
 	getters: {
-		chartData(): { hour: string; avg_time: number }[] {
-			const hourlyData: Record<string, { sum: number; count: number }> = {};
+		chartData(): { hour: string; avg_time: number,  response_time: number }[] {
+			const hourlyData: Record<string, { sum: number; count: number, response_time: number }> = {};
 
 			this.results.forEach((result) => {
 				const date = new Date(result.created_at);
 				const hour = `${date.getHours().toString().padStart(2, '0')}:00`;
 
 				if (!hourlyData[hour]) {
-					hourlyData[hour] = { sum: 0, count: 0 };
+					hourlyData[hour] = { sum: 0, count: 0, response_time: 0 };
 				}
 
 				hourlyData[hour].sum += result.response_time;
 				hourlyData[hour].count++;
-			});
+				hourlyData[hour].response_time += result.response_time;
+			});	
 
 			return Object.entries(hourlyData)
 				.map(([hour, data]) => ({
 					hour,
 					avg_time: Math.round(data.sum / data.count),
+					response_time: data.response_time
 				}))
 				.sort((a, b) => a.hour.localeCompare(b.hour));
 		},
