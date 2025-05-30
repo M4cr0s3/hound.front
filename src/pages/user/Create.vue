@@ -41,9 +41,8 @@
                 option-label="label"
                 option-value="value"
                 required
-                :error="usersStore.getError('role_id').toString()"
+                :error="usersStore.getError('role_id')"
             />
-
             <div class="flex justify-end space-x-3">
               <Button
                   variant="secondary"

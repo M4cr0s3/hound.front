@@ -162,9 +162,9 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/vue';
-import {computed, ref} from 'vue';
-import {Icon} from '@iconify/vue';
-import {watchDebounced} from '@vueuse/core';
+import { Icon } from '@iconify/vue';
+import { watchDebounced } from '@vueuse/core';
+import { computed, ref } from 'vue';
 
 const props = defineProps({
   modelValue: {
@@ -200,7 +200,7 @@ const props = defineProps({
     default: 'Нет доступных значений',
   },
   error: {
-    type: String,
+    type: [String, Array, Number],
     default: '',
   },
   multiple: {
@@ -287,7 +287,7 @@ const getOptionValue = (option: any) => {
 const removeSelectedValue = (value: any) => {
   if (!props.multiple) return;
 
-  const newValues = selectedValues.value.filter(v => v !== value);
+  const newValues = selectedValues.value.filter((v: any) => v !== value);
   emit('update:modelValue', newValues);
 };
 </script>

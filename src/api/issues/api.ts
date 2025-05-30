@@ -1,4 +1,4 @@
-import {httpClient, type Issue} from '@/api';
+import { httpClient, type Issue } from '@/api';
 
 export const IssuesApi = {
   async get(issueId: string | number) {
