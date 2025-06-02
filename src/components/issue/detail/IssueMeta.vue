@@ -45,10 +45,10 @@
 </template>
 
 <script setup lang="ts">
-import {formatDateTime} from '@/utils';
+import type { Issue } from "@/api";
 import Badge from "@/components/ui/Badge.vue";
-import {computed} from "vue";
-import type {Issue} from "@/api";
+import { formatDateTime } from '@/utils';
+import { computed } from "vue";
 
 const {issue} = defineProps<{
   issue: Issue;

@@ -19,7 +19,7 @@
             <span class="text-gray-500">{{ formatDate(activity.created_at) }}</span>
             <span class="text-gray-400">•</span>
             <span class="text-xs px-2 py-0.5 rounded-full"
-                  :class="activityTypeClasses[activity.type] || 'bg-gray-100 text-gray-800'">
+                  :class="activityTypeClasses[activity.type as keyof typeof activityTypeClasses] || 'bg-gray-100 text-gray-800'">
               {{ humanReadableType(activity.type) }}
             </span>
           </div>
@@ -38,10 +38,10 @@
 </template>
 
 <script setup lang="ts">
-import {Avatar} from '@/components/ui';
+import { Avatar } from '@/components/ui';
 import IssueActivityChanges from './IssueActivityChanges.vue';
 
-const props = defineProps<{
+defineProps<{
   activities: Array<{
     id: number;
     type: string;

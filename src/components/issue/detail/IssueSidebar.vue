@@ -8,7 +8,7 @@
           <label class="block text-xs font-medium text-gray-500 mb-1">Приоритет</label>
           <PrioritySelect
               v-model="issue.priority"
-              @change="(priority: string) => issuesStore.updateIssue(issue.id, { priority })"
+              @change="(priority: IssuePriority) => issuesStore.updateIssue(issue.id, { priority })"
           />
         </div>
 
@@ -39,9 +39,9 @@
 </template>
 
 <script setup lang="ts">
-import {PrioritySelect, DatePicker, Badge} from '@/components/ui';
-import type {Issue} from '@/api';
-import {useIssuesStore} from "@/stores";
+import type { Issue, IssuePriority } from '@/api';
+import { Badge, DatePicker, PrioritySelect } from '@/components/ui';
+import { useIssuesStore } from "@/stores";
 
 const props = defineProps<{
   issue: Issue;

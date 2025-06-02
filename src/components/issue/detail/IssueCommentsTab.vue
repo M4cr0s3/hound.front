@@ -29,10 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted} from 'vue';
-import {CommentForm, ActivityItem} from '@/components/ui';
-import {type Comment, IssuesApi} from '@/api';
+import { type Comment, IssuesApi } from '@/api';
 import IssueComments from "@/components/issue/detail/IssueComments.vue";
+import { CommentForm } from '@/components/ui';
+import { ref } from 'vue';
 
 const props = defineProps<{
   issueId: number;
