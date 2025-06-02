@@ -42,14 +42,14 @@
 </template>
 
 <script setup lang="ts">
-import {Icon} from '@iconify/vue'
-import {type Comment, httpClient, type Id} from "@/api";
-import {Avatar} from "@/components/ui";
-import MarkdownIt from 'markdown-it';
+import { type Comment, httpClient, type Id } from "@/api";
+import { Avatar } from "@/components/ui";
+import { useUsersStore } from "@/stores";
+import { Icon } from '@iconify/vue';
 import hljs from "highlight.js";
 import 'highlight.js/styles/paraiso-dark.min.css';
-import {toast} from "vue-sonner";
-import {useUsersStore} from "@/stores";
+import MarkdownIt from 'markdown-it';
+import { toast } from "vue-sonner";
 
 const props = withDefaults(defineProps<{
   comments: Comment[],
@@ -98,7 +98,7 @@ const deleteComment = async (id: Id) => {
     await httpClient.delete(`/comments/${id}`);
     emit('deleted');
     toast.success('Комментарий успешно удален');
-  } catch (e) {
+  } catch (e: any) {
     toast.error('Произошла ошибка при удалении комментария', {
       description: e.data.message,
     });

@@ -121,14 +121,14 @@
 </template>
 
 <script setup lang="ts">
-import {ref, onMounted, watch} from 'vue';
-import {Icon} from '@iconify/vue'
-import {Avatar, Button, Modal, SelectField} from '@/components/ui';
-import {httpClient, type Team, type User} from '@/api';
-import {useIssuesStore} from "@/stores";
-import {EmptyState} from "@/components/projects/settings/notification";
+import { httpClient, type Team, type User } from '@/api';
+import { EmptyState } from "@/components/projects/settings/notification";
+import { Avatar, Button, Modal, SelectField } from '@/components/ui';
+import { useIssuesStore } from "@/stores";
+import { Icon } from '@iconify/vue';
+import { onMounted, ref, watch } from 'vue';
 
-const props = defineProps<{
+defineProps<{
   assignees: {
     users: any[];
     teams: any[];
@@ -155,16 +155,12 @@ const addAssignee = () => {
   isAddAssigneeOpen.value = false;
 };
 
-const removeAssignee = (type: 'user' | 'team', id: number) => {
-  issueStore.removeAssignee(issueStore.issue.id, type, id);
-}
-
 const resetSelection = () => {
-  selectedUserIds.value = null;
-  selectedTeamIds.value = null;
+  selectedUserIds.value = [];
+  selectedTeamIds.value = [];
 };
 
-const fetchAvailableUsers = async (query: string) => {
+const fetchAvailableUsers = async (query?: string) => {
   try {
     availableUsers.value = (await httpClient.post<{ users: User[] }>('/users/available', {
       query: {q: query},
@@ -175,11 +171,12 @@ const fetchAvailableUsers = async (query: string) => {
   }
 };
 
-const fetchAvailableTeams = async (query: string) => {
+const fetchAvailableTeams = async (query?: string) => {
   try {
     availableTeams.value = (await httpClient.get<{ teams: Team[] }>('/teams/available', {
-      query: {q: query},
-      issue_id: issueStore.issue.id,
+      query: {q: query, issue_id: issueStore.issue.id },
+      
+
     })).teams;
   } catch (error) {
     console.error('Error fetching teams:', error);

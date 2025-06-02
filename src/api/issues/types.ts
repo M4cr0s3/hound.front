@@ -71,4 +71,5 @@ export interface Issue {
   };
   comments?: Comment[];
   project?: Project
+  statusClass?: string
 }
