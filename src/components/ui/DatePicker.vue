@@ -63,7 +63,7 @@
         <div class="grid grid-cols-7 gap-1">
           <div
               v-for="day in daysInMonth"
-              :key="day.date"
+              :key="day.day"
               @click="selectDate(day)"
               class="text-center py-1 text-sm rounded-full"
               :class="{
@@ -99,19 +99,13 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, watch, onMounted, onBeforeUnmount} from 'vue';
-import {Icon} from '@iconify/vue';
+import { Icon } from '@iconify/vue';
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: null
-  },
-  placeholder: {
-    type: String,
-    default: 'Выберите дату'
-  }
-});
+const props = defineProps<{
+  modelValue: string | null,
+  placeholder?: string
+}>();
 
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string | null): void

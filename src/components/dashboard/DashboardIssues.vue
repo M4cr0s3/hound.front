@@ -34,7 +34,7 @@
                   <p
                       class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0"
                   >
-                    {{ issue.event?.project.name }}
+                    {{ issue.event?.project?.name }}
                   </p>
                 </div>
                 <div
@@ -66,10 +66,10 @@
 </template>
 
 <script setup lang="ts">
-import {computed, onMounted, ref} from "vue";
-import {httpClient, type Issue} from "@/api";
-import {formatDateTime, getReadableIssueStatus} from '@/utils'
-import {EmptyState} from "@/components/projects/settings/notification";
+import { httpClient, type Issue } from "@/api";
+import { EmptyState } from "@/components/projects/settings/notification";
+import { formatDateTime, getReadableIssueStatus } from '@/utils';
+import { computed, onMounted, ref } from "vue";
 
 const issues = ref<Issue[]>([]);
 
@@ -85,20 +85,19 @@ const getStatusClass = (status: string) => {
       return 'bg-gray-100 text-gray-800';
   }
 }
-
-const computedIssues = computed<Issue[]>(() => {
+const computedIssues = computed((): Issue[] => {
   if (issues.value.length) {
     return issues.value.map(issue => ({
       ...issue,
       statusClass: getStatusClass(issue.status),
-      status: getReadableIssueStatus(issue.status),
-    }))
-  }
+      status: getReadableIssueStatus(issue.status) as any,
+    }) 
+  )}
 
   return [];
 });
 
 onMounted(async () => {
-  issues.value = await httpClient.get<{ issues: Issue[]; }>('/issues/dashboard');
+  issues.value = await httpClient.get<Issue[]>('/issues/dashboard');
 });
 </script>

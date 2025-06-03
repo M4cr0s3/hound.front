@@ -12,7 +12,7 @@ import { computed } from 'vue';
 
 interface Props {
   variant: Variant;
-  text?: string;
+  text?: string | null;
 }
 
 const { text, variant } = defineProps<Props>();
