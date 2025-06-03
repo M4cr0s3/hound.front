@@ -18,6 +18,7 @@ export interface Project {
     hour: string;
     count: number;
   }[];
+  resolved?: string
 }
 
 export interface UpdateProjectBody {

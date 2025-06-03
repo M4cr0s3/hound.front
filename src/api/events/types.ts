@@ -6,7 +6,7 @@ export interface Event {
   project_id: number;
   environment: string;
   type: string;
-  level: 'error' | 'warning' | 'info';
+  level: 'error' | 'warning' | 'info' | 'debug';
   message: string;
   release: string | null;
   metadata: {

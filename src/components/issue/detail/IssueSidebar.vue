@@ -16,7 +16,7 @@
           <label class="block text-xs font-medium text-gray-500 mb-1">Дата дедлайна</label>
           <DatePicker
               v-model="issue.due_date"
-              @change="(dueDate: string) => issuesStore.updateIssue(issue.id, { due_date: dueDate })"
+              @change="(dueDate) => issuesStore.updateIssue(issue.id, { due_date: dueDate })"
           />
         </div>
 
