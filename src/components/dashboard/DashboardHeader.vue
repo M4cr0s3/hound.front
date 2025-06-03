@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import {ref} from 'vue'
-import {onClickOutside, watchDebounced} from '@vueuse/core'
-import {Icon} from '@iconify/vue'
-import {httpClient} from "@/api";
-import {type ActionItem, Avatar, DropdownMenu, Modal} from "@/components/ui";
+import { httpClient } from "@/api";
 import SearchItem from "@/components/search/SearchItem.vue";
-import {useUsersStore} from "@/stores";
-import {ROUTES} from "@/router/routes.ts";
-import {useRouter} from "vue-router";
+import { type ActionItem, Avatar, DropdownMenu, Modal } from "@/components/ui";
+import { ROUTES } from "@/router/routes.ts";
+import { useUsersStore } from "@/stores";
+import { Icon } from '@iconify/vue';
+import { watchDebounced } from '@vueuse/core';
+import { ref } from 'vue';
+import { useRouter } from "vue-router";
 
 const userStore = useUsersStore();
 const router = useRouter();
