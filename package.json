@@ -29,6 +29,7 @@
     "vuedraggable": "^4.1.0"
   },
   "devDependencies": {
+    "@types/markdown-it": "^14.1.2",
     "@eslint/js": "^9.23.0",
     "@pinia/testing": "^1.0.1",
     "@types/node": "^22.14.1",

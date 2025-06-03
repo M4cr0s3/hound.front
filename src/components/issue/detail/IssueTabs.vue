@@ -12,23 +12,12 @@
           'whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm cursor-pointer',
         ]"
       >
-        <span class="flex items-center">
-          <Icon :icon="tab.icon" class="mr-2 h-5 w-5" />
-          {{ tab.label }}
-          <span
-              v-if="tab.count !== undefined"
-              class="ml-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800"
-          >
-            {{ tab.count }}
-          </span>
-        </span>
       </button>
     </nav>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Icon } from '@iconify/vue';
 
 const props = defineProps<{
   activeTab: 'comments' | 'activities';

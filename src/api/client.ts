@@ -86,7 +86,7 @@ export const httpClient = {
     return this.request<T>('patch', url, data, options);
   },
 
-  delete<T>(url: string, data: any, options?: FetchOptions<'json'>) {
+  delete<T>(url: string, data?: any, options?: FetchOptions<'json'>) {
     return this.request<T>('delete', url, data, options);
   },
 };
