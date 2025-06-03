@@ -75,12 +75,13 @@
           <Panel title="Активные задачи">
             <template #button>
               <Badge variant="primary">
-                {{ teamsStore.team.assignments.length }} проектов
+                {{ teamsStore.team.assignments.length }} задач
               </Badge>
             </template>
             <ul class="divide-y divide-gray-100">
               <li v-if="teamsStore.team.assignments.length" v-for="assignment in teamsStore.team.assignments" :key="assignment.id"
-                class="p-5 hover:bg-gray-50 transition-colors duration-150">
+                class="p-5 hover:bg-gray-50 transition-colors duration-150"
+                @click="router.push(ROUTES.ISSUE.SHOW.replace(':id', assignment.issue.id.toString()))">
                 <div class="flex items-start justify-between space-x-4">
                   <div class="flex-1 min-w-0">
                     <p class="text-base font-medium text-gray-900 mb-1">{{ assignment.issue.title }}</p>
@@ -88,7 +89,6 @@
                       <Badge 
                         :variant="getBadgeColor(assignment.issue.status)"
                         :text="getReadableIssueStatus(assignment.issue.status)" />
-                      <span class="text-xs text-gray-500">Обновлено 2 дня назад</span>
                     </div>
                   </div>
                   <button class="text-gray-400 hover:text-gray-500">
