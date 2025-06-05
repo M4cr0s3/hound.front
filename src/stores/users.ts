@@ -1,9 +1,9 @@
-import {defineStore} from "pinia";
-import type {BaseResponse, Id, Pagination, User} from "@/api";
-import {httpClient} from "@/api";
-import {ROUTES} from "@/router/routes.ts";
-import {ref, computed} from "vue";
-import {useRouter} from "vue-router";
+import type { BaseResponse, Id, Pagination, User } from "@/api";
+import { httpClient } from "@/api";
+import { ROUTES } from "@/router/routes.ts";
+import { defineStore } from "pinia";
+import { computed, onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
 
 export interface UserFilters {
   search: string;
@@ -84,6 +84,12 @@ export const useUsersStore = defineStore('users', () => {
 
   // Getters
   const getError = computed(() => (key: string) => errors.value[key]);
+
+  onMounted(async () => {
+    if (localStorage.getItem('token')) {
+      await getCurrentUser();
+    }
+  });
 
   return {
     // State
