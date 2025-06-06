@@ -209,10 +209,10 @@ import { ROUTES } from "@/router/routes.ts";
 import { useIssuesStore } from "@/stores";
 import { formatDateTime } from '@/utils';
 import { Icon } from '@iconify/vue';
+import * as v from 'valibot';
 import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { toast } from "vue-sonner";
-import { schema } from "./schema.ts";
 import { actions, columns } from "./table.ts";
 import type { Trend } from './types.ts';
 
@@ -247,7 +247,14 @@ const createIssueForm = reactive<Partial<Issue>>({
   title: '',
   priority: IssuePriority.Low,
   due_date:  new Date().toDateString(),
-  event_id: 0,
+  event_id: 0
+});
+
+const schema = v.object({
+  title: v.string(),
+  priority: v.string(),
+  due_date: v.string(),
+  event_id: v.number()
 });
 
 const eventsStats = reactive({
@@ -291,13 +298,17 @@ const LEVEL_VARIANTS = {
 const LEVEL_COLOR = {
   error: 'red',
   warning: 'yellow',
-  info: 'blue'
+  info: 'blue',
+  critical: 'red',
+  debug: 'green'
 };
 
 const LEVEL_ICON = {
   error: 'heroicons:exclamation-circle',
   warning: 'heroicons:exclamation-triangle',
-  info: 'heroicons:information-circle'
+  info: 'heroicons:information-circle',
+  critical: 'heroicons:information-circle',
+  debug: 'heroicons:information-circle'
 }
 
 const getLevelVariant = (level: keyof typeof LEVEL_VARIANTS) => {

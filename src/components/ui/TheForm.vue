@@ -5,35 +5,36 @@
 </template>
 
 <script setup lang="ts" generic="T">
-import {ref} from 'vue';
+import type { BaseSchema } from 'valibot';
 import * as v from 'valibot';
-import type {BaseSchema} from 'valibot';
+import { ref } from 'vue';
 
 const props = defineProps<{
-  schema: BaseSchema,
-  submit?: (data: any) => Promise<void> | void
+  schema: BaseSchema<any, any,  v.BaseIssue<unknown>>,
+  submit: (data: any) => Promise<unknown> | unknown
   data: T
 }>();
 
+type Error = Record<keyof T, string>
+
 const emit = defineEmits(['submit']);
-const errors = ref<Record<keyof T, string>>({});
+const errors = ref<Error>();
 
 async function handleSubmit() {
   try {
-    errors.value = {};
+    errors.value = {} as Error;
     const result = await v.parse(props.schema, props.data);
     await props.submit(result);
     emit('submit', result);
   } catch (e) {
     if (e instanceof v.ValiError) {
       errors.value = transformValiError(e);
-    } else {
-      throw e;
     }
+    throw e;
   }
 }
 
-function transformValiError(error: v.ValiError): Record<string, string> {
+function transformValiError(error: v.ValiError<typeof props.schema>): Error {
   const result: Record<string, string> = {};
   error.issues.forEach(issue => {
     if (issue.path) {
