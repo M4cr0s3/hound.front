@@ -14,7 +14,8 @@
             critical: 'heroicons:exclamation-triangle',
             error: 'heroicons:exclamation-circle',
             warning: 'heroicons:exclamation-circle',
-            info: 'heroicons:information-circle'
+            info: 'heroicons:information-circle',
+            debug: 'heroicons:information-circle'
           }[event.level]"
             class="h-5 w-5"
         />
@@ -50,9 +51,9 @@
 </template>
 
 <script setup lang="ts">
-import {Icon} from '@iconify/vue';
-import {formatDateTime} from '@/utils';
-import type {Event} from '@/api'
+import type { Event } from '@/api';
+import { formatDateTime } from '@/utils';
+import { Icon } from '@iconify/vue';
 
 defineProps<{
   event: Event;
