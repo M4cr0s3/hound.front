@@ -4,7 +4,7 @@
       <div
           class="flex-shrink-0 mt-1"
           :class="{
-          'text-red-500': event.level === 'error' || event.level === 'critical',
+          'text-red-500': event.level === 'error',
           'text-amber-500': event.level === 'warning',
           'text-gray-500': event.level === 'info'
         }"
@@ -15,7 +15,7 @@
             error: 'heroicons:exclamation-circle',
             warning: 'heroicons:exclamation-circle',
             info: 'heroicons:information-circle',
-            debug: 'heroicons:information-circle'
+            debug:'heroicons:information-circle'
           }[event.level]"
             class="h-5 w-5"
         />
@@ -31,7 +31,7 @@
           <span
               class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
               :class="{
-              'bg-red-100 text-red-800': event.level === 'error' || event.level === 'critical',
+              'bg-red-100 text-red-800': event.level === 'error' || event.level === 'debug',
               'bg-amber-100 text-amber-800': event.level === 'warning',
               'bg-blue-100 text-blue-800': event.level === 'info'
             }"
