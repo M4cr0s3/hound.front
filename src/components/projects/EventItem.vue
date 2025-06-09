@@ -31,7 +31,7 @@
           <span
               class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium"
               :class="{
-              'bg-red-100 text-red-800': event.level === 'error' || event.level === 'debug',
+              'bg-red-100 text-red-800': event.level === 'error' || event.level === 'critical',
               'bg-amber-100 text-amber-800': event.level === 'warning',
               'bg-blue-100 text-blue-800': event.level === 'info'
             }"
