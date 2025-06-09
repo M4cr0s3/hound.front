@@ -36,7 +36,7 @@ import { ref } from 'vue';
 
 const props = defineProps<{
   issueId: number;
-  comments: Comment[];
+  comments: Comment[] | undefined;
 }>();
 
 const emit = defineEmits(['comment-added', 'comment-deleted']);

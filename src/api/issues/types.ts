@@ -14,6 +14,20 @@ export enum IssuePriority {
   Critical = 'critical',
 }
 
+export interface Activities {
+  id: number;
+  type: string;
+  changes: {
+    before: Record<string, any>;
+    after: Record<string, any>;
+  };
+  user: {
+    id: number;
+    name: string;
+  };
+  created_at: string;
+};
+
 export interface User {
   id: number;
   name: string;
@@ -72,4 +86,5 @@ export interface Issue {
   comments?: Comment[];
   project?: Project
   statusClass?: string
+  activities: Activities[]
 }

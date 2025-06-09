@@ -52,7 +52,7 @@ import MarkdownIt from 'markdown-it';
 import { toast } from "vue-sonner";
 
 const props = withDefaults(defineProps<{
-  comments: Comment[],
+  comments: Comment[] | undefined,
   showParentReferences?: boolean
 }>(), {
   showParentReferences: false
