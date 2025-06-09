@@ -34,24 +34,15 @@
       <p v-if="issue.due_date">
         Срок: {{ new Date(issue.due_date).toLocaleDateString('ru-RU') }}
       </p>
-      <p v-if="issue.assignees?.length">
-        Назначено: {{ issue.assignees.map((user) => user.name).join(', ') }}
+      <p v-if="issue.assignees?.users.length">
+        Назначено: {{ issue.assignees.users.map((user) => user.name).join(', ') }}
       </p>
-      <div v-if="issue.tags?.length" class="flex gap-1 mt-2">
-        <span
-            v-for="tag in issue.tags"
-            :key="tag"
-            class="bg-gray-200 text-gray-700 px-2 py-1 rounded-full text-xs"
-        >
-          {{ tag }}
-        </span>
-      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import {IssueStatus, IssuePriority, type Issue} from '@/api';
+import { IssuePriority, IssueStatus, type Issue } from '@/api';
 
 defineProps<{
   issue: Issue;

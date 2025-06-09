@@ -66,14 +66,14 @@
 </template>
 
 <script setup lang="ts">
-import {computed} from 'vue';
-import {Icon} from '@iconify/vue';
-import {DataTable} from '@/components/ui';
-import {type Issue, IssueStatus, IssuePriority, type Pagination} from '@/api';
+import { type Issue, IssuePriority, IssueStatus, type Pagination } from '@/api';
+import { DataTable } from '@/components/ui';
+import { Icon } from '@iconify/vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   issues: Issue[];
-  pagination: Pagination | null;
+  pagination: Pagination | undefined;
   isLoading: boolean;
 }>();
 

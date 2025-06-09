@@ -34,38 +34,35 @@
 </template>
 
 <script setup lang="ts">
-import {Icon} from '@iconify/vue';
-import {Badge} from '@/components/ui';
-import {formatDateTime} from '@/utils';
+import type { Issue } from '@/api';
+import { Badge } from '@/components/ui';
+import { formatDateTime } from '@/utils';
+import { Icon } from '@iconify/vue';
 
-const props = defineProps({
-  issue: {
-    type: Object,
-    required: true
-  },
-  projectSlug: {
-    type: String,
-    required: true
-  }
-});
+const props = defineProps<{
+  issue: Issue,
+  projectSlug: string
+}>();
 
-const getBadgeVariant = (status) => {
-  const statusMap = {
-    open: 'primary',
-    in_progress: 'warning',
-    resolved: 'success',
-    closed: 'secondary'
-  };
-  return statusMap[status] || 'default';
+const STATUS_MAP = {
+  open: 'primary',
+  in_progress: 'warning',
+  resolved: 'success',
+  closed: 'secondary'
+}
+
+const STATUS_TEXT_MAP = {
+  open: 'Открыта',
+  in_progress: 'В работе',
+  resolved: 'Решена',
+  closed: 'Закрыта'
+}
+
+const getBadgeVariant = (status: keyof typeof STATUS_MAP) => {
+  return (STATUS_MAP[status] || 'default') as Variant;
 };
 
-const getStatusText = (status) => {
-  const statusTextMap = {
-    open: 'Открыта',
-    in_progress: 'В работе',
-    resolved: 'Решена',
-    closed: 'Закрыта'
-  };
-  return statusTextMap[status] || status;
+const getStatusText = (status: keyof typeof STATUS_TEXT_MAP)=> {
+  return (STATUS_TEXT_MAP[status] || status) as Variant;
 };
 </script>
