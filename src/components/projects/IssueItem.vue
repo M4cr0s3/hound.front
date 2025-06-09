@@ -34,23 +34,18 @@
 </template>
 
 <script setup lang="ts">
-import {Icon} from '@iconify/vue';
-import {Badge} from '@/components/ui';
-import {formatDateTime} from '@/utils';
+import type { Issue, IssueStatus } from '@/api';
+import { Badge } from '@/components/ui';
+import { formatDateTime } from '@/utils';
+import { Icon } from '@iconify/vue';
 
-const props = defineProps({
-  issue: {
-    type: Object,
-    required: true
-  },
-  projectSlug: {
-    type: String,
-    required: true
-  }
-});
+const props = defineProps<{
+  issue: Issue,
+  projectSlug: string
+}>();
 
-const getBadgeVariant = (status) => {
-  const statusMap = {
+const getBadgeVariant = (status: IssueStatus): Variant => {
+  const statusMap: Record<string, Variant> = {
     open: 'primary',
     in_progress: 'warning',
     resolved: 'success',
@@ -59,7 +54,7 @@ const getBadgeVariant = (status) => {
   return statusMap[status] || 'default';
 };
 
-const getStatusText = (status) => {
+const getStatusText = (status: IssueStatus)=> {
   const statusTextMap = {
     open: 'Открыта',
     in_progress: 'В работе',
