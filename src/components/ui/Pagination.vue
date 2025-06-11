@@ -20,7 +20,7 @@
 					aria-label="Pagination"
 				>
 					<button
-						v-for="(page, index) in pagination.links"
+						v-for="(page, index) in pagination?.links"
 						:key="page.label"
 						:disabled="!page.url || isLoading"
 						@click="handlePageChange(page.url)"
@@ -35,8 +35,8 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
 import type { Pagination } from '@/api';
+import { computed } from 'vue';
 
 interface Props {
 	pagination: Pagination;
@@ -52,10 +52,10 @@ const emit = defineEmits<{
 	(e: 'page-change', url: string | null): void;
 }>();
 
-const isFirstPage = computed(() => props.pagination.current_page === 1);
+const isFirstPage = computed(() => props.pagination?.current_page === 1);
 const isLastPage = computed(() => {
 	return (
-		props.pagination.current_page ===
+		props.pagination?.current_page ===
 		Math.ceil(
 			props.pagination.total / (props.pagination.to - props.pagination.from + 1)
 		)
