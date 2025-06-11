@@ -32,16 +32,14 @@
           <IssuesTable
               v-if="viewMode === 'table'"
               :issues="issues"
-              :pagination="pagination"
               :is-loading="isLoading"
-              @select="(row) => router.push(ROUTES.ISSUE.SHOW.replace(':id', row.id))"
+              @select="(row) => router.push(ROUTES.ISSUE.SHOW.replace(':id', row.id.toString()))"
               @page-change="handlePageChange"
           />
           <IssueKanban
               v-else
               :issues="issues"
               :is-loading="isLoading"
-              @select="openDetailsModal"
           />
         </template>
         <template v-else>
@@ -54,29 +52,31 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, onMounted} from 'vue';
-import {IssuesFilter, IssuesTable, IssueKanban} from '@/components/issue'
-import {Button} from '@/components/ui'
-import {useIssuesStore} from '@/stores'
-import {watchDebounced} from "@vueuse/core";
-import {resetForm} from "@/utils";
+import { IssuePriority, IssueStatus } from '@/api';
+import { IssueKanban, IssuesFilter, IssuesTable } from '@/components/issue';
+import { EmptyState } from "@/components/projects/settings/notification";
+import { Button } from '@/components/ui';
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
-import {EmptyState} from "@/components/projects/settings/notification";
-import {ROUTES} from "@/router/routes.ts";
-import {useRouter} from "vue-router";
+import { ROUTES } from "@/router/routes.ts";
+import { useIssuesStore, type IssueFilters } from '@/stores';
+import { resetForm } from "@/utils";
+import { watchDebounced } from "@vueuse/core";
+import { computed, onMounted, ref } from 'vue';
+import { useRouter } from "vue-router";
 
 const issuesStore = useIssuesStore();
 const router = useRouter();
 
-const filters = ref({
+const filters = ref<IssueFilters>({
   search: '',
-  status: '',
-  priority: '',
-  tags: []
+  status: IssueStatus.Open,
+  priority: IssuePriority.Low,
+  tags: [],
+  page: 1,
+  perPage: 1,
 });
 
 const issues = computed(() => issuesStore.issues);
-const pagination = computed(() => issuesStore.pagination);
 const isLoading = computed(() => issuesStore.isLoading);
 
 const viewMode = ref<'table' | 'board'>('table');
@@ -86,7 +86,7 @@ watchDebounced(filters, () => {
   issuesStore.fetchIssues()
 }, {debounce: 500, deep: true});
 
-const handlePageChange = (page: string) => {
+const handlePageChange = (page: string | null) => {
   issuesStore.filters.page = Number(page);
   issuesStore.fetchIssues();
 };

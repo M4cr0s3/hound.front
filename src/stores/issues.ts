@@ -1,5 +1,5 @@
-import {httpClient, type Id, type Issue, type IssuePriority, type IssueStatus, type Pagination} from "@/api";
-import {defineStore} from "pinia";
+import { httpClient, type Id, type Issue, type IssuePriority, type IssueStatus, type Pagination } from "@/api";
+import { defineStore } from "pinia";
 
 export interface IssueFilters {
   search: string;
@@ -14,7 +14,7 @@ interface IssuesState {
   issues: Issue[];
   issue: Issue,
   filters: IssueFilters;
-  pagination: Pagination | null;
+  pagination?: Pagination;
   isLoading: boolean;
 }
 
@@ -30,7 +30,6 @@ export const useIssuesStore = defineStore('issues', {
       page: 1,
       perPage: 10,
     },
-    pagination: null,
     isLoading: false,
   }),
 
