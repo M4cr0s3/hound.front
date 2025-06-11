@@ -69,7 +69,7 @@ export const useUsersStore = defineStore('users', () => {
   }
 
   const logout = async () => {
-    const response = await httpClient.get('/auth/logout');
+    const response = await httpClient.get<any>('/auth/logout');
 
     if (response.status === 'success') {
       localStorage.removeItem('token');

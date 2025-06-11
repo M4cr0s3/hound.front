@@ -6,11 +6,12 @@ export const useEventsStore = defineStore('events', () => {
   const events = ref<Event[]>([]);
   const event = ref<Event>({
     id: 0,
-    name: '',
-    description: '',
     type: '',
     level: 'info',
-    metadata: {},
+    metadata: {
+      '': '',
+      fingerprint: ''
+    },
     event_id: '',
     count: 0,
     message: '',
@@ -19,6 +20,9 @@ export const useEventsStore = defineStore('events', () => {
     environment: '',
     project: {} as Event['project'],
     issues: [],
+    created_at: '',
+    updated_at: '',
+    deleted_at: null,
   });
   const isLoading = ref(false);
 
