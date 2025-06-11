@@ -116,13 +116,6 @@ const isOpen = ref(false);
 const currentDate = ref(new Date());
 const selectedDate = ref<Date | null>(null);
 
-const parseDate = (dateString: string | null) => {
-  if (!dateString) return null;
-  const parts = dateString.split('-');
-  return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
-};
-
-
 if (props.modelValue) {
   selectedDate.value = new Date(props.modelValue);
 }
@@ -220,14 +213,6 @@ const isSelected = (date: Date) => {
       date.getMonth() === selectedDate.value.getMonth() &&
       date.getFullYear() === selectedDate.value.getFullYear()
   );
-};
-
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString('ru-RU', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  });
 };
 
 const toggleCalendar = () => {

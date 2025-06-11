@@ -24,10 +24,10 @@
 </template>
 
 <script setup lang="ts">
-import { StacktraceViewer, JsonViewer } from '@/components/ui';
 import type { Event } from '@/api';
+import { JsonViewer, StacktraceViewer } from '@/components/ui';
 
-const props = defineProps<{
+defineProps<{
   event: Event;
 }>();
 </script>

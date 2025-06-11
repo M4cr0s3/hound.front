@@ -66,8 +66,8 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue';
-import {Icon} from '@iconify/vue';
+import { Icon } from '@iconify/vue';
+import { ref } from 'vue';
 
 interface CodeSnippet {
   preContext?: string[];
@@ -91,19 +91,6 @@ const props = defineProps<{
 
 const isCollapsed = ref(false);
 const expandedFrames = ref<number[]>([]);
-
-function shouldIndentLine(code: string | null | undefined): boolean {
-  if (!code) return false;
-
-  const trimmed = code.trim();
-  if (!trimmed) return false;
-
-  return trimmed.endsWith('{') ||
-      trimmed.startsWith('}') ||
-      trimmed.startsWith('try') ||
-      trimmed.startsWith('catch') ||
-      trimmed.startsWith('finally');
-}
 
 function getCodeLines(frame: StackFrame) {
   if (!frame?.codeSnippet) return [];

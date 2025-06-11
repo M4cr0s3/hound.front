@@ -72,6 +72,7 @@
                   v-for="member in project.team?.members"
                   :key="member.id"
                   :name="member.name"
+                  size="sm"
               />
             </div>
           </td>
@@ -93,12 +94,12 @@
 </template>
 
 <script setup lang="ts">
-import {Icon} from '@iconify/vue';
-import {computed, onMounted, ref} from "vue";
-import {httpClient, type Project} from "@/api";
-import {Avatar} from "@/components/ui";
-import {PLATFORMS} from "@/data";
-import {useColor} from "@/composables";
+import { httpClient, type Project } from "@/api";
+import { Avatar } from "@/components/ui";
+import { useColor } from "@/composables";
+import { PLATFORMS } from "@/data";
+import { Icon } from '@iconify/vue';
+import { computed, onMounted, ref } from "vue";
 
 const projects = ref<Project[]>([]);
 

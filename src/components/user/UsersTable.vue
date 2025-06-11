@@ -25,7 +25,7 @@ import { useUsersStore } from "@/stores";
 import { ref } from 'vue';
 import { toast } from "vue-sonner";
 
-const props = defineProps<{
+defineProps<{
   users: User[];
   pagination: Pagination | undefined;
   isLoading: boolean;

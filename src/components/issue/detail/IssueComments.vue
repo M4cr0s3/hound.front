@@ -51,7 +51,7 @@ import 'highlight.js/styles/paraiso-dark.min.css';
 import MarkdownIt from 'markdown-it';
 import { toast } from "vue-sonner";
 
-const props = withDefaults(defineProps<{
+withDefaults(defineProps<{
   comments: Comment[] | undefined,
   showParentReferences?: boolean
 }>(), {

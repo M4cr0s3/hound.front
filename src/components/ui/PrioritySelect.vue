@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { SelectField } from "@/components/ui";
 
-const props = defineProps<{
+defineProps<{
   modelValue: string;
 }>();
 

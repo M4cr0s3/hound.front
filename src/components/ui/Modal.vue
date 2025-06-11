@@ -51,8 +51,8 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, onUnmounted, ref} from 'vue';
-import {onClickOutside} from "@vueuse/core";
+import { onClickOutside } from "@vueuse/core";
+import { onMounted, onUnmounted, ref } from 'vue';
 
 defineProps({
   isOpen: {
@@ -68,7 +68,7 @@ const close = () => {
   emit('close');
 };
 
-onClickOutside(() => modalRef.value, () => {
+onClickOutside(modalRef.value, () => {
   close();
 });
 

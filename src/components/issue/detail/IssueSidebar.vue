@@ -43,7 +43,7 @@ import type { Issue, IssuePriority } from '@/api';
 import { Badge, DatePicker, PrioritySelect } from '@/components/ui';
 import { useIssuesStore } from "@/stores";
 
-const props = defineProps<{
+defineProps<{
   issue: Issue;
 }>();
 const emit = defineEmits(['priority-changed', 'due-date-changed']);

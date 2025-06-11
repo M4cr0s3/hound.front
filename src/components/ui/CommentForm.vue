@@ -39,7 +39,7 @@
         >
           <div
               v-for="(user, index) in userSuggestions"
-              :key="user.id"
+              :key="index"
               @click="insertUserMention(user)"
               class="relative cursor-default select-none py-2 pl-3 pr-9 hover:bg-indigo-50"
               :class="{ 'bg-indigo-100': selectedSuggestionIndex === index }"
@@ -140,13 +140,13 @@
 </template>
 
 <script setup lang="ts">
-import {computed, nextTick, onBeforeUnmount, onMounted, ref, watch} from 'vue';
-import {Icon} from '@iconify/vue';
-import MarkdownIt from 'markdown-it';
+import { httpClient, type User } from "@/api";
+import { Button } from "@/components/ui";
+import { Icon } from '@iconify/vue';
+import { useDebounceFn } from "@vueuse/core";
 import hljs from 'highlight.js';
-import {Button} from "@/components/ui";
-import {httpClient} from "@/api";
-import {useDebounceFn} from "@vueuse/core";
+import MarkdownIt from 'markdown-it';
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 const props = defineProps<{
   isLoading: boolean;
@@ -160,7 +160,7 @@ const comment = ref(props.initialValue || '');
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
 const showUserSuggestions = ref(false);
-const userSuggestions = ref([]);
+const userSuggestions = ref<User[]>([]);
 const selectedSuggestionIndex = ref(0);
 const currentMentionQuery = ref('');
 const mentionStartPos = ref(-1);
@@ -240,12 +240,12 @@ const searchUsers = useDebounceFn(async (query: string) => {
 }, 300);
 
 const checkForMention = () => {
-  const cursorPos = textareaRef.value.selectionStart;
+  const cursorPos = textareaRef.value?.selectionStart;
   const textBeforeCursor = comment.value.substring(0, cursorPos);
 
   const lastAtPos = textBeforeCursor.lastIndexOf('@');
 
-  if (Math.abs(cursorPos - lastAtPos) === 1) {
+  if (cursorPos && (Math.abs(cursorPos - lastAtPos) === 1)) {
     return;
   }
 
@@ -265,7 +265,7 @@ const checkForMention = () => {
 };
 
 
-const insertUserMention = (user) => {
+const insertUserMention = (user: any) => {
   if (!textareaRef.value) return;
 
   const textarea = textareaRef.value;
@@ -285,7 +285,7 @@ const insertUserMention = (user) => {
   });
 };
 
-const handleKeyDown = (e) => {
+const handleKeyDown = (e: any) => {
   if (showUserSuggestions.value) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -314,7 +314,7 @@ const handleKeyDown = (e) => {
     }
   }
 };
-const handleClickOutside = (e) => {
+const handleClickOutside = (e: any) => {
   if (textareaRef.value && !textareaRef.value.contains(e.target)) {
     showUserSuggestions.value = false;
   }

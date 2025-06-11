@@ -74,7 +74,7 @@ import { computed } from 'vue';
 
 const { pagination } = useIssuesStore()
 
-const props = defineProps<{
+defineProps<{
   issues: Issue[];
   isLoading: boolean;
 }>();

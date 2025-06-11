@@ -39,7 +39,7 @@ import { Badge } from '@/components/ui';
 import { formatDateTime } from '@/utils';
 import { Icon } from '@iconify/vue';
 
-const props = defineProps<{
+defineProps<{
   issue: Issue,
   projectSlug: string
 }>();

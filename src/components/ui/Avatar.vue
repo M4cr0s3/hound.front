@@ -2,7 +2,7 @@
 defineProps<{
   name?: string
   src?: string
-  size?: string
+  size: string
 }>()
 
 function getSize(size: string) {

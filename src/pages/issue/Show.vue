@@ -9,13 +9,17 @@ import IssueSidebar from "@/components/issue/detail/IssueSidebar.vue";
 import IssueTabs from "@/components/issue/detail/IssueTabs.vue";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
 import { useIssuesStore } from "@/stores";
+import { storeToRefs } from "pinia";
 import { onMounted, ref } from "vue";
 
 const {id} = defineProps<{
   id: string;
 }>()
 
-const { issue, fetchIssue } = useIssuesStore();
+const store = useIssuesStore();
+
+const { fetchIssue } = store;
+const { issue } = storeToRefs(store);
 const activeTab = ref<'comments' | 'activities'>('comments');
 
 const changeTab = (tab: 'comments' | 'activities') => {
@@ -24,6 +28,7 @@ const changeTab = (tab: 'comments' | 'activities') => {
 
 onMounted(async () => {
   await fetchIssue(+id);
+  console.log(issue)
 })
 
 </script>
