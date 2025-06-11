@@ -72,7 +72,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-900">{{ team.name }}</p>
-                <p class="text-sm text-gray-500">{{ team.members_count }} участников</p>
+                <p class="text-sm text-gray-500">{{ team.members.length }} участников</p>
               </div>
             </div>
           </RouterLink>
@@ -241,6 +241,8 @@ const BADGE_COLOR = {
   error: 'danger',
   warning: 'warning',
   info: 'info',
+  debug: 'debug',
+  critical: 'critical'
 }
 
 const ISSUE_STATUS = {
@@ -287,11 +289,11 @@ const updatePassword = async () => {
     showPasswordModal.value = false;
     passwordForm.value = {
       current_password: '',
-      new_password: '',
-      new_password_confirmation: ''
+      password: '',
+      password_confirmation: ''
     };
     toast.success('Пароль успешно обновлен');
-  } catch (error) {
+  } catch (error: any) {
     toast.error('Ошибка обновления пароля', {description: error.data.message});
   } finally {
     isUpdatingPassword.value = false;

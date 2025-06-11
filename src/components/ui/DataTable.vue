@@ -18,7 +18,7 @@
         <tbody class="bg-white divide-y divide-gray-200">
         <tr
             v-for="(row, rowIndex) in data"
-            :key="rowKey ? row[rowKey] : rowIndex"
+            :key="rowIndex"
             class="hover:bg-gray-50"
             :class="{ 'cursor-pointer': rowClickable, [rowClass]: rowClass }"
             @click="handleRowClick(row)"
@@ -89,6 +89,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {
   rowClickable: false,
+  rowClass: 'text-sm text-gray-700'
 });
 
 const emit = defineEmits<{
