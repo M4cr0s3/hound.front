@@ -20,7 +20,7 @@ export function formatDateTime(
     }
 ): string {
   const dateObj = typeof date === 'string' ? new Date(date) : date;
-  return new Intl.DateTimeFormat('default', options).format(dateObj);
+  return new Intl.DateTimeFormat('ru-RU', options).format(dateObj);
 }
 
 /**

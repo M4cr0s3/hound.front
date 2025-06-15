@@ -131,10 +131,7 @@ const rules = ref<NotificationRule[]>([])
 const errors = shallowRef({ 
   event_type: '',
   trigger_type: '',
-  trigger_params: {
-    threshold: 10,
-    time_window: 60,
-  },
+  trigger_params: {},
   channels: [],
 });
 const form = reactive<NotificationRuleForm>({

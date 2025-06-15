@@ -37,7 +37,7 @@ onMounted(async () => {
         </RouterLink>
       </div>
 
-      <div class="bg-white shadow rounded-lg overflow-hidden">
+      <div class="bg-white shadow rounded-lg">
         <ul
             v-if="usersStore.isLoading"
             class="divide-y divide-gray-200"

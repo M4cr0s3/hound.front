@@ -72,7 +72,7 @@
               </div>
               <div>
                 <p class="text-sm font-medium text-gray-900">{{ team.name }}</p>
-                <p class="text-sm text-gray-500">{{ team.members.length }} участников</p>
+                <p class="text-sm text-gray-500">{{ team?.members?.length }} участников</p>
               </div>
             </div>
           </RouterLink>

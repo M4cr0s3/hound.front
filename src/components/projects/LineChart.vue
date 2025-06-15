@@ -3,18 +3,18 @@
 </template>
 
 <script setup lang="ts">
-import type { ECharts, EChartsOption } from 'echarts';
-import { BarChart, LineChart } from 'echarts/charts';
+import {ref, onMounted, onBeforeUnmount, watch} from 'vue';
+import * as echarts from 'echarts/core';
+import {BarChart, LineChart} from 'echarts/charts';
 import {
   GridComponent,
+  TooltipComponent,
   LegendComponent,
   MarkLineComponent,
-  TitleComponent,
-  TooltipComponent
+  TitleComponent
 } from 'echarts/components';
-import * as echarts from 'echarts/core';
-import { CanvasRenderer } from 'echarts/renderers';
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import {CanvasRenderer} from 'echarts/renderers';
+import type {EChartsOption, ECharts} from 'echarts';
 
 echarts.use([
   BarChart,
@@ -29,7 +29,7 @@ echarts.use([
 
 const props = defineProps({
   color: {
-    type: String 
+    type: String,
   },
   data: {
     type: Array as () => Array<{
@@ -47,11 +47,11 @@ const props = defineProps({
 });
 
 const chartRef = ref<HTMLElement | null>(null);
-const chart = ref<ECharts | echarts.EChartsType>();
+let chart: ECharts | null = null;
 
 const initChart = () => {
   if (!chartRef.value) return;
-  chart.value = echarts.init(chartRef.value);
+  chart = echarts.init(chartRef.value);
   updateChart();
 };
 
@@ -195,11 +195,11 @@ const updateChart = () => {
     })
   };
 
-  chart.value?.setOption(option);
+  chart.setOption(option);
 };
 
 const handleResize = () => {
-  chart.value?.resize();
+  chart?.resize();
 };
 
 onMounted(() => {
@@ -209,7 +209,7 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('resize', handleResize);
-  chart.value?.dispose();
+  chart?.dispose();
 });
 
 watch(

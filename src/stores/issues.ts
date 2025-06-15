@@ -113,7 +113,7 @@ export const useIssuesStore = defineStore('issues', {
 
     async removeAssignee(issueId: Id, type: 'user' | 'team', id: Id) {
       try {
-        await httpClient.delete(`/issues/${issueId}/assignees/${id}`, {body: {type}});
+        await httpClient.delete(`/issues/${issueId}/assignees/${id}`, {type});
         await this.fetchIssue(issueId)
       } catch (e) {
         console.error(e);

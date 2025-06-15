@@ -12,7 +12,7 @@
         </ol>
       </nav>
 
-      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6" v-if="eventsStore.event">
         <div class="flex items-center gap-3">
           <div
               class="p-2 rounded-lg"
@@ -33,7 +33,7 @@
                   :text="eventsStore.event.level"
                   class="text-xs"
               />
-              <span class="text-xs text-gray-500">
+              <span class="text-xs text-gray-500" v-if="eventsStore?.event.created_at">
                 {{ formatDateTime(eventsStore.event.created_at) }}
               </span>
               <span
@@ -190,20 +190,13 @@
             </div>
           </div>
         </div>
-        <EmptyState
-            v-else
-            title="Нет связанных задач"
-            description="Это событие еще не связано ни с одной задачей."
-            icon="mdi:alert-circle-outline"
-        >
-          <button
-              @click="createIssue"
-              class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none"
-          >
-            <Icon icon="mdi:plus" class="h-5 w-5 mr-2"/>
-            Создать проблему
-          </button>
-        </EmptyState>
+        <div class="bg-white rounded-lg shadow overflow-hidden" v-else>
+          <EmptyState
+              title="Нет связанных задач"
+              description="Это событие еще не связано ни с одной задачей."
+              icon="mdi:alert-circle-outline"
+          />
+        </div>
       </div>
     </div>
 
@@ -211,16 +204,23 @@
 </template>
 
 <script setup lang="ts">
-import { EmptyState } from "@/components/projects/settings/notification";
-import { Badge, JsonViewer, StacktraceViewer } from '@/components/ui';
-import { PLATFORMS } from "@/data";
+import {EmptyState} from "@/components/projects/settings/notification";
+import {Badge, JsonViewer, StacktraceViewer} from '@/components/ui';
+import {PLATFORMS} from "@/data";
 import DashboardLayout from "@/layouts/DashboardLayout.vue";
-import { useEventsStore } from "@/stores";
-import { formatDateTime, getIssueStatusColor, getLevelColor, getLevelIcon, getLevelVariant, getReadableIssueStatus } from '@/utils';
-import { Icon } from '@iconify/vue';
-import { useClipboard } from '@vueuse/core';
-import { computed, onMounted, ref } from 'vue';
-import { toast } from "vue-sonner";
+import {useEventsStore} from "@/stores";
+import {
+  formatDateTime,
+  getIssueStatusColor,
+  getLevelColor,
+  getLevelIcon,
+  getLevelVariant,
+  getReadableIssueStatus
+} from '@/utils';
+import {Icon} from '@iconify/vue';
+import {useClipboard} from '@vueuse/core';
+import {computed, onMounted, ref} from 'vue';
+import {toast} from "vue-sonner";
 
 const props = defineProps<{
   id: string;
@@ -228,7 +228,6 @@ const props = defineProps<{
 
 const eventsStore = useEventsStore();
 const activeTab = ref('details');
-const {copy} = useClipboard();
 
 const tabs = [
   {id: 'details', name: 'Детали'},
@@ -246,15 +245,6 @@ const filteredMetadata = computed(() => {
   const {file, line, stacktrace, ...rest} = eventsStore.event.metadata || {};
   return rest;
 });
-
-function copyEventId() {
-  copy(eventsStore.event.event_id);
-  toast.success('ID события скопирован в буфер обмена');
-}
-
-function createIssue() {
-  console.log('Create issue from event', eventsStore.event);
-}
 
 onMounted(async () => {
   await eventsStore.fetchEvent(+props.id);

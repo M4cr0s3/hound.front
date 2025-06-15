@@ -5,8 +5,8 @@
         <p class="text-sm font-medium text-gray-500 truncate">{{ title }}</p>
         <p class="mt-1 text-2xl font-semibold text-gray-900">
           {{ value }}
-          <span v-if="trend === 'up'" class="text-green-600 text-sm ml-1">↑</span>
-          <span v-if="trend === 'down'" class="text-red-600 text-sm ml-1">↓</span>
+          <span v-if="trend === 'up'" class="text-red-600 text-sm ml-1">↓</span>
+          <span v-if="trend === 'down'" class="text-green-600 text-sm ml-1">↑</span>
           <span v-if="trend === 'week'" class="text-indigo-600 text-sm ml-1">↗</span>
         </p>
       </div>
@@ -27,8 +27,8 @@
         v-if="trend"
         class="px-5 py-3 bg-gray-50 text-xs flex items-center"
         :class="{
-        'text-green-600': trend === 'up',
-        'text-red-600': trend === 'down',
+        'text-green-600': trend === 'down',
+        'text-red-600': trend === 'up',
         'text-indigo-600': trend === 'week',
         'text-gray-500': trend === 'neutral'
       }"
