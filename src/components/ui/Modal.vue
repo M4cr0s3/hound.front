@@ -68,9 +68,12 @@ const close = () => {
   emit('close');
 };
 
-onClickOutside(modalRef.value, () => {
-  close();
-});
+onClickOutside(
+    () => modalRef.value,
+    () => {
+      close();
+    }
+);
 
 const handleEscape = (e: KeyboardEvent) => {
   if (e.key === 'Escape') {
